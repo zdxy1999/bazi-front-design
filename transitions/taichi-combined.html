@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太极组合</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .taichi-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+
+        .taichi-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .label {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .sub-label {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="taichi-container">
+        <svg viewBox="0 0 100 100" class="taichi-svg">
+            <!-- 太极背景圆（白色） -->
+            <circle cx="50" cy="50" r="50" fill="#ffffff"/>
+
+            <!-- 阴鱼（黑色部分） -->
+            <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 1 50 50 A 25 25 0 0 0 50 0"
+                  fill="#1a1a1a"/>
+
+            <!-- 阳鱼的小黑点（在上半部分的突出部分中心） -->
+            <circle cx="50" cy="25" r="12.5" fill="#1a1a1a"/>
+
+            <!-- 阴鱼的小白点（在下半部分的突出部分中心） -->
+            <circle cx="50" cy="75" r="12.5" fill="#ffffff"/>
+        </svg>
+    </div>
+
+    <div class="label">
+        完整太极图案
+        <span class="sub-label">阳鱼（左）+ 阴鱼（右）组合</span>
+    </div>
+</body>
+</html>

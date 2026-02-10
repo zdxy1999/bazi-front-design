@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能模块按钮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --border-size: 2px;
+            --spotlight-size: 200px;
+            --hue: 210;
+            --saturation: 100;
+            --lightness: 60;
+            --bg-spot-opacity: 0.15;
+            --border-spot-opacity: 1;
+            --border-light-opacity: 1;
+            --backdrop: transparent;
+            --backup-border: hsl(0 0% 50% / 0.2);
+            --radius: 0px;
+            --x: 960;
+            --y: 540;
+            --glow-hue: 0;
+            --glow-saturation: 100;
+            --glow-lightness: 28;
+            --edge-proximity: 0;
+            --highlight-x: 960;
+            --highlight-y: 540;
+
+            /* 5个旋转光晕的颜色配置 */
+            --orbit-glow-1-hue: 0;
+            --orbit-glow-1-saturation: 70;
+            --orbit-glow-1-lightness: 20;
+            --orbit-edge-opacity-1: 0;
+
+            --orbit-glow-2-hue: 60;
+            --orbit-glow-2-saturation: 90;
+            --orbit-glow-2-lightness: 30;
+            --orbit-edge-opacity-2: 0;
+
+            --orbit-glow-3-hue: 120;
+            --orbit-glow-3-saturation: 90;
+            --orbit-glow-3-lightness: 20;
+            --orbit-edge-opacity-3: 0;
+
+            --orbit-glow-4-hue: 210;
+            --orbit-glow-4-saturation: 90;
+            --orbit-glow-4-lightness: 30;
+            --orbit-edge-opacity-4: 0;
+
+            --orbit-glow-5-hue: 0;
+            --orbit-glow-5-saturation: 0;
+            --orbit-glow-5-lightness: 30;
+            --orbit-edge-opacity-5: 0;
+
+            /* 按钮卡片配置 */
+            --button-card-gap: 24px;
+            --button-card-size: 160px;
+            --button-card-radius: 20px;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s ease;
+        }
+
+        /* 浅色主题 */
+        body.light-theme {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #000000;
+        }
+
+        body.light-theme .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* ========== 背景光晕系统 ========== */
+        .card {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orbiting-glow {
+            position: absolute;
+            width: calc(var(--spotlight-size) * 1.5);
+            height: calc(var(--spotlight-size) * 1.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 55;
+            background: radial-gradient(
+                circle,
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness) * 1%) / 0.6),
+                transparent 70%
+            );
+            filter: blur(20px);
+            opacity: 0.4;
+            transform-origin: center center;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .orbiting-glow-1 {
+            animation-duration: 2.5s;
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+        }
+
+        .orbiting-glow-2 {
+            animation-duration: 3.2s;
+            animation-delay: -0.5s;
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+        }
+
+        .orbiting-glow-3 {
+            animation-duration: 4s;
+            animation-delay: -1s;
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+        }
+
+        .orbiting-glow-4 {
+            animation-duration: 2.8s;
+            animation-delay: -1.5s;
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+        }
+
+        .orbiting-glow-5 {
+            animation-duration: 3.5s;
+            animation-delay: -2s;
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+        }
+
+        /* 边缘光晕层 */
+        .card-glow-border {
+            position: absolute;
+            inset: -10px;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: calc(var(--radius) + 10px);
+            overflow: visible;
+        }
+
+        /* 5个光晕对应的边缘高光层 */
+        .card-glow-highlight-1,
+        .card-glow-highlight-2,
+        .card-glow-highlight-3,
+        .card-glow-highlight-4,
+        .card-glow-highlight-5 {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 45;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        /* 边缘高光内部的光晕层 */
+        .card-glow-highlight-1::before,
+        .card-glow-highlight-2::before,
+        .card-glow-highlight-3::before,
+        .card-glow-highlight-4::before,
+        .card-glow-highlight-5::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+
+        .card-glow-highlight-1::before {
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-1, 960) * 1px)
+                calc(var(--highlight-y-1, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-1);
+        }
+
+        .card-glow-highlight-2::before {
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-2, 960) * 1px)
+                calc(var(--highlight-y-2, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-2);
+        }
+
+        .card-glow-highlight-3::before {
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-3, 960) * 1px)
+                calc(var(--highlight-y-3, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-3);
+        }
+
+        .card-glow-highlight-4::before {
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-4, 960) * 1px)
+                calc(var(--highlight-y-4, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-4);
+        }
+
+        .card-glow-highlight-5::before {
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-5, 960) * 1px)
+                calc(var(--highlight-y-5, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-5);
+        }
+
+        /* 浅色主题下提高边缘高光的透明度 */
+        body.light-theme .card-glow-highlight-1::before,
+        body.light-theme .card-glow-highlight-2::before,
+        body.light-theme .card-glow-highlight-3::before,
+        body.light-theme .card-glow-highlight-4::before {
+            opacity: 2;
+            filter: brightness(2) saturate(1.5);
+        }
+
+        body.light-theme .card-glow-highlight-5::before {
+            opacity: 2;
+            filter: brightness(1.5) saturate(0.5);
+        }
+
+        /* 内部遮罩 - 只显示边缘 */
+        .card-glow-inner {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            border-radius: calc(var(--radius) - 4px);
+            z-index: 50;
+            opacity: 1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .card-glow-inner {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        /* 光晕可见性蒙版 - 中心暗淡，边缘明亮 */
+        .glow-visibility-mask {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            z-index: 60;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 1) 50%,
+                rgba(0, 0, 0, 0.9) 65%,
+                rgba(0, 0, 0, 0.6) 80%,
+                rgba(0, 0, 0, 0.2) 90%,
+                rgba(0, 0, 0, 0) 95%
+            );
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .glow-visibility-mask {
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.6) 0%,
+                rgba(255, 255, 255, 0.5) 40%,
+                rgba(255, 255, 255, 0.3) 60%,
+                rgba(255, 255, 255, 0.1) 80%,
+                rgba(255, 255, 255, 0) 90%
+            );
+        }
+
+        /* ========== 按钮卡片容器 ========== */
+        .button-cards-container {
+            position: relative;
+            z-index: 100;
+            display: grid;
+            grid-template-columns: repeat(2, var(--button-card-size));
+            gap: var(--button-card-gap);
+            padding: 40px;
+        }
+
+        /* ========== 玻璃质感按钮卡片 ========== */
+        .button-card {
+            position: relative;
+            width: var(--button-card-size);
+            height: var(--button-card-size);
+            border-radius: var(--button-card-radius);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            outline: none;
+        }
+
+        /* 卡片光晕效果 */
+        .button-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--button-card-radius);
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 60%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        /* 卡片边框光晕 */
+        .button-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--button-card-radius);
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0.05),
+                rgba(255, 255, 255, 0.1)
+            );
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .button-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .button-card:hover::before {
+            opacity: 1;
+        }
+
+        .button-card:hover::after {
+            opacity: 1;
+        }
+
+        .button-card:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        /* ========== 五色辉光点击效果 ========== */
+        .button-card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--button-card-radius);
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        /* 五色辉光波纹 */
+        .glow-ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        /* 点击触发动画 */
+        .button-card.clicking .glow-ripple {
+            animation: glowRippleExpand 0.8s ease-out forwards;
+        }
+
+        /* 五个不同颜色的波纹 */
+        .glow-ripple-1 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 70%, 50%) 0%,
+                hsl(0, 70%, 30%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0s;
+        }
+
+        .glow-ripple-2 {
+            background: radial-gradient(
+                circle,
+                hsl(60, 90%, 60%) 0%,
+                hsl(60, 90%, 40%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.08s;
+        }
+
+        .glow-ripple-3 {
+            background: radial-gradient(
+                circle,
+                hsl(120, 90%, 50%) 0%,
+                hsl(120, 90%, 30%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.16s;
+        }
+
+        .glow-ripple-4 {
+            background: radial-gradient(
+                circle,
+                hsl(210, 90%, 60%) 0%,
+                hsl(210, 90%, 40%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.24s;
+        }
+
+        .glow-ripple-5 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 0%, 100%) 0%,
+                hsl(0, 0%, 80%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.32s;
+        }
+
+        @keyframes glowRippleExpand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+                filter: blur(2px);
+            }
+            50% {
+                opacity: 0.6;
+                filter: blur(8px);
+            }
+            100% {
+                width: 300%;
+                height: 300%;
+                opacity: 0;
+                filter: blur(15px);
+            }
+        }
+
+        /* 点击时的外部辉光 */
+        .button-card.clicking {
+            animation: cardGlowPulse 0.6s ease-out;
+        }
+
+        @keyframes cardGlowPulse {
+            0%, 100% {
+                box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.3),
+                    0 0 0 1px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.3),
+                    0 0 30px hsl(0, 70%, 50%),
+                    0 0 60px hsl(60, 90%, 60%),
+                    0 0 90px hsl(120, 90%, 50%),
+                    0 0 120px hsl(210, 90%, 60%);
+                background: rgba(255, 255, 255, 0.12);
+            }
+        }
+
+        /* 浅色主题下的辉光效果 */
+        body.light-theme .button-card.clicking {
+            animation: cardGlowPulseLight 0.6s ease-out;
+        }
+
+        @keyframes cardGlowPulseLight {
+            0%, 100% {
+                box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.1),
+                    0 0 0 1px rgba(0, 0, 0, 0.05);
+            }
+            50% {
+                box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.1),
+                    0 0 40px hsl(45, 100%, 90%),
+                    0 0 80px hsl(0, 100%, 90%),
+                    0 0 120px hsl(210, 100%, 90%),
+                    0 0 160px hsl(50, 100%, 90%);
+                background: rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        /* 浅色主题下的波纹颜色 - 多彩色系 */
+        body.light-theme .glow-ripple-1 {
+            background: radial-gradient(
+                circle,
+                hsl(45, 100%, 90%) 0%,
+                hsl(45, 100%, 80%) 40%,
+                transparent 70%
+            );
+        }
+
+        body.light-theme .glow-ripple-2 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 100%, 90%) 0%,
+                hsl(0, 100%, 80%) 40%,
+                transparent 70%
+            );
+        }
+
+        body.light-theme .glow-ripple-3 {
+            background: radial-gradient(
+                circle,
+                hsl(210, 100%, 90%) 0%,
+                hsl(210, 100%, 80%) 40%,
+                transparent 70%
+            );
+        }
+
+        body.light-theme .glow-ripple-4 {
+            background: radial-gradient(
+                circle,
+                hsl(50, 100%, 90%) 0%,
+                hsl(50, 100%, 80%) 40%,
+                transparent 70%
+            );
+        }
+
+        body.light-theme .glow-ripple-5 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 0%, 100%) 0%,
+                hsl(0, 0%, 95%) 40%,
+                transparent 70%
+            );
+        }
+
+        /* 卡片图标 */
+        .button-card-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .button-card-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .button-card:hover .button-card-icon {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(1.1);
+        }
+
+        .button-card:hover .button-card-icon svg {
+            stroke: rgba(255, 255, 255, 1);
+        }
+
+        /* 卡片标题 */
+        .button-card-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .button-card:hover .button-card-title {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        /* ========== 浅色主题适配 ========== */
+        body.light-theme .button-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .button-card::before {
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0, 0, 0, 0.05) 0%,
+                transparent 60%
+            );
+        }
+
+        body.light-theme .button-card::after {
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.02),
+                rgba(0, 0, 0, 0.05)
+            );
+        }
+
+        body.light-theme .button-card:hover {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .button-card-icon {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        body.light-theme .button-card-icon svg {
+            stroke: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-theme .button-card:hover .button-card-icon {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .button-card:hover .button-card-icon svg {
+            stroke: rgba(0, 0, 0, 1);
+        }
+
+        body.light-theme .button-card-title {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        body.light-theme .button-card:hover .button-card-title {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        /* 浅色主题下增强光晕饱和度和亮度 */
+        body.light-theme {
+            --orbit-glow-1-saturation: 100;
+            --orbit-glow-1-lightness: 40;
+            --orbit-glow-2-saturation: 100;
+            --orbit-glow-2-lightness: 50;
+            --orbit-glow-3-saturation: 100;
+            --orbit-glow-3-lightness: 40;
+            --orbit-glow-4-saturation: 100;
+            --orbit-glow-4-lightness: 50;
+            --orbit-glow-5-lightness: 70;
+        }
+
+        body.light-theme .orbiting-glow {
+            opacity: 0.7;
+        }
+
+        /* ========== SVG 滤镜 (液态效果) ========== */
+        .svg-filters {
+            position: absolute;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* ========== 响应式设计 ========== */
+        @media (max-width: 480px) {
+            :root {
+                --button-card-size: 140px;
+                --button-card-gap: 16px;
+                --button-card-radius: 16px;
+            }
+
+            .button-cards-container {
+                padding: 24px;
+            }
+
+            .button-card-icon {
+                width: 48px;
+                height: 48px;
+                margin-bottom: 12px;
+            }
+
+            .button-card-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .button-card-title {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            :root {
+                --button-card-size: 120px;
+            }
+
+            .button-card-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .button-card-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .button-card-title {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 深色模式</button>
+
+    <!-- SVG 滤镜定义 -->
+    <svg class="svg-filters">
+        <defs>
+            <!-- 液态扭曲滤镜 -->
+            <filter id="liquid-distortion" primitiveUnits="objectBoundingBox">
+                <feImage
+                    href="data:image/png;base64,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"
+                    x="0" y="0" width="1" height="1" result="map"/>
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0.02" result="blur"/>
+                <feDisplacementMap
+                    id="disp"
+                    in="blur"
+                    in2="map"
+                    scale="1"
+                    xChannelSelector="R"
+                    yChannelSelector="G">
+                    <animate
+                        attributeName="scale"
+                        to="1.4"
+                        dur="0.3s"
+                        begin="btn-card-1.mouseover"
+                        fill="freeze"/>
+                    <animate
+                        attributeName="scale"
+                        to="1"
+                        dur="0.3s"
+                        begin="btn-card-1.mouseout"
+                        fill="freeze"/>
+                </feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- 背景光晕层 -->
+    <div class="card">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+        <div class="glow-visibility-mask"></div>
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+    </div>
+
+    <!-- 按钮卡片容器 -->
+    <div class="button-cards-container">
+        <div class="button-card" id="btn-card-1" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6"></path>
+                    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"></circle>
+                </svg>
+            </div>
+            <div class="button-card-title">命盘分析</div>
+        </div>
+
+        <div class="button-card" id="btn-card-2" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                    <path d="M12 4v16M4 12h16"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path>
+                </svg>
+            </div>
+            <div class="button-card-title">八字排盘</div>
+        </div>
+
+        <div class="button-card" id="btn-card-3" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    <path d="M8.5 8.5c0-1 1-2 2-2s2 1 2 2"></path>
+                </svg>
+            </div>
+            <div class="button-card-title">姻缘配对</div>
+        </div>
+
+        <div class="button-card" id="btn-card-4" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2 12h5l3 5 5-10 3 5h4"></path>
+                    <path d="M22 12h-3M3 12H2"></path>
+                    <circle cx="12" cy="5" r="1"></circle>
+                    <circle cx="5" cy="17" r="1"></circle>
+                    <circle cx="19" cy="17" r="1"></circle>
+                </svg>
+            </div>
+            <div class="button-card-title">运势预测</div>
+        </div>
+
+        <div class="button-card" id="btn-card-5" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    <circle cx="12" cy="12" r="2"></circle>
+                    <path d="M12 2v5M12 17v5M2 7v5M22 7v5"></path>
+                </svg>
+            </div>
+            <div class="button-card-title">事业财运</div>
+        </div>
+
+        <div class="button-card" id="btn-card-6" onmousemove="updateCardGlow(event, this)" onmouseleave="resetCardGlow(this)" onclick="triggerGlow(event, this)">
+            <div class="button-card-glow">
+                <div class="glow-ripple glow-ripple-1"></div>
+                <div class="glow-ripple glow-ripple-2"></div>
+                <div class="glow-ripple glow-ripple-3"></div>
+                <div class="glow-ripple glow-ripple-4"></div>
+                <div class="glow-ripple glow-ripple-5"></div>
+            </div>
+            <div class="button-card-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    <circle cx="12" cy="6" r="1.5"></circle>
+                    <path d="M12 2v2M12 20v2M3 12H2M22 12h-1"></path>
+                    <path d="M18.5 9c1-1.5 2.5-1.5 3.5-.5"></path>
+                    <path d="M18.5 15c1 1.5 2.5 1.5 3.5.5"></path>
+                </svg>
+            </div>
+            <div class="button-card-title">健康养生</div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                button.textContent = '🌙 深色模式';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                button.textContent = '☀️ 浅色模式';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 页面加载时恢复主题设置
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const button = document.querySelector('.theme-toggle');
+
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                button.textContent = '☀️ 浅色模式';
+            }
+        });
+
+        // 旋转光晕的配置
+        const orbitRadius = 160;
+        let rotationAngle = 0;
+        const rotationSpeed = 0.008;
+
+        // 随机运动中心点的配置
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        let centerTargetX = window.innerWidth / 2;
+        let centerTargetY = window.innerHeight / 2;
+        const centerMoveSpeed = 0.002;
+        let centerAngle = 0;
+
+        // 更新随机运动中心点的位置
+        function updateRandomCenter() {
+            centerAngle += centerMoveSpeed;
+
+            const maxRangeX = window.innerWidth * 0.4;
+            const maxRangeY = window.innerHeight * 0.4;
+
+            centerTargetX = window.innerWidth / 2 + Math.sin(centerAngle) * maxRangeX + Math.sin(centerAngle * 0.7) * (maxRangeX * 0.5);
+            centerTargetY = window.innerHeight / 2 + Math.cos(centerAngle * 0.8) * maxRangeY + Math.cos(centerAngle * 1.3) * (maxRangeY * 0.5);
+
+            centerX += (centerTargetX - centerX) * 0.01;
+            centerY += (centerTargetY - centerY) * 0.01;
+        }
+
+        // 更新旋转光晕的位置
+        function updateOrbitingGlows() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+
+            glows.forEach((glow, index) => {
+                const angle = rotationAngle + (index * Math.PI * 2 / 5);
+                const offsetX = Math.cos(angle) * orbitRadius;
+                const offsetY = Math.sin(angle) * orbitRadius;
+
+                const glowWidth = parseFloat(getComputedStyle(glow).width);
+                const glowHeight = parseFloat(getComputedStyle(glow).height);
+
+                glow.style.left = `${centerX + offsetX - glowWidth / 2}px`;
+                glow.style.top = `${centerY + offsetY - glowHeight / 2}px`;
+            });
+        }
+
+        // 旋转动画循环
+        function animateRotation() {
+            rotationAngle += rotationSpeed;
+            updateRandomCenter();
+            updateOrbitingGlows();
+            updateEdgeHighlight(); // 更新边缘高光位置
+            requestAnimationFrame(animateRotation);
+        }
+
+        // 启动旋转动画
+        animateRotation();
+
+        // 计算旋转光晕位置并更新边缘高光
+        function updateEdgeHighlight() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+            const card = document.querySelector('.card');
+            const cardRect = card.getBoundingClientRect();
+
+            // 计算光晕影响范围（用于距离归一化）
+            const maxDistance = 300; // 光晕影响范围的最大距离
+
+            // 为每个光晕计算其对应的边缘高光位置和透明度
+            glows.forEach((glow, index) => {
+                const rect = glow.getBoundingClientRect();
+                const glowCenterX = rect.left + rect.width / 2;
+                const glowCenterY = rect.top + rect.height / 2;
+
+                // 计算到卡片四边的距离
+                const distToLeft = glowCenterX - cardRect.left;
+                const distToRight = cardRect.right - glowCenterX;
+                const distToTop = glowCenterY - cardRect.top;
+                const distToBottom = cardRect.bottom - glowCenterY;
+
+                // 找到最近的边
+                const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+                // 根据距离计算透明度：距离越近越亮，距离越远越暗
+                // 归一化到 0-1 范围，然后反转（近=1，远=0）
+                let edgeOpacity = Math.max(0, 1 - (minDist / maxDistance));
+                // 使用平方函数让过渡更平滑
+                edgeOpacity = edgeOpacity * edgeOpacity;
+                // 最大透明度为 3（提高深色模式下的亮度）
+                edgeOpacity = Math.min(3, edgeOpacity);
+
+                // 浅色模式下额外增加亮度
+                if (document.body.classList.contains('light-theme')) {
+                    edgeOpacity *= 5;
+                }
+
+                // 设置边缘高光的位置（在光晕向卡片边缘方向的投影）
+                let highlightX = glowCenterX;
+                let highlightY = glowCenterY;
+
+                if (minDist === distToLeft) {
+                    highlightX = cardRect.left; // 卡片左边缘
+                } else if (minDist === distToRight) {
+                    highlightX = cardRect.right; // 卡片右边缘
+                } else if (minDist === distToTop) {
+                    highlightY = cardRect.top; // 卡片上边缘
+                } else {
+                    highlightY = cardRect.bottom; // 卡片下边缘
+                }
+
+                // 更新对应的高光位置和透明度变量
+                const highlightIndex = index + 1;
+                document.documentElement.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.documentElement.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.documentElement.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+            });
+        }
+
+        // 更新卡片光晕位置
+        function updateCardGlow(event, card) {
+            const rect = card.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width) * 100;
+            const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+            card.style.setProperty('--mouse-x', `${x}%`);
+            card.style.setProperty('--mouse-y', `${y}%`);
+        }
+
+        // 重置卡片光晕
+        function resetCardGlow(card) {
+            card.style.setProperty('--mouse-x', `50%`);
+            card.style.setProperty('--mouse-y', `50%`);
+        }
+
+        // 触发五色辉光点击效果
+        function triggerGlow(event, card) {
+            // 移除可能存在的点击类
+            card.classList.remove('clicking');
+
+            // 强制重绘以重新触发动画
+            void card.offsetWidth;
+
+            // 添加点击类触发动画
+            card.classList.add('clicking');
+
+            // 动画结束后移除类
+            setTimeout(() => {
+                card.classList.remove('clicking');
+            }, 800);
+        }
+    </script>
+</body>
+</html>
