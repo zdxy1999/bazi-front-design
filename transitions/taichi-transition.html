@@ -595,37 +595,75 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
-        /* 主题切换按钮 */
+        /* 主题切换按钮 - 玻璃圆形按钮 */
         .theme-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
             transition: all 0.3s ease;
         }
 
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle:hover svg {
+            stroke: rgba(255, 255, 255, 1);
+        }
+
+        .theme-toggle:active {
             transform: scale(1.05);
         }
 
+        /* 浅色主题 */
         body.light-theme .theme-toggle {
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: #000000;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .theme-toggle svg {
+            stroke: rgba(0, 0, 0, 0.7);
         }
 
         body.light-theme .theme-toggle:hover {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .theme-toggle:hover svg {
+            stroke: rgba(0, 0, 0, 1);
         }
 
         /* 响应式 */
@@ -651,7 +689,22 @@
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 深色模式</button>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg viewBox="0 0 24 24" class="theme-icon-dark">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg viewBox="0 0 24 24" class="theme-icon-light" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
 
     <!-- 背景光晕层 -->
     <div class="card">
@@ -704,15 +757,18 @@
         // 主题切换功能
         function toggleTheme() {
             const body = document.body;
-            const button = document.querySelector('.theme-toggle');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
 
             if (body.classList.contains('light-theme')) {
                 body.classList.remove('light-theme');
-                button.textContent = '🌙 深色模式';
+                darkIcon.style.display = 'block';
+                lightIcon.style.display = 'none';
                 localStorage.setItem('theme', 'dark');
             } else {
                 body.classList.add('light-theme');
-                button.textContent = '☀️ 浅色模式';
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
                 localStorage.setItem('theme', 'light');
             }
         }
@@ -720,11 +776,13 @@
         // 页面加载时恢复主题设置
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
-            const button = document.querySelector('.theme-toggle');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
 
             if (savedTheme === 'light') {
                 document.body.classList.add('light-theme');
-                button.textContent = '☀️ 浅色模式';
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
             }
         });
 
