@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>边缘光晕卡片</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --border-size: 2px;
+            --spotlight-size: 200px;
+            --hue: 210;
+            --saturation: 100;
+            --lightness: 60;
+            --bg-spot-opacity: 0.15;
+            --border-spot-opacity: 1;
+            --border-light-opacity: 1;
+            --backdrop: transparent;
+            --backup-border: hsl(0 0% 50% / 0.2);
+            --radius: 0px;
+            --x: 960;
+            --y: 540;
+            --glow-hue: 0;
+            --glow-saturation: 100;
+            --glow-lightness: 28;
+            --edge-proximity: 0;
+            --highlight-x: 960;
+            --highlight-y: 540;
+
+            /* ========== 5个旋转光晕的颜色配置 ========== */
+            /* 每个光晕的色相值 (HSL中的H) */
+            --orbit-glow-1-hue: 0;      /* 红色 */
+            --orbit-glow-1-saturation: 70;
+            --orbit-glow-1-lightness: 20;
+            --orbit-edge-opacity-1: 0;  /* 边缘高光透明度 */
+
+            --orbit-glow-2-hue: 60;     /* 黄色 */
+            --orbit-glow-2-saturation: 90;
+            --orbit-glow-2-lightness: 30;
+            --orbit-edge-opacity-2: 0;
+
+            --orbit-glow-3-hue: 120;    /* 绿色 */
+            --orbit-glow-3-saturation: 90;
+            --orbit-glow-3-lightness: 20;
+            --orbit-edge-opacity-3: 0;
+
+            --orbit-glow-4-hue: 210;    /* 蓝色 */
+            --orbit-glow-4-saturation: 90;
+            --orbit-glow-4-lightness: 30;
+            --orbit-edge-opacity-4: 0;
+
+            --orbit-glow-5-hue: 0;      /* 白色（色相为0，饱和度0） */
+            --orbit-glow-5-saturation: 0;
+            --orbit-glow-5-lightness: 30;
+            --orbit-edge-opacity-5: 0;
+            /* ========== 颜色配置结束 ========== */
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s ease;
+        }
+
+        /* 浅色主题 */
+        body.light-theme {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        /* 主题切换按钮 - 玻璃圆形按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle:hover svg {
+            stroke: rgba(255, 255, 255, 1);
+        }
+
+        .theme-toggle:active {
+            transform: scale(1.05);
+        }
+
+        /* 浅色主题 */
+        body.light-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .theme-toggle svg {
+            stroke: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-theme .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.15);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .theme-toggle:hover svg {
+            stroke: rgba(0, 0, 0, 1);
+        }
+
+        .card {
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            max-height: none;
+            border-radius: var(--radius);
+            position: relative;
+            background: var(--backdrop);
+            backdrop-filter: blur(20px);
+            border: var(--border-size) solid var(--backup-border);
+            overflow: hidden;
+        }
+
+        /* 核心光晕效果 */
+        .card[data-glow] {
+            background: none; /* 禁用鼠标跟随的光晕 */
+        }
+
+        /* 边缘光晕层容器 */
+        .card-glow-border {
+            position: absolute;
+            inset: -10px;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: calc(var(--radius) + 10px);
+            overflow: visible;
+        }
+
+        /* 边缘光晕 - 强调光 */
+        .card-glow-border::before {
+            display: none; /* 禁用鼠标跟随的边缘光晕 */
+        }
+
+        /* 内部遮罩 - 只显示边缘 */
+        .card-glow-inner {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            border-radius: calc(var(--radius) - 4px);
+            z-index: 50;
+            opacity: 1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .card-glow-inner {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        /* 光晕可见性蒙版 - 中心暗淡，边缘明亮 */
+        .glow-visibility-mask {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            z-index: 60;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 1) 50%,
+                rgba(0, 0, 0, 0.9) 65%,
+                rgba(0, 0, 0, 0.6) 80%,
+                rgba(0, 0, 0, 0.2) 90%,
+                rgba(0, 0, 0, 0) 95%
+            );
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .glow-visibility-mask {
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.6) 0%,
+                rgba(255, 255, 255, 0.5) 40%,
+                rgba(255, 255, 255, 0.3) 60%,
+                rgba(255, 255, 255, 0.1) 80%,
+                rgba(255, 255, 255, 0) 90%
+            );
+        }
+
+        /* 额外的边缘光晕增强层 */
+        .card-glow-border-extra {
+            display: none; /* 禁用额外的边缘光晕增强层 */
+        }
+
+        .card-glow-inner::before {
+            display: none; /* 禁用内部光晕 */
+        }
+
+        /* 边缘光晕 - 聚光点 */
+        .card-glow-border::after {
+            display: none;
+        }
+
+        /* 独立的白色高光层 - 为每个光晕创建 */
+        .card-glow-highlight {
+            position: absolute;
+            inset: -10px;
+            pointer-events: none;
+            z-index: 60;
+            border-radius: calc(var(--radius) + 10px);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.4) calc(var(--spotlight-size) * 0.4) at
+                calc(var(--highlight-x, 960) * 1px)
+                calc(var(--highlight-y, 540) * 1px),
+                hsl(0, 0%, 100% / 0.8),
+                transparent 100%
+            );
+            filter: brightness(5) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+            opacity: calc(var(--edge-proximity, 0) * var(--edge-proximity, 0) * 2);
+            display: none; /* 隐藏原来的单一高光层 */
+        }
+
+        /* 5个光晕对应的边缘高光层 */
+        .card-glow-highlight-1,
+        .card-glow-highlight-2,
+        .card-glow-highlight-3,
+        .card-glow-highlight-4,
+        .card-glow-highlight-5 {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 45;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        /* 边缘高光内部的光晕层 */
+        .card-glow-highlight-1::before,
+        .card-glow-highlight-2::before,
+        .card-glow-highlight-3::before,
+        .card-glow-highlight-4::before,
+        .card-glow-highlight-5::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+
+        .card-glow-highlight-1::before {
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-1, 960) * 1px)
+                calc(var(--highlight-y-1, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-1);
+        }
+
+        .card-glow-highlight-2::before {
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-2, 960) * 1px)
+                calc(var(--highlight-y-2, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-2);
+        }
+
+        .card-glow-highlight-3::before {
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-3, 960) * 1px)
+                calc(var(--highlight-y-3, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-3);
+        }
+
+        .card-glow-highlight-4::before {
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-4, 960) * 1px)
+                calc(var(--highlight-y-4, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-4);
+        }
+
+        .card-glow-highlight-5::before {
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-5, 960) * 1px)
+                calc(var(--highlight-y-5, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-5);
+        }
+
+        /* 内部遮罩 - 只显示边缘 */
+        .card-glow-inner {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            border-radius: calc(var(--radius) - 4px);
+            z-index: 50;
+            opacity: 1;
+            pointer-events: none;
+        }
+
+        /* 围绕鼠标旋转的光晕 */
+        .orbiting-glow {
+            position: absolute;
+            width: calc(var(--spotlight-size) * 1.5);
+            height: calc(var(--spotlight-size) * 1.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 55;
+            background: radial-gradient(
+                circle,
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness) * 1%) / 0.6),
+                transparent 70%
+            );
+            filter: blur(20px);
+            opacity: 0.4;
+            transform-origin: center center;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        /* 呼吸动画 */
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        /* 每个光晕不同的动画周期和颜色 */
+        .orbiting-glow-1 {
+            animation-duration: 2.5s;
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+        }
+
+        .orbiting-glow-2 {
+            animation-duration: 3.2s;
+            animation-delay: -0.5s;
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+        }
+
+        .orbiting-glow-3 {
+            animation-duration: 4s;
+            animation-delay: -1s;
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+        }
+
+        .orbiting-glow-4 {
+            animation-duration: 2.8s;
+            animation-delay: -1.5s;
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+        }
+
+        .orbiting-glow-5 {
+            animation-duration: 3.5s;
+            animation-delay: -2s;
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+        }
+
+        /* 外部光晕层 */
+        .card[data-glow] > [data-glow] {
+            display: none; /* 禁用外部光晕层 */
+        }
+
+        /* 卡片内容 */
+        .card-content {
+            position: relative;
+            z-index: 100;
+            padding: 60px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        .card-content h1 {
+            font-size: 4rem;
+            font-weight: 200;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.5s ease;
+        }
+
+        body.light-theme .card-content h1 {
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-content p {
+            font-size: 1.25rem;
+            opacity: 0.6;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.8;
+            color: #ffffff;
+            transition: color 0.5s ease;
+        }
+
+        body.light-theme .card-content p {
+            color: #333333;
+        }
+
+        .card-content .highlight {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: all 0.5s ease;
+        }
+
+        body.light-theme .card-content .highlight {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.03);
+            color: #333333;
+        }
+
+        /* 主滚动容器 */
+        .main-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+        }
+
+        .main-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .main-container.active {
+            display: flex;
+        }
+
+        /* 每一页 */
+        .page {
+            flex: 0 0 100vw;
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            flex-direction: column;
+            padding: 0 !important;
+            position: relative;
+        }
+
+        .page-top {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wuxing-chart-svg {
+            width: 520px;
+            height: 520px;
+            max-width: 100%;
+            max-height: 45vh;
+        }
+
+        .page-bottom {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+        }
+
+        .cards-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-wrapper-container {
+            width: 70vw !important;
+            max-width: 400px !important;
+        }
+
+        /* Profile Card 样式 */
+        .profile-card {
+            position: relative;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Card Content Wrapper */
+        .card-wrapper {
+            position: relative;
+            z-index: 5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Effect */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.05);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            z-index: 1;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+        }
+
+        body.light-theme .profile-card::before {
+            background: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Theme Color Overlay */
+        .profile-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.08) 0%,
+                hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.03) 100%
+            );
+            border-radius: 20px;
+            z-index: 2;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        body.light-theme .profile-card::after {
+            mix-blend-mode: normal;
+            opacity: 0.2;
+        }
+
+        /* Profile Card 辉光效果 */
+        .profile-card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .profile-card-inner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3),
+                transparent 70%
+            );
+            filter: blur(40px);
+            animation: glowMove 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glowMove {
+            0% { top: 20%; left: 20%; }
+            25% { top: 20%; left: 60%; }
+            50% { top: 60%; left: 60%; }
+            75% { top: 60%; left: 20%; }
+            100% { top: 20%; left: 20%; }
+        }
+
+        .profile-card-edge-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 3;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3) 25%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.4) 50%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3) 75%,
+                transparent 100%
+            );
+            opacity: 0.6;
+            animation: edgeGlowPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes edgeGlowPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Card Header */
+        .card-header {
+            padding: 12px 12px 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gua-symbol {
+            width: 36px;
+            height: 36px;
+        }
+
+        .gua-line {
+            stroke: var(--theme-color);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+        }
+
+        .gua-line.yang {
+            stroke: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .gua-line.yang {
+            stroke: rgba(0, 0, 0, 0.9);
+        }
+
+        .gua-line.yin-left,
+        .gua-line.yin-right {
+            stroke: rgba(255, 255, 255, 0.6);
+        }
+
+        body.light-theme .gua-line.yin-left,
+        body.light-theme .gua-line.yin-right {
+            stroke: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Card Content Inner */
+        .card-content-inner {
+            padding: 0 12px 12px;
+            color: #ffffff;
+        }
+
+        body.light-theme .card-content-inner {
+            color: #333333;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .user-username {
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0.6;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .user-username {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .user-name {
+            display: none;
+        }
+
+        body.light-theme .user-name {
+            background: linear-gradient(135deg, #333333 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-birth {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .user-birth {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .pillars-section {
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        body.light-theme .section-title {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .pillar-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .pillar-label {
+            font-size: 0.65rem;
+            opacity: 0.5;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        body.light-theme .pillar-label {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .pillar-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        body.light-theme .pillar-value {
+            color: #333333;
+        }
+
+        .minggua-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 8px;
+        }
+
+        .minggua-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .minggua-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50% !important;
+            background: var(--theme-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .minggua-details h4 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: #ffffff;
+        }
+
+        body.light-theme .minggua-details h4 {
+            color: #333333;
+        }
+
+        .minggua-details p {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        body.light-theme .minggua-details p {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .minggua-element {
+            text-align: right;
+        }
+
+        .element-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+        }
+
+        .element-direction {
+            font-size: 0.65rem;
+            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .element-direction {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* 新建按钮页面 */
+        .new-profile-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #ffffff;
+        }
+
+        body.light-theme .new-profile-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 2px dashed rgba(0, 0, 0, 0.15);
+            color: #333333;
+        }
+
+        .new-profile-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        body.light-theme .new-profile-card:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.25);
+        }
+
+        .new-profile-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .new-profile-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .new-profile-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        /* 命卦主题颜色配置 */
+        /* 坎卦 - 一白 - 水五行 */
+        .profile-card[data-star="1"] {
+            --theme-hue: 210;
+            --theme-saturation: 90;
+            --theme-lightness: 50;
+            --theme-color: #2196F3;
+        }
+
+        /* 坤卦 - 二黑 - 土五行 */
+        .profile-card[data-star="2"] {
+            --theme-hue: 45;
+            --theme-saturation: 90;
+            --theme-lightness: 50;
+            --theme-color: #FFC107;
+        }
+
+        /* 震卦 - 三碧 - 木五行 */
+        .profile-card[data-star="3"] {
+            --theme-hue: 120;
+            --theme-saturation: 70;
+            --theme-lightness: 50;
+            --theme-color: #4CAF50;
+        }
+
+        /* 浅色主题下的命卦颜色调整 */
+        body.light-theme .profile-card[data-star="1"] {
+            --theme-hue: 210;
+            --theme-saturation: 80;
+            --theme-lightness: 45;
+        }
+
+        body.light-theme .profile-card[data-star="2"] {
+            --theme-hue: 45;
+            --theme-saturation: 85;
+            --theme-lightness: 55;
+        }
+
+        body.light-theme .profile-card[data-star="3"] {
+            --theme-hue: 120;
+            --theme-saturation: 60;
+            --theme-lightness: 45;
+        }
+
+        /* 五行图SVG样式 */
+        .element-circle-glow {
+            filter: blur(12px);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .element-circle-glow {
+            opacity: 0.5;
+            filter: blur(12px) brightness(1.2);
+        }
+
+        .daymaster-star {
+            fill: rgba(255, 215, 0, 0.6);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+        }
+
+        .element-circle-glass-bg {
+            fill: rgba(255, 255, 255, 0.1);
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 1.5;
+        }
+
+        body.light-theme .element-circle-glass-bg {
+            fill: rgba(255, 255, 255, 0.2);
+            stroke: rgba(255, 255, 255, 0.6);
+        }
+
+        .connection-line {
+            pointer-events: none;
+            stroke: rgba(255, 255, 255, 0.4);
+        }
+
+        body.light-theme .connection-line {
+            stroke: rgba(0, 0, 0, 0.3);
+        }
+
+        .element-label {
+            font-size: 16px;
+            fill: rgba(255, 255, 255, 0.9);
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+            font-weight: 300;
+            stroke: rgba(255, 255, 255, 0.4);
+            stroke-width: 1;
+            paint-order: stroke fill;
+            filter: url(#glass-text);
+        }
+
+        body.light-theme .element-label {
+            fill: rgba(51, 51, 51, 0.85);
+            stroke: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .page {
+                padding: 0 !important;
+            }
+
+            .page-top {
+                padding: 0 !important;
+            }
+
+            .card-wrapper-container {
+                width: 65vw;
+                max-width: 320px !important;
+            }
+
+            .wuxing-chart-svg {
+                width: 450px;
+                height: 450px;
+            }
+        }
+
+        /* 深色主题下提高边缘高光的透明度 */
+        .card-glow-highlight-1::before,
+        .card-glow-highlight-2::before,
+        .card-glow-highlight-3::before,
+        .card-glow-highlight-4::before {
+            opacity: 1.5; /* 提高边缘高光的基础透明度 */
+            filter: brightness(1.5) saturate(1.2); /* 增加亮度和饱和度 */
+        }
+
+        .card-glow-highlight-5::before {
+            opacity: 1.5;
+            filter: brightness(1.3) saturate(0.5); /* 白色光晕 */
+        }
+
+        /* 浅色主题下增强光晕饱和度和亮度 */
+        body.light-theme {
+            --orbit-glow-1-saturation: 100;
+            --orbit-glow-1-lightness: 40;   /* 提高亮度 */
+            --orbit-glow-2-saturation: 100;
+            --orbit-glow-2-lightness: 50;   /* 提高亮度 */
+            --orbit-glow-3-saturation: 100;
+            --orbit-glow-3-lightness: 40;   /* 提高亮度 */
+            --orbit-glow-4-saturation: 100;
+            --orbit-glow-4-lightness: 50;   /* 提高亮度 */
+            --orbit-glow-5-lightness: 70;   /* 白色光晕在浅色模式下更亮 */
+        }
+
+        /* 浅色主题下提高光晕不透明度 */
+        body.light-theme .orbiting-glow {
+            opacity: 0.7;
+        }
+
+        /* 浅色主题下提高边缘高光的透明度 */
+        body.light-theme .card-glow-highlight-1::before,
+        body.light-theme .card-glow-highlight-2::before,
+        body.light-theme .card-glow-highlight-3::before,
+        body.light-theme .card-glow-highlight-4::before {
+            opacity: 2; /* 提高边缘高光的基础透明度 */
+            filter: brightness(2) saturate(1.5); /* 增加亮度和饱和度 */
+        }
+
+        body.light-theme .card-glow-highlight-5::before {
+            opacity: 2;
+            filter: brightness(1.5) saturate(0.5); /* 白色光晕 */
+        }
+
+        /* 环境光晕 */
+        body::before {
+            display: none; /* 禁用环境光晕 */
+        }
+
+        @media (max-width: 768px) {
+            .card-content {
+                padding: 40px;
+            }
+            .card-content h1 {
+                font-size: 2.5rem;
+            }
+            .card-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg viewBox="0 0 24 24" class="theme-icon-dark">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg viewBox="0 0 24 24" class="theme-icon-light" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+    <div class="card" data-glow>
+        <div data-glow></div>
+        <div class="card-glow-inner"></div>
+        <div class="card-glow-border-extra"></div>
+        <div class="card-glow-border"></div>
+        <div class="card-glow-highlight"></div>
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+        <div class="glow-visibility-mask"></div>
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+        <div class="main-container" id="mainContainer">
+            <!-- 第1页: 坎卦 -->
+            <div class="page">
+                <div class="page-top">
+                    <svg class="wuxing-chart-svg" id="wuxing-chart-1" viewBox="0 0 600 600">
+                        <defs>
+                            <filter id="glass-text" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                                <feOffset in="blur" dx="0" dy="1" result="offsetBlur"/>
+                                <feFlood flood-color="rgba(255,255,255,0.5)" result="glowColor"/>
+                                <feComposite in="glowColor" in2="offsetBlur" operator="in" result="softGlow"/>
+                                <feMerge>
+                                    <feMergeNode in="softGlow"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="page-bottom">
+                    <div class="cards-container">
+                        <div class="card-wrapper-container">
+                            <div class="profile-card" data-star="1">
+                                <div class="profile-card-glow">
+                                    <div class="profile-card-inner-glow"></div>
+                                    <div class="profile-card-edge-glow"></div>
+                                </div>
+                                <div class="card-wrapper">
+                                    <div class="card-header">
+                                        <svg class="gua-symbol" viewBox="0 0 100 100">
+                                            <line x1="15" y1="25" x2="40" y2="25" class="gua-line yin-left"/>
+                                            <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                                            <line x1="15" y1="50" x2="85" y2="50" class="gua-line yang"/>
+                                            <line x1="15" y1="75" x2="40" y2="75" class="gua-line yin-left"/>
+                                            <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                                        </svg>
+                                    </div>
+                                    <div class="card-content-inner">
+                                        <div class="user-info">
+                                            <h2 class="user-username">@user_kan</h2>
+                                            <p class="user-birth">1990年5月15日 14:30</p>
+                                        </div>
+                                        <div class="pillars-section">
+                                            <div class="section-title">四柱八字</div>
+                                            <div class="pillars-grid">
+                                                <div class="pillar-item"><div class="pillar-label">年柱</div><div class="pillar-value">庚午</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">月柱</div><div class="pillar-value">辛巳</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">日柱</div><div class="pillar-value">壬子</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">时柱</div><div class="pillar-value">丁未</div></div>
+                                            </div>
+                                        </div>
+                                        <div class="minggua-info">
+                                            <div class="minggua-left">
+                                                <div class="minggua-badge">坎</div>
+                                                <div class="minggua-details">
+                                                    <h4>坎卦 · 一白</h4>
+                                                    <p>西四命 / 水五行</p>
+                                                </div>
+                                            </div>
+                                            <div class="minggua-element">
+                                                <span class="element-tag">属水</span>
+                                                <div class="element-direction">吉方位：北</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第2页: 坤卦 -->
+            <div class="page">
+                <div class="page-top">
+                    <svg class="wuxing-chart-svg" id="wuxing-chart-2" viewBox="0 0 600 600">
+                        <defs>
+                            <filter id="glass-text-2" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                                <feOffset in="blur" dx="0" dy="1" result="offsetBlur"/>
+                                <feFlood flood-color="rgba(255,255,255,0.5)" result="glowColor"/>
+                                <feComposite in="glowColor" in2="offsetBlur" operator="in" result="softGlow"/>
+                                <feMerge>
+                                    <feMergeNode in="softGlow"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="page-bottom">
+                    <div class="cards-container">
+                        <div class="card-wrapper-container">
+                            <div class="profile-card" data-star="2">
+                                <div class="profile-card-glow">
+                                    <div class="profile-card-inner-glow"></div>
+                                    <div class="profile-card-edge-glow"></div>
+                                </div>
+                                <div class="card-wrapper">
+                                    <div class="card-header">
+                                        <svg class="gua-symbol" viewBox="0 0 100 100">
+                                            <line x1="15" y1="25" x2="40" y2="25" class="gua-line yin-left"/>
+                                            <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                                            <line x1="15" y1="50" x2="40" y2="50" class="gua-line yin-left"/>
+                                            <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                                            <line x1="15" y1="75" x2="40" y2="75" class="gua-line yin-left"/>
+                                            <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                                        </svg>
+                                    </div>
+                                    <div class="card-content-inner">
+                                        <div class="user-info">
+                                            <h2 class="user-username">@user_kun</h2>
+                                            <p class="user-birth">1985年8月20日 10:00</p>
+                                        </div>
+                                        <div class="pillars-section">
+                                            <div class="section-title">四柱八字</div>
+                                            <div class="pillars-grid">
+                                                <div class="pillar-item"><div class="pillar-label">年柱</div><div class="pillar-value">乙丑</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">月柱</div><div class="pillar-value">甲申</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">日柱</div><div class="pillar-value">丙辰</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">时柱</div><div class="pillar-value">癸巳</div></div>
+                                            </div>
+                                        </div>
+                                        <div class="minggua-info">
+                                            <div class="minggua-left">
+                                                <div class="minggua-badge">坤</div>
+                                                <div class="minggua-details">
+                                                    <h4>坤卦 · 二黑</h4>
+                                                    <p>西四命 / 土五行</p>
+                                                </div>
+                                            </div>
+                                            <div class="minggua-element">
+                                                <span class="element-tag">属土</span>
+                                                <div class="element-direction">吉方位：西南</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第3页: 震卦 -->
+            <div class="page">
+                <div class="page-top">
+                    <svg class="wuxing-chart-svg" id="wuxing-chart-3" viewBox="0 0 600 600">
+                        <defs>
+                            <filter id="glass-text-3" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                                <feOffset in="blur" dx="0" dy="1" result="offsetBlur"/>
+                                <feFlood flood-color="rgba(255,255,255,0.5)" result="glowColor"/>
+                                <feComposite in="glowColor" in2="offsetBlur" operator="in" result="softGlow"/>
+                                <feMerge>
+                                    <feMergeNode in="softGlow"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="page-bottom">
+                    <div class="cards-container">
+                        <div class="card-wrapper-container">
+                            <div class="profile-card" data-star="3">
+                                <div class="profile-card-glow">
+                                    <div class="profile-card-inner-glow"></div>
+                                    <div class="profile-card-edge-glow"></div>
+                                </div>
+                                <div class="card-wrapper">
+                                    <div class="card-header">
+                                        <svg class="gua-symbol" viewBox="0 0 100 100">
+                                            <line x1="15" y1="25" x2="85" y2="25" class="gua-line yang"/>
+                                            <line x1="15" y1="50" x2="40" y2="50" class="gua-line yin-left"/>
+                                            <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                                            <line x1="15" y1="75" x2="40" y2="75" class="gua-line yin-left"/>
+                                            <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                                        </svg>
+                                    </div>
+                                    <div class="card-content-inner">
+                                        <div class="user-info">
+                                            <h2 class="user-username">@user_zhen</h2>
+                                            <p class="user-birth">1995年3月10日 08:30</p>
+                                        </div>
+                                        <div class="pillars-section">
+                                            <div class="section-title">四柱八字</div>
+                                            <div class="pillars-grid">
+                                                <div class="pillar-item"><div class="pillar-label">年柱</div><div class="pillar-value">乙亥</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">月柱</div><div class="pillar-value">己卯</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">日柱</div><div class="pillar-value">庚戌</div></div>
+                                                <div class="pillar-item"><div class="pillar-label">时柱</div><div class="pillar-value">庚辰</div></div>
+                                            </div>
+                                        </div>
+                                        <div class="minggua-info">
+                                            <div class="minggua-left">
+                                                <div class="minggua-badge">震</div>
+                                                <div class="minggua-details">
+                                                    <h4>震卦 · 三碧</h4>
+                                                    <p>东四命 / 木五行</p>
+                                                </div>
+                                            </div>
+                                            <div class="minggua-element">
+                                                <span class="element-tag">属木</span>
+                                                <div class="element-direction">吉方位：东</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第4页: 新建按钮 -->
+            <div class="page">
+                <div class="page-top"></div>
+                <div class="page-bottom">
+                    <div class="cards-container">
+                        <div class="card-wrapper-container">
+                            <div class="new-profile-card">
+                                <div class="new-profile-icon">+</div>
+                                <div class="new-profile-title">新建命盘</div>
+                                <div class="new-profile-subtitle">创建您的八字命盘分析</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                darkIcon.style.display = 'block';
+                lightIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 页面加载时恢复主题设置
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+            }
+        });
+
+        // 旋转光晕的配置
+        const orbitRadius = 160; // 旋转半径
+        let rotationAngle = 0; // 当前旋转角度
+        const rotationSpeed = 0.008; // 旋转速度（弧度/帧）
+
+        // 随机运动中心点的配置
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        let centerTargetX = window.innerWidth / 2;
+        let centerTargetY = window.innerHeight / 2;
+        const centerMoveSpeed = 0.002; // 中心点移动速度
+        let centerAngle = 0; // 用于生成平滑随机运动的变量
+
+        // 更新随机运动中心点的位置
+        function updateRandomCenter() {
+            // 使用正弦波组合生成平滑的随机运动
+            centerAngle += centerMoveSpeed;
+
+            // 计算允许的运动范围（从中心到距离边缘20%的位置）
+            const maxRangeX = window.innerWidth * 0.4; // X轴最大移动范围（从中心算起）
+            const maxRangeY = window.innerHeight * 0.4; // Y轴最大移动范围（从中心算起）
+
+            // 生成新的目标点（限制在允许范围内）
+            centerTargetX = window.innerWidth / 2 + Math.sin(centerAngle) * maxRangeX + Math.sin(centerAngle * 0.7) * (maxRangeX * 0.5);
+            centerTargetY = window.innerHeight / 2 + Math.cos(centerAngle * 0.8) * maxRangeY + Math.cos(centerAngle * 1.3) * (maxRangeY * 0.5);
+
+            // 平滑移动到目标点
+            centerX += (centerTargetX - centerX) * 0.01;
+            centerY += (centerTargetY - centerY) * 0.01;
+        }
+
+        // 更新旋转光晕的位置
+        function updateOrbitingGlows() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+
+            glows.forEach((glow, index) => {
+                const angle = rotationAngle + (index * Math.PI * 2 / 5); // 每个光晕间隔72度（5个光晕均匀分布）
+                const offsetX = Math.cos(angle) * orbitRadius;
+                const offsetY = Math.sin(angle) * orbitRadius;
+
+                // 使用 getComputedStyle 获取实际尺寸
+                const glowWidth = parseFloat(getComputedStyle(glow).width);
+                const glowHeight = parseFloat(getComputedStyle(glow).height);
+
+                glow.style.left = `${centerX + offsetX - glowWidth / 2}px`;
+                glow.style.top = `${centerY + offsetY - glowHeight / 2}px`;
+            });
+        }
+
+        // 旋转动画循环
+        function animateRotation() {
+            rotationAngle += rotationSpeed;
+
+            // 更新随机中心点位置
+            updateRandomCenter();
+
+            updateOrbitingGlows();
+            updateEdgeHighlight(); // 更新边缘高光位置
+
+            requestAnimationFrame(animateRotation);
+        }
+
+        // 启动旋转动画
+        animateRotation();
+
+        // 计算旋转光晕位置并更新边缘高光
+        function updateEdgeHighlight() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+            const card = document.querySelector('.card');
+            const cardRect = card.getBoundingClientRect();
+
+            // 计算光晕影响范围（用于距离归一化）
+            const maxDistance = 300; // 光晕影响范围的最大距离
+
+            // 为每个光晕计算其对应的边缘高光位置和透明度
+            glows.forEach((glow, index) => {
+                const rect = glow.getBoundingClientRect();
+                const glowCenterX = rect.left + rect.width / 2;
+                const glowCenterY = rect.top + rect.height / 2;
+
+                // 计算到卡片四边的距离
+                const distToLeft = glowCenterX - cardRect.left;
+                const distToRight = cardRect.right - glowCenterX;
+                const distToTop = glowCenterY - cardRect.top;
+                const distToBottom = cardRect.bottom - glowCenterY;
+
+                // 找到最近的边
+                const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+                // 根据距离计算透明度：距离越近越亮，距离越远越暗
+                // 归一化到 0-1 范围，然后反转（近=1，远=0）
+                let edgeOpacity = Math.max(0, 1 - (minDist / maxDistance));
+                // 使用平方函数让过渡更平滑
+                edgeOpacity = edgeOpacity * edgeOpacity;
+                // 最大透明度为 3（提高深色模式下的亮度）
+                edgeOpacity = Math.min(3, edgeOpacity);
+
+                // 浅色模式下额外增加亮度
+                if (document.body.classList.contains('light-theme')) {
+                    edgeOpacity *= 5;
+                }
+
+                // 设置边缘高光的位置（在光晕向卡片边缘方向的投影）
+                let highlightX = glowCenterX;
+                let highlightY = glowCenterY;
+
+                if (minDist === distToLeft) {
+                    highlightX = cardRect.left; // 卡片左边缘
+                } else if (minDist === distToRight) {
+                    highlightX = cardRect.right; // 卡片右边缘
+                } else if (minDist === distToTop) {
+                    highlightY = cardRect.top; // 卡片上边缘
+                } else {
+                    highlightY = cardRect.bottom; // 卡片下边缘
+                }
+
+                // 更新对应的高光位置和透明度变量
+                const highlightIndex = index + 1;
+                document.documentElement.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.documentElement.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.documentElement.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+            });
+        }
+
+        // ========== 五行图初始化 ==========
+        function initWuxingChart(svgId, dayMasterElement) {
+            const svg = document.getElementById(svgId);
+            if (!svg) return;
+
+            // 五行比重数据（百分比 0-100）
+            const elementPercentages = {
+                wood: 25,
+                fire: 15,
+                earth: 30,
+                metal: 20,
+                water: 10
+            };
+
+            // 五行元素配置
+            const isLightTheme = document.body.classList.contains('light-theme');
+            const elements = [
+                { id: 'wood', name: '木', color: 'rgba(76, 175, 80, 0.9)', borderColor: '#4CAF50', angle: 198, isDayMaster: dayMasterElement === 'wood' },
+                { id: 'fire', name: '火', color: 'rgba(244, 67, 54, 0.9)', borderColor: '#F44336', angle: 270, isDayMaster: dayMasterElement === 'fire' },
+                { id: 'earth', name: '土', color: 'rgba(255, 193, 7, 0.9)', borderColor: '#FFC107', angle: 342, isDayMaster: dayMasterElement === 'earth' },
+                { id: 'metal', name: '金', color: isLightTheme ? 'rgba(120, 120, 120, 0.85)' : 'rgba(255, 255, 255, 0.9)', borderColor: isLightTheme ? '#CCCCCC' : '#FFFFFF', angle: 54, isDayMaster: dayMasterElement === 'metal' },
+                { id: 'water', name: '水', color: 'rgba(33, 150, 243, 0.9)', borderColor: '#2196F3', angle: 126, isDayMaster: dayMasterElement === 'water' }
+            ];
+
+            // 连线配置
+            const connections = [
+                { from: 0, to: 1, dashed: false },
+                { from: 1, to: 2, dashed: false },
+                { from: 2, to: 3, dashed: false },
+                { from: 3, to: 4, dashed: false },
+                { from: 4, to: 0, dashed: false },
+                { from: 0, to: 2, dashed: true },
+                { from: 2, to: 4, dashed: true },
+                { from: 4, to: 1, dashed: true },
+                { from: 1, to: 3, dashed: true },
+                { from: 3, to: 0, dashed: true }
+            ];
+
+            // 布局参数
+            const centerX = 300;
+            const centerY = 300;
+            const radius = 140;  // 增大半径，从90改为140
+
+            function getCircleRadius(percentage) {
+                return 30 + percentage * 1.0;  // 增大基础半径和倍数
+            }
+
+            // 计算元素位置
+            const elementPositions = elements.map(el => ({
+                x: centerX + radius * Math.cos(el.angle * Math.PI / 180),
+                y: centerY + radius * Math.sin(el.angle * Math.PI / 180),
+                r: getCircleRadius(elementPercentages[el.id]),
+                ...el
+            }));
+
+            // 绘制连线
+            const connectionLines = [];
+            connections.forEach(conn => {
+                const from = elementPositions[conn.from];
+                const to = elementPositions[conn.to];
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y);
+                line.setAttribute('stroke-width', conn.dashed ? '1.5' : '2');
+                if (conn.dashed) {
+                    line.setAttribute('stroke-dasharray', '5,5');
+                }
+                line.setAttribute('class', 'connection-line');
+                svg.appendChild(line);
+                connectionLines.push(line);
+            });
+
+            // 绘制元素圆圈
+            const labelElements = [];
+            const glowElements = [];
+            const glassBgElements = [];
+            let dayMasterStar = null;
+            let dayMasterIndex = -1;
+            let starRotationAngle = 0;
+
+            elementPositions.forEach((pos, index) => {
+                if (pos.isDayMaster) {
+                    dayMasterIndex = index;
+                }
+                pos.baseX = pos.x;
+                pos.baseY = pos.y;
+                pos.phaseX = Math.random() * Math.PI * 2;
+                pos.phaseY = Math.random() * Math.PI * 2;
+                pos.speedX = 0.0005 + Math.random() * 0.0005;
+                pos.speedY = 0.0005 + Math.random() * 0.0005;
+                pos.rangeX = 3 + Math.random() * 3;
+                pos.rangeY = 3 + Math.random() * 3;
+                pos.time = 0;
+
+                // 光晕
+                const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                glow.setAttribute('cx', pos.x);
+                glow.setAttribute('cy', pos.y);
+                glow.setAttribute('r', pos.r);
+                glow.setAttribute('fill', pos.color);
+                glow.setAttribute('class', 'element-circle-glow');
+                svg.appendChild(glow);
+                glowElements.push(glow);
+
+                // 玻璃背景
+                const glassBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                glassBg.setAttribute('cx', pos.x);
+                glassBg.setAttribute('cy', pos.y);
+                glassBg.setAttribute('r', pos.r);
+                glassBg.setAttribute('class', 'element-circle-glass-bg');
+                svg.appendChild(glassBg);
+                glassBgElements.push(glassBg);
+
+                // 标签
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', pos.x);
+                label.setAttribute('y', pos.y);
+                label.setAttribute('class', 'element-label');
+                label.style.fontSize = '20px';  // 增大字体
+                const nameSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                nameSpan.setAttribute('x', pos.x);
+                nameSpan.setAttribute('dy', '-0.6em');
+                nameSpan.textContent = pos.name;
+                label.appendChild(nameSpan);
+                const percentSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                percentSpan.setAttribute('x', pos.x);
+                percentSpan.setAttribute('dy', '1.4em');
+                percentSpan.textContent = `${elementPercentages[pos.id]}%`;
+                label.appendChild(percentSpan);
+                svg.appendChild(label);
+                labelElements.push(label);
+
+                // 日主星星
+                if (pos.isDayMaster) {
+                    const star = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    const starOffset = pos.r - 2;
+                    const starX = pos.x + starOffset;
+                    const starY = pos.y - starOffset;
+                    const starSize = 6;
+                    const starPoints = [];
+                    for (let i = 0; i < 5; i++) {
+                        const outerAngle = (i * 72 - 90) * Math.PI / 180;
+                        const innerAngle = ((i * 72) + 36 - 90) * Math.PI / 180;
+                        starPoints.push(`${starX + starSize * Math.cos(outerAngle)},${starY + starSize * Math.sin(outerAngle)}`);
+                        starPoints.push(`${starX + starSize * 0.4 * Math.cos(innerAngle)},${starY + starSize * 0.4 * Math.sin(innerAngle)}`);
+                    }
+                    star.setAttribute('points', starPoints.join(' '));
+                    star.setAttribute('class', 'daymaster-star');
+                    svg.appendChild(star);
+                    dayMasterStar = star;
+                }
+            });
+
+            // 动画循环
+            function animate() {
+                elementPositions.forEach((pos, index) => {
+                    pos.time += 16;
+                    const offsetX = Math.sin(pos.phaseX + pos.time * pos.speedX) * pos.rangeX;
+                    const offsetY = Math.cos(pos.phaseY + pos.time * pos.speedY) * pos.rangeY;
+                    const newX = pos.baseX + offsetX;
+                    const newY = pos.baseY + offsetY;
+                    glowElements[index].setAttribute('cx', newX);
+                    glowElements[index].setAttribute('cy', newY);
+                    glassBgElements[index].setAttribute('cx', newX);
+                    glassBgElements[index].setAttribute('cy', newY);
+                    labelElements[index].setAttribute('x', newX);
+                    labelElements[index].setAttribute('y', newY);
+                    const tspans = labelElements[index].querySelectorAll('tspan');
+                    if (tspans.length >= 2) {
+                        tspans[0].setAttribute('x', newX);
+                        tspans[1].setAttribute('x', newX);
+                    }
+                });
+
+                if (dayMasterIndex >= 0 && dayMasterStar) {
+                    const dayMasterPos = elementPositions[dayMasterIndex];
+                    const dmOffsetX = Math.sin(dayMasterPos.phaseX + dayMasterPos.time * dayMasterPos.speedX) * dayMasterPos.rangeX;
+                    const dmOffsetY = Math.cos(dayMasterPos.phaseY + dayMasterPos.time * dayMasterPos.speedY) * dayMasterPos.rangeY;
+                    const dmNewX = dayMasterPos.baseX + dmOffsetX;
+                    const dmNewY = dayMasterPos.baseY + dmOffsetY;
+                    starRotationAngle += 0.008;
+                    const starOrbitRadius = dayMasterPos.r + 3;
+                    const starX = dmNewX + starOrbitRadius * Math.cos(starRotationAngle);
+                    const starY = dmNewY + starOrbitRadius * Math.sin(starRotationAngle);
+                    const starSize = 6;
+                    const starPoints = [];
+                    for (let i = 0; i < 5; i++) {
+                        const outerAngle = (i * 72 - 90 + starRotationAngle * 180 / Math.PI) * Math.PI / 180;
+                        const innerAngle = ((i * 72) + 36 - 90 + starRotationAngle * 180 / Math.PI) * Math.PI / 180;
+                        starPoints.push(`${starX + starSize * Math.cos(outerAngle)},${starY + starSize * Math.sin(outerAngle)}`);
+                        starPoints.push(`${starX + starSize * 0.4 * Math.cos(innerAngle)},${starY + starSize * 0.4 * Math.sin(innerAngle)}`);
+                    }
+                    dayMasterStar.setAttribute('points', starPoints.join(' '));
+                }
+
+                connections.forEach((conn, index) => {
+                    const fromX = parseFloat(glowElements[conn.from].getAttribute('cx'));
+                    const fromY = parseFloat(glowElements[conn.from].getAttribute('cy'));
+                    const toX = parseFloat(glowElements[conn.to].getAttribute('cx'));
+                    const toY = parseFloat(glowElements[conn.to].getAttribute('cy'));
+                    connectionLines[index].setAttribute('x1', fromX);
+                    connectionLines[index].setAttribute('y1', fromY);
+                    connectionLines[index].setAttribute('x2', toX);
+                    connectionLines[index].setAttribute('y2', toY);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // 页面加载完成后初始化所有五行图
+        window.addEventListener('DOMContentLoaded', () => {
+            initWuxingChart('wuxing-chart-1', 'water');  // 坎卦 - 水为日主
+            initWuxingChart('wuxing-chart-2', 'earth');  // 坤卦 - 土为日主
+            initWuxingChart('wuxing-chart-3', 'wood');   // 震卦 - 木为日主
+        });
+    </script>
+</body>
+</html>
