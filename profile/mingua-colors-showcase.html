@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九星命卦色彩展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --spotlight-size: 200px;
+
+            /* 5个旋转光晕的颜色配置 */
+            --orbit-glow-1-hue: 0;
+            --orbit-glow-1-saturation: 70;
+            --orbit-glow-1-lightness: 20;
+            --orbit-edge-opacity-1: 0;
+
+            --orbit-glow-2-hue: 60;
+            --orbit-glow-2-saturation: 90;
+            --orbit-glow-2-lightness: 30;
+            --orbit-edge-opacity-2: 0;
+
+            --orbit-glow-3-hue: 120;
+            --orbit-glow-3-saturation: 90;
+            --orbit-glow-3-lightness: 20;
+            --orbit-edge-opacity-3: 0;
+
+            --orbit-glow-4-hue: 210;
+            --orbit-glow-4-saturation: 90;
+            --orbit-glow-4-lightness: 30;
+            --orbit-edge-opacity-4: 0;
+
+            --orbit-glow-5-hue: 0;
+            --orbit-glow-5-saturation: 0;
+            --orbit-glow-5-lightness: 30;
+            --orbit-edge-opacity-5: 0;
+
+            --highlight-x-1: 960;
+            --highlight-y-1: 540;
+            --highlight-x-2: 960;
+            --highlight-y-2: 540;
+            --highlight-x-3: 960;
+            --highlight-y-3: 540;
+            --highlight-x-4: 960;
+            --highlight-y-4: 540;
+            --highlight-x-5: 960;
+            --highlight-y-5: 540;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* 浅色主题 */
+        body.light-theme {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            --orbit-glow-1-saturation: 100;
+            --orbit-glow-1-lightness: 40;
+            --orbit-glow-2-saturation: 100;
+            --orbit-glow-2-lightness: 50;
+            --orbit-glow-3-saturation: 100;
+            --orbit-glow-3-lightness: 40;
+            --orbit-glow-4-saturation: 100;
+            --orbit-glow-4-lightness: 50;
+            --orbit-glow-5-lightness: 70;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .theme-toggle svg {
+            stroke: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-theme .theme-toggle:active {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-icon-light {
+            display: none;
+        }
+
+        body.light-theme .theme-icon-dark {
+            display: none;
+        }
+
+        body.light-theme .theme-icon-light {
+            display: block;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        body.light-theme .page-title {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .page-subtitle {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* 卡片网格容器 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 旋转光晕背景 */
+        .background-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .card-glow-border {
+            position: absolute;
+            inset: -10px;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 10px;
+            overflow: visible;
+        }
+
+        .card-glow-inner {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            border-radius: 6px;
+            z-index: 50;
+            opacity: 1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .card-glow-inner {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        .orbiting-glow {
+            position: absolute;
+            width: calc(var(--spotlight-size) * 1.5);
+            height: calc(var(--spotlight-size) * 1.5);
+            border-radius: 50%;
+            z-index: 55;
+            background: radial-gradient(
+                circle,
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness) * 1%) / 0.6),
+                transparent 70%
+            );
+            filter: blur(20px);
+            opacity: 0.4;
+            transform-origin: center center;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .orbiting-glow-1 {
+            animation-duration: 2.5s;
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+        }
+
+        .orbiting-glow-2 {
+            animation-duration: 3.2s;
+            animation-delay: -0.5s;
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+        }
+
+        .orbiting-glow-3 {
+            animation-duration: 4s;
+            animation-delay: -1s;
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+        }
+
+        .orbiting-glow-4 {
+            animation-duration: 2.8s;
+            animation-delay: -1.5s;
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+        }
+
+        .orbiting-glow-5 {
+            animation-duration: 3.5s;
+            animation-delay: -2s;
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+        }
+
+        .card-glow-highlight-1,
+        .card-glow-highlight-2,
+        .card-glow-highlight-3,
+        .card-glow-highlight-4,
+        .card-glow-highlight-5 {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 45;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .card-glow-highlight-1::before,
+        .card-glow-highlight-2::before,
+        .card-glow-highlight-3::before,
+        .card-glow-highlight-4::before,
+        .card-glow-highlight-5::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 0;
+            pointer-events: none;
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+
+        .card-glow-highlight-1::before {
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-1, 960) * 1px)
+                calc(var(--highlight-y-1, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-1);
+        }
+
+        .card-glow-highlight-2::before {
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-2, 960) * 1px)
+                calc(var(--highlight-y-2, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-2);
+        }
+
+        .card-glow-highlight-3::before {
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-3, 960) * 1px)
+                calc(var(--highlight-y-3, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-3);
+        }
+
+        .card-glow-highlight-4::before {
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-4, 960) * 1px)
+                calc(var(--highlight-y-4, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-4);
+        }
+
+        .card-glow-highlight-5::before {
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-5, 960) * 1px)
+                calc(var(--highlight-y-5, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-5);
+        }
+
+        body.light-theme .card-glow-highlight-1::before,
+        body.light-theme .card-glow-highlight-2::before,
+        body.light-theme .card-glow-highlight-3::before,
+        body.light-theme .card-glow-highlight-4::before {
+            filter: brightness(2) saturate(1.5);
+        }
+
+        body.light-theme .card-glow-highlight-5::before {
+            filter: brightness(1.5) saturate(0.5);
+        }
+
+        .glow-visibility-mask {
+            position: absolute;
+            inset: 0;
+            border-radius: 0;
+            z-index: 40;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 1) 50%,
+                rgba(0, 0, 0, 0.9) 65%,
+                rgba(0, 0, 0, 0.6) 80%,
+                rgba(0, 0, 0, 0.2) 90%,
+                rgba(0, 0, 0, 0) 95%
+            );
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .glow-visibility-mask {
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.6) 0%,
+                rgba(255, 255, 255, 0.5) 40%,
+                rgba(255, 255, 255, 0.3) 60%,
+                rgba(255, 255, 255, 0.1) 80%,
+                rgba(255, 255, 255, 0) 90%
+            );
+        }
+
+        /* Profile 卡片样式 */
+        .profile-card {
+            --theme-hue: 200;
+            --theme-saturation: 75;
+            --theme-lightness: 55;
+
+            width: 100%;
+            min-width: 280px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-theme .profile-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 命卦主题色配置 */
+        .profile-card[data-star="1"] {
+            --theme-hue: 0;
+            --theme-saturation: 0;
+            --theme-lightness: 70;
+        }
+
+        .profile-card[data-star="2"] {
+            --theme-hue: 0;
+            --theme-saturation: 0;
+            --theme-lightness: 30;
+        }
+
+        .profile-card[data-star="3"] {
+            --theme-hue: 200;
+            --theme-saturation: 75;
+            --theme-lightness: 55;
+        }
+
+        .profile-card[data-star="4"] {
+            --theme-hue: 120;
+            --theme-saturation: 70;
+            --theme-lightness: 50;
+        }
+
+        .profile-card[data-star="5"] {
+            --theme-hue: 45;
+            --theme-saturation: 90;
+            --theme-lightness: 55;
+        }
+
+        .profile-card[data-star="6"] {
+            --theme-hue: 0;
+            --theme-saturation: 0;
+            --theme-lightness: 70;
+        }
+
+        .profile-card[data-star="7"] {
+            --theme-hue: 0;
+            --theme-saturation: 80;
+            --theme-lightness: 60;
+        }
+
+        .profile-card[data-star="8"] {
+            --theme-hue: 0;
+            --theme-saturation: 0;
+            --theme-lightness: 85;
+        }
+
+        .profile-card[data-star="9"] {
+            --theme-hue: 275;
+            --theme-saturation: 80;
+            --theme-lightness: 60;
+        }
+
+        /* 内部辉光 */
+        .profile-card-inner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3),
+                transparent 70%
+            );
+            filter: blur(40px);
+            animation: glowMove 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glowMove {
+            0% {
+                top: 20%;
+                left: 20%;
+            }
+            25% {
+                top: 20%;
+                left: 60%;
+            }
+            50% {
+                top: 60%;
+                left: 60%;
+            }
+            75% {
+                top: 60%;
+                left: 20%;
+            }
+            100% {
+                top: 20%;
+                left: 20%;
+            }
+        }
+
+        /* 边缘辉光反射 */
+        .profile-card-edge-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3) 25%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.4) 50%,
+                hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3) 75%,
+                transparent 100%
+            );
+            opacity: 0.6;
+            animation: edgeGlowPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes edgeGlowPulse {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .card-header {
+            padding: 24px 20px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .gua-symbol {
+            width: 80px;
+            height: 80px;
+        }
+
+        .gua-line {
+            stroke-width: 6;
+            stroke-linecap: round;
+        }
+
+        .yang {
+            stroke: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%));
+        }
+
+        .yin-left, .yin-right {
+            stroke: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%));
+        }
+
+        .card-content {
+            padding: 16px 20px 24px;
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-theme .card-content {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+        }
+
+        body.light-theme .user-name {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .user-birth {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .user-birth {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .mingua-info {
+            text-align: center;
+        }
+
+        .mingua-number {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.15);
+            border: 1px solid hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3);
+            border-radius: 14px;
+            font-size: 24px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .mingua-number {
+            background: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.2);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .mingua-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+        }
+
+        body.light-theme .mingua-name {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .mingua-details {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .mingua-details {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .detail-item {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 4px 8px;
+            background: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.1);
+            border-radius: 6px;
+            color: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%));
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 旋转光晕背景 -->
+    <div class="background-container">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+
+        <div class="glow-visibility-mask"></div>
+    </div>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </div>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1 class="page-title">九星命卦色彩展示</h1>
+        <p class="page-subtitle">每种命卦对应的主题色和卦象</p>
+    </div>
+
+    <!-- 卡片网格 -->
+    <div class="cards-grid">
+        <!-- 1. 一白坎卦 -->
+        <div class="profile-card" data-star="1">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yang"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yin-left"/>
+                    <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">坎水命主</h2>
+                    <p class="user-birth">1990年5月15日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">1</div>
+                    <div class="mingua-name">一白坎卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">水</span>
+                        <span class="detail-item">东四命</span>
+                        <span class="detail-item">北</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 二黑坤卦 -->
+        <div class="profile-card" data-star="2">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yin-left"/>
+                    <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yin-left"/>
+                    <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">坤土命主</h2>
+                    <p class="user-birth">1991年8月20日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">2</div>
+                    <div class="mingua-name">二黑坤卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">土</span>
+                        <span class="detail-item">西四命</span>
+                        <span class="detail-item">西南</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 三碧震卦 -->
+        <div class="profile-card" data-star="3">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yin-left"/>
+                    <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yang"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">震木命主</h2>
+                    <p class="user-birth">1992年3月10日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">3</div>
+                    <div class="mingua-name">三碧震卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">木</span>
+                        <span class="detail-item">东四命</span>
+                        <span class="detail-item">东</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 四绿巽卦 -->
+        <div class="profile-card" data-star="4">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yang"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yin-left"/>
+                    <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">巽木命主</h2>
+                    <p class="user-birth">1993年4月5日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">4</div>
+                    <div class="mingua-name">四绿巽卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">木</span>
+                        <span class="detail-item">东四命</span>
+                        <span class="detail-item">东南</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 五黄中卦 -->
+        <div class="profile-card" data-star="5">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yang"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yin-left"/>
+                    <line x1="60" y1="75" x2="85" y2="75" class="gua-line yin-right"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">中土命主</h2>
+                    <p class="user-birth">1994年6月12日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">5</div>
+                    <div class="mingua-name">五黄中卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">土</span>
+                        <span class="detail-item">中宫</span>
+                        <span class="detail-item">中</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 六白乾卦 -->
+        <div class="profile-card" data-star="6">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yang"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yang"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yang"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">乾金命主</h2>
+                    <p class="user-birth">1995年10月8日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">6</div>
+                    <div class="mingua-name">六白乾卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">金</span>
+                        <span class="detail-item">西四命</span>
+                        <span class="detail-item">西北</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 七赤兑卦 -->
+        <div class="profile-card" data-star="7">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yin-left"/>
+                    <line x1="60" y1="25" x2="85" y2="25" class="gua-line yin-right"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yin-left"/>
+                    <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yang"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">兑金命主</h2>
+                    <p class="user-birth">1996年9月18日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">7</div>
+                    <div class="mingua-name">七赤兑卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">金</span>
+                        <span class="detail-item">西四命</span>
+                        <span class="detail-item">西</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. 八白艮卦 -->
+        <div class="profile-card" data-star="8">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yang"/>
+                    <line x1="15" y1="50" x2="85" y2="50" class="gua-line yin-left"/>
+                    <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yang"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">艮土命主</h2>
+                    <p class="user-birth">1997年1月25日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">8</div>
+                    <div class="mingua-name">八白艮卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">土</span>
+                        <span class="detail-item">西四命</span>
+                        <span class="detail-item">东北</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. 九紫离卦 -->
+        <div class="profile-card" data-star="9">
+            <div class="profile-card-inner-glow"></div>
+            <div class="profile-card-edge-glow"></div>
+            <div class="card-header">
+                <svg class="gua-symbol" viewBox="0 0 100 100">
+                    <line x1="15" y1="25" x2="85" y2="25" class="gua-line yang"/>
+                    <line x1="15" y1="50" x2="40" y2="50" class="gua-line yin-left"/>
+                    <line x1="60" y1="50" x2="85" y2="50" class="gua-line yin-right"/>
+                    <line x1="15" y1="75" x2="85" y2="75" class="gua-line yang"/>
+                </svg>
+            </div>
+            <div class="card-content">
+                <div class="user-info">
+                    <h2 class="user-name">离火命主</h2>
+                    <p class="user-birth">1999年9月24日</p>
+                </div>
+                <div class="mingua-info">
+                    <div class="mingua-number">9</div>
+                    <div class="mingua-name">九紫离卦</div>
+                    <div class="mingua-details">
+                        <span class="detail-item">火</span>
+                        <span class="detail-item">东四命</span>
+                        <span class="detail-item">南</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                darkIcon.style.display = 'block';
+                lightIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 旋转光晕动画
+        const orbitRadius = 160;
+        let rotationAngle = 0;
+        const rotationSpeed = 0.008;
+
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        let centerTargetX = window.innerWidth / 2;
+        let centerTargetY = window.innerHeight / 2;
+        const centerMoveSpeed = 0.002;
+        let centerAngle = 0;
+
+        function updateRandomCenter() {
+            centerAngle += centerMoveSpeed;
+            const maxRangeX = window.innerWidth * 0.4;
+            const maxRangeY = window.innerHeight * 0.4;
+
+            centerTargetX = window.innerWidth / 2 + Math.sin(centerAngle) * maxRangeX + Math.sin(centerAngle * 0.7) * (maxRangeX * 0.5);
+            centerTargetY = window.innerHeight / 2 + Math.cos(centerAngle * 0.8) * maxRangeY + Math.cos(centerAngle * 1.3) * (maxRangeY * 0.5);
+
+            centerX += (centerTargetX - centerX) * 0.01;
+            centerY += (centerTargetY - centerY) * 0.01;
+        }
+
+        function updateOrbitingGlows() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+
+            glows.forEach((glow, index) => {
+                const angle = rotationAngle + (index * Math.PI * 2 / 5);
+                const offsetX = Math.cos(angle) * orbitRadius;
+                const offsetY = Math.sin(angle) * orbitRadius;
+
+                const glowWidth = parseFloat(getComputedStyle(glow).width);
+                const glowHeight = parseFloat(getComputedStyle(glow).height);
+
+                glow.style.left = `${centerX + offsetX - glowWidth / 2}px`;
+                glow.style.top = `${centerY + offsetY - glowHeight / 2}px`;
+            });
+        }
+
+        function updateHighlightPositions() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+            const maxDistance = 300;
+
+            glows.forEach((glow, index) => {
+                const rect = glow.getBoundingClientRect();
+                const glowCenterX = rect.left + rect.width / 2;
+                const glowCenterY = rect.top + rect.height / 2;
+
+                const distToLeft = glowCenterX;
+                const distToRight = window.innerWidth - glowCenterX;
+                const distToTop = glowCenterY;
+                const distToBottom = window.innerHeight - glowCenterY;
+
+                const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+                let edgeOpacity = Math.max(0, 1 - (minDist / maxDistance));
+                edgeOpacity = edgeOpacity * edgeOpacity;
+                edgeOpacity = Math.min(3, edgeOpacity);
+
+                if (document.body.classList.contains('light-theme')) {
+                    edgeOpacity *= 5;
+                }
+
+                let highlightX = glowCenterX;
+                let highlightY = glowCenterY;
+
+                if (minDist === distToLeft) {
+                    highlightX = 0;
+                } else if (minDist === distToRight) {
+                    highlightX = window.innerWidth;
+                } else if (minDist === distToTop) {
+                    highlightY = 0;
+                } else {
+                    highlightY = window.innerHeight;
+                }
+
+                const highlightIndex = index + 1;
+                document.documentElement.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.documentElement.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.documentElement.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+                document.body.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.body.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.body.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+            });
+        }
+
+        function animateRotation() {
+            rotationAngle += rotationSpeed;
+            updateRandomCenter();
+            updateOrbitingGlows();
+            updateHighlightPositions();
+            requestAnimationFrame(animateRotation);
+        }
+
+        window.addEventListener('load', () => {
+            centerX = window.innerWidth / 2;
+            centerY = window.innerHeight / 2;
+            updateHighlightPositions();
+        });
+
+        animateRotation();
+
+        // 页面加载时恢复主题设置
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

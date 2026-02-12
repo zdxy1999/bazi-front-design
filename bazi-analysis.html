@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字命盘分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f17 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .paragraph {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .paragraph-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .paragraph-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            min-width: 60px;
+        }
+
+        .paragraph-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .highlight {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <div class="section-title">基本信息</div>
+            <div class="paragraph">
+                <div class="paragraph-title">
+                    <span class="paragraph-label">姓名</span>
+                    <span class="paragraph-text">张三丰</span>
+                </div>
+                <div class="paragraph-title">
+                    <span class="paragraph-label">性别</span>
+                    <span class="paragraph-text">男</span>
+                </div>
+                <div class="paragraph-title">
+                    <span class="paragraph-label">出生时间</span>
+                    <span class="paragraph-text">1991年8月20日 16:45</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">命盘解析</div>
+            <div class="paragraph">
+                <div class="paragraph-text">解析完成</div>
+                <div class="highlight">恭喜！您的八字命盘已经生成。</div>
+                <div class="paragraph-text">年柱：辛未 月柱：丙申 日柱：癸酉 时柱：壬申</div>
+            </div>
+        </div>
+</body>
+</html>

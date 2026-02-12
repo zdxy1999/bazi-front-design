@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行生克图 - ECharts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f5f7fa 100%);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: hsl(0, 0%, 90%);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        body.light-theme h1 {
+            color: hsl(220, 20%, 20%);
+        }
+
+        #mynetwork {
+            width: 600px;
+            height: 600px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+        }
+
+        body.light-theme #mynetwork {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: hsl(0, 0%, 80%);
+            font-size: 24px;
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: hsl(220, 20%, 40%);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">☀</div>
+
+    <h1>五行生克图</h1>
+
+    <div id="chart" style="width: 600px; height: 600px;"></div>
+
+    <script>
+        // 五行比重数据（百分比 0-100）
+        const elementPercentages = {
+            wood: 25,
+            fire: 15,
+            earth: 30,
+            metal: 20,
+            water: 10
+        };
+
+        // 初始化ECharts
+        const chart = echarts.init(document.getElementById('chart'));
+
+        // 五行节点数据 - 正五边形布局
+        const centerX = 300, centerY = 300, radius = 80;
+        const nodes = [
+            {
+                id: 0,
+                name: '木',
+                label: {
+                    show: true,
+                    formatter: `木\n${elementPercentages.wood}%`,
+                    fontSize: 16,
+                    color: '#fff'
+                },
+                symbolSize: 30 + elementPercentages.wood * 1.5,
+                itemStyle: {
+                    color: 'rgba(76, 175, 80, 0.9)',
+                    borderColor: '#4CAF50',
+                    borderWidth: 3
+                },
+                x: centerX + radius * Math.cos(198 * Math.PI / 180),
+                y: centerY + radius * Math.sin(198 * Math.PI / 180),
+                fixed: true
+            },
+            {
+                id: 1,
+                name: '火',
+                label: {
+                    show: true,
+                    formatter: `火\n${elementPercentages.fire}%`,
+                    fontSize: 16,
+                    color: '#fff'
+                },
+                symbolSize: 30 + elementPercentages.fire * 1.5,
+                itemStyle: {
+                    color: 'rgba(244, 67, 54, 0.9)',
+                    borderColor: '#F44336',
+                    borderWidth: 3
+                },
+                x: centerX + radius * Math.cos(270 * Math.PI / 180),
+                y: centerY + radius * Math.sin(270 * Math.PI / 180),
+                fixed: true
+            },
+            {
+                id: 2,
+                name: '土',
+                label: {
+                    show: true,
+                    formatter: `土\n${elementPercentages.earth}%`,
+                    fontSize: 16,
+                    color: '#fff'
+                },
+                symbolSize: 30 + elementPercentages.earth * 1.5,
+                itemStyle: {
+                    color: 'rgba(255, 193, 7, 0.9)',
+                    borderColor: '#FFC107',
+                    borderWidth: 3
+                },
+                x: centerX + radius * Math.cos(342 * Math.PI / 180),
+                y: centerY + radius * Math.sin(342 * Math.PI / 180),
+                fixed: true
+            },
+            {
+                id: 3,
+                name: '金',
+                label: {
+                    show: true,
+                    formatter: `金\n${elementPercentages.metal}%`,
+                    fontSize: 16,
+                    color: '#333'
+                },
+                symbolSize: 30 + elementPercentages.metal * 1.5,
+                itemStyle: {
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    borderColor: '#FFFFFF',
+                    borderWidth: 3
+                },
+                x: centerX + radius * Math.cos(54 * Math.PI / 180),
+                y: centerY + radius * Math.sin(54 * Math.PI / 180),
+                fixed: true
+            },
+            {
+                id: 4,
+                name: '水',
+                label: {
+                    show: true,
+                    formatter: `水\n${elementPercentages.water}%`,
+                    fontSize: 16,
+                    color: '#fff'
+                },
+                symbolSize: 30 + elementPercentages.water * 1.5,
+                itemStyle: {
+                    color: 'rgba(33, 150, 243, 0.9)',
+                    borderColor: '#2196F3',
+                    borderWidth: 3
+                },
+                x: centerX + radius * Math.cos(126 * Math.PI / 180),
+                y: centerY + radius * Math.sin(126 * Math.PI / 180),
+                fixed: true
+            }
+        ];
+
+        // 连线数据
+        const edges = [
+            // 相生关系
+            { source: 0, target: 1, label: { show: true, formatter: '生', color: '#4CAF50' }, lineStyle: { color: 'rgba(76, 175, 80, 0.6)', width: 2 } },
+            { source: 1, target: 2, label: { show: true, formatter: '生', color: '#4CAF50' }, lineStyle: { color: 'rgba(76, 175, 80, 0.6)', width: 2 } },
+            { source: 2, target: 3, label: { show: true, formatter: '生', color: '#4CAF50' }, lineStyle: { color: 'rgba(76, 175, 80, 0.6)', width: 2 } },
+            { source: 3, target: 4, label: { show: true, formatter: '生', color: '#4CAF50' }, lineStyle: { color: 'rgba(76, 175, 80, 0.6)', width: 2 } },
+            { source: 4, target: 0, label: { show: true, formatter: '生', color: '#4CAF50' }, lineStyle: { color: 'rgba(76, 175, 80, 0.6)', width: 2 } },
+
+            // 相克关系
+            { source: 0, target: 2, label: { show: true, formatter: '克', color: '#F44336' }, lineStyle: { color: 'rgba(244, 67, 54, 0.4)', width: 1.5, type: 'dashed' } },
+            { source: 2, target: 4, label: { show: true, formatter: '克', color: '#F44336' }, lineStyle: { color: 'rgba(244, 67, 54, 0.4)', width: 1.5, type: 'dashed' } },
+            { source: 4, target: 1, label: { show: true, formatter: '克', color: '#F44336' }, lineStyle: { color: 'rgba(244, 67, 54, 0.4)', width: 1.5, type: 'dashed' } },
+            { source: 1, target: 3, label: { show: true, formatter: '克', color: '#F44336' }, lineStyle: { color: 'rgba(244, 67, 54, 0.4)', width: 1.5, type: 'dashed' } },
+            { source: 3, target: 0, label: { show: true, formatter: '克', color: '#F44336' }, lineStyle: { color: 'rgba(244, 67, 54, 0.4)', width: 1.5, type: 'dashed' } }
+        ];
+
+        const option = {
+            backgroundColor: 'transparent',
+            series: [{
+                type: 'graph',
+                layout: 'none',
+                data: nodes,
+                links: edges,
+                roam: false,
+                label: {
+                    show: true
+                },
+                lineStyle: {
+                    curveness: 0.2
+                },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: {
+                        width: 3
+                    }
+                }
+            }]
+        };
+
+        chart.setOption(option);
+
+        // 主题切换
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+        }
+
+        // 响应式
+        window.addEventListener('resize', () => {
+            chart.resize();
+        });
+    </script>
+</body>
+</html>
