@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>命盘分析 - 八字命理</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/background.css">
+    <link rel="stylesheet" href="../css/glass-card.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+    <!-- 返回首页链接 -->
+    <a href="../index.html" class="home-link">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+    </a>
+
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- 背景光晕系统 -->
+    <div class="background-container">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+        <div class="glow-visibility-mask"></div>
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>命盘分析</h1>
+            <p>多维度解读您的命盘，全面的运势分析报告</p>
+        </header>
+
+        <main class="content-area">
+            <div class="glass-card analysis-card card-wood">
+                <h3>五行分析</h3>
+                <p>您的命局中木气旺盛，日主甲木得令，显示您具有仁爱之心，性格温和而坚韧。木主生发，寓意生命力旺盛，具有良好的成长性和发展潜力。年支子水生甲木，印星有力，说明您善于思考，学习能力强。月令寅木为甲木之禄地，根基稳固，事业运势看好。</p>
+            </div>
+
+            <div class="glass-card analysis-card card-fire">
+                <h3>性格特征</h3>
+                <p>甲木日主之人，性格正直向上，具有强烈的进取心和责任感。您为人处世稳重，讲究原则，但不失灵活性。日主坐辰土，食伤泄秀，聪明睿智，富有创造力。天干透出丙火，伤官高透，才华横溢，善于表达，在艺术或创意领域会有不错的表现。</p>
+            </div>
+
+            <div class="glass-card analysis-card card-earth">
+                <h3>事业财运</h3>
+                <p>从命局来看，您的财运较为平稳。时柱戊辰土重，食伤生财，财运来源于智慧和专业技能。建议从事与木、火、土相关的行业，如教育、文化、设计、建筑等，这样能够更好地发挥您的才能，获得更大的成就。大运丁卯、戊辰时期，事业运势渐入佳境，中年之后财运亨通。</p>
+            </div>
+
+            <div class="glass-card analysis-card card-water">
+                <h3>婚姻感情</h3>
+                <p>您的婚姻宫坐辰土，配偶星得位，另一半性格稳重，能够相互扶持。日支相合，婚姻关系和谐。需要注意的是，辰辰自刑，感情中容易出现小摩擦，建议多沟通，增进理解。最佳婚配对象为属龙、属鸡、属鼠之人，命理相合，婚姻美满。</p>
+            </div>
+
+            <div class="glass-card analysis-card card-metal">
+                <h3>健康建议</h3>
+                <p>从五行健康角度来看，木气过旺需注意肝胆方面的养护。建议保持规律作息，适当进行户外运动，多接触大自然。火气偏弱，要注意心血管健康，保持心情愉悦。土气适中，脾胃功能良好，但饮食宜清淡有节。定期体检，预防为主，保持健康的生活方式。</p>
+            </div>
+
+            <div class="glass-card analysis-card">
+                <h3>流年运势</h3>
+                <p>甲辰年，龙年，与日柱伏吟，是自我提升、积累实力的好时机。工作上可能面临一些挑战，但也是成长的机会。财运方面，正财稳定，偏财一般，不宜冒险投资。感情上，单身者有机会遇到心仪对象，有伴侣者关系和谐。健康方面，注意休息，避免过度劳累。</p>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="glass-button" onclick="window.location.href='bazi-detail.html'">
+                    <span>返回八字详情</span>
+                </button>
+                <button class="glass-button" onclick="window.location.href='bazi-match.html'">
+                    <span>查看缘分匹配</span>
+                </button>
+                <button class="glass-button" onclick="window.location.href='../index.html'">
+                    <span>返回首页</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>

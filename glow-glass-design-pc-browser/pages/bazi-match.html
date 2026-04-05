@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>缘分匹配 - 八字命理</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/background.css">
+    <link rel="stylesheet" href="../css/glass-card.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <style>
+        .match-carousel {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .match-card-wrapper {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .match-card {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .match-card.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        .match-card.prev {
+            transform: translateX(-100%);
+        }
+
+        .match-nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .match-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        body.light-theme .indicator {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-theme .indicator.active {
+            background: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回首页链接 -->
+    <a href="../index.html" class="home-link">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+    </a>
+
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- 背景光晕系统 -->
+    <div class="background-container">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+        <div class="glow-visibility-mask"></div>
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>缘分匹配</h1>
+            <p>寻找与您命理相合的TA，测算良缘运势</p>
+        </header>
+
+        <main class="content-area">
+            <div class="match-carousel">
+                <div class="match-card-wrapper">
+                    <!-- 匹配卡片 1 -->
+                    <div class="glass-card match-card card-wood active" data-index="0">
+                        <div class="match-avatar profile-avatar">乙</div>
+                        <h2 class="match-name">乙木命卦</h2>
+                        <p style="opacity: 0.7; margin-bottom: 20px;">阴木 · 柔顺 · 温婉如玉</p>
+                        <div class="info-grid" style="grid-template-columns: repeat(2, 1fr);">
+                            <div class="info-item">
+                                <label>日元</label>
+                                <span>乙木</span>
+                            </div>
+                            <div class="info-item">
+                                <label>命卦</label>
+                                <span>巽卦</span>
+                            </div>
+                            <div class="info-item">
+                                <label>五行</label>
+                                <span>木命</span>
+                            </div>
+                            <div class="info-item">
+                                <label>生肖</label>
+                                <span>牛</span>
+                            </div>
+                        </div>
+                        <div class="match-reason">
+                            <strong>推荐理由：</strong>
+                            <p>甲木配乙木，阴阳调和，刚柔并济。两人同为木命，性格互补，能够相互理解支持。甲木刚强，乙木柔顺，搭配得当，家庭和谐。五行木木相生，感情长久，婚姻美满。</p>
+                        </div>
+                    </div>
+
+                    <!-- 匹配卡片 2 -->
+                    <div class="glass-card match-card card-water" data-index="1">
+                        <div class="match-avatar profile-avatar">癸</div>
+                        <h2 class="match-name">癸水命卦</h2>
+                        <p style="opacity: 0.7; margin-bottom: 20px;">阴水 · 智慧 · 灵动聪慧</p>
+                        <div class="info-grid" style="grid-template-columns: repeat(2, 1fr);">
+                            <div class="info-item">
+                                <label>日元</label>
+                                <span>癸水</span>
+                            </div>
+                            <div class="info-item">
+                                <label>命卦</label>
+                                <span>坎卦</span>
+                            </div>
+                            <div class="info-item">
+                                <label>五行</label>
+                                <span>水命</span>
+                            </div>
+                            <div class="info-item">
+                                <label>生肖</label>
+                                <span>猪</span>
+                            </div>
+                        </div>
+                        <div class="match-reason">
+                            <strong>推荐理由：</strong>
+                            <p>水生木，癸水生甲木，印星相生，寓意相生相扶。癸水温柔体贴，能够滋养甲木，帮助其成长。甲木受水生养，运势更佳。水木相合，感情深厚，相互依存，是一对佳偶。</p>
+                        </div>
+                    </div>
+
+                    <!-- 匹配卡片 3 -->
+                    <div class="glass-card match-card card-fire" data-index="2">
+                        <div class="match-avatar profile-avatar">丁</div>
+                        <h2 class="match-name">丁火命卦</h2>
+                        <p style="opacity: 0.7; margin-bottom: 20px;">阴火 · 温暖 · 灿烂如星</p>
+                        <div class="info-grid" style="grid-template-columns: repeat(2, 1fr);">
+                            <div class="info-item">
+                                <label>日元</label>
+                                <span>丁火</span>
+                            </div>
+                            <div class="info-item">
+                                <label>命卦</label>
+                                <span>离卦</span>
+                            </div>
+                            <div class="info-item">
+                                <label>五行</label>
+                                <span>火命</span>
+                            </div>
+                            <div class="info-item">
+                                <label>生肖</label>
+                                <span>蛇</span>
+                            </div>
+                        </div>
+                        <div class="match-reason">
+                            <strong>推荐理由：</strong>
+                            <p>木生火，甲木生丁火，食伤生财，寓意付出与回报。甲木乐于付出，丁火温暖回报。木火通明，聪明睿智，事业有成。两人组合，相得益彰，家庭兴旺，财运亨通。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 导航按钮 -->
+                <div class="match-nav">
+                    <button class="glass-button icon-button" onclick="prevMatch()">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="glass-button icon-button" onclick="nextMatch()">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 指示器 -->
+                <div class="match-indicators">
+                    <div class="indicator active" data-index="0" onclick="goToMatch(0)"></div>
+                    <div class="indicator" data-index="1" onclick="goToMatch(1)"></div>
+                    <div class="indicator" data-index="2" onclick="goToMatch(2)"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="glass-button" onclick="window.location.href='bazi-analysis.html'">
+                    <span>返回命盘分析</span>
+                </button>
+                <button class="glass-button" onclick="window.location.href='../index.html'">
+                    <span>返回首页</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/pages/bazi-match.js"></script>
+</body>
+</html>

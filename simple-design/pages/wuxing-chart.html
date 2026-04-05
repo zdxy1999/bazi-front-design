@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行生克图</title>
+    <link rel="stylesheet" href="../tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-6);
+            transition: background 0.3s ease;
+        }
+
+        h1 {
+            font-size: var(--text-3xl);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+            margin-bottom: var(--space-8);
+            text-align: center;
+        }
+
+        #chart-container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* 元素圆圈 */
+        .element-circle {
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .element-circle:hover {
+            filter: brightness(1.2);
+        }
+
+        /* 连线 */
+        .connection-line {
+            stroke: var(--theme-text-tertiary);
+            stroke-width: 2;
+            opacity: 0.4;
+        }
+
+        .connection-line.generation {
+            stroke-dasharray: none;
+        }
+
+        .connection-line.restriction {
+            stroke-dasharray: 5, 5;
+            opacity: 0.3;
+        }
+
+        /* 元素标签 */
+        .element-label {
+            font-size: var(--text-lg);
+            font-weight: var(--font-medium);
+            fill: var(--theme-text-primary);
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        .element-percent {
+            font-size: var(--text-sm);
+            fill: var(--theme-text-secondary);
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        /* 日主标记 */
+        .daymaster-star {
+            fill: var(--color-earth);
+            filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.6));
+        }
+
+        /* 图例 */
+        .legend {
+            display: flex;
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+            padding: var(--space-4);
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-card-border);
+            border-radius: var(--radius-lg);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            color: var(--theme-text-secondary);
+        }
+
+        .legend-line {
+            width: 30px;
+            height: 2px;
+        }
+
+        .legend-line.solid {
+            background: var(--theme-text-tertiary);
+        }
+
+        .legend-line.dashed {
+            background: transparent;
+            border-top: 2px dashed var(--theme-text-tertiary);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-fixed);
+            width: 48px;
+            height: 48px;
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--theme-text-primary);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-icon-light { display: none; }
+        .light-theme .theme-icon-dark { display: none; }
+        .light-theme .theme-icon-light { display: block; }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            h1 { font-size: var(--text-2xl); }
+            #chart-container { max-width: 100%; }
+            .legend { flex-direction: column; gap: var(--space-3); }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <h1>五行生克图</h1>
+
+    <div id="chart-container">
+        <svg id="wuxing-chart" viewBox="0 0 600 600"></svg>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-line solid"></div>
+            <span>相生</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-line dashed"></div>
+            <span>相克</span>
+        </div>
+    </div>
+
+    <script>
+        // 五行比重数据
+        const elementPercentages = {
+            wood: 25,
+            fire: 15,
+            earth: 30,
+            metal: 20,
+            water: 10
+        };
+
+        // 五行元素配置
+        const elements = [
+            { id: 'wood', name: '木', color: '#4CAF50', angle: 198, isDayMaster: true },
+            { id: 'fire', name: '火', color: '#F44336', angle: 270 },
+            { id: 'earth', name: '土', color: '#FFC107', angle: 342 },
+            { id: 'metal', name: '金', color: '#FFFFFF', angle: 54 },
+            { id: 'water', name: '水', color: '#2196F3', angle: 126 }
+        ];
+
+        // 连线配置
+        const connections = [
+            // 相生关系
+            { from: 0, to: 1, type: 'generation' },
+            { from: 1, to: 2, type: 'generation' },
+            { from: 2, to: 3, type: 'generation' },
+            { from: 3, to: 4, type: 'generation' },
+            { from: 4, to: 0, type: 'generation' },
+            // 相克关系
+            { from: 0, to: 2, type: 'restriction' },
+            { from: 2, to: 4, type: 'restriction' },
+            { from: 4, to: 1, type: 'restriction' },
+            { from: 1, to: 3, type: 'restriction' },
+            { from: 3, to: 0, type: 'restriction' }
+        ];
+
+        const centerX = 300;
+        const centerY = 300;
+        const radius = 90;
+
+        // 根据百分比计算圆的半径
+        function getCircleRadius(percentage) {
+            return 20 + percentage * 0.7;
+        }
+
+        const svg = document.getElementById('wuxing-chart');
+
+        // 计算元素位置
+        const elementPositions = elements.map(el => ({
+            x: centerX + radius * Math.cos(el.angle * Math.PI / 180),
+            y: centerY + radius * Math.sin(el.angle * Math.PI / 180),
+            r: getCircleRadius(elementPercentages[el.id]),
+            ...el
+        }));
+
+        // 绘制连线
+        connections.forEach(conn => {
+            const from = elementPositions[conn.from];
+            const to = elementPositions[conn.to];
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', from.x);
+            line.setAttribute('y1', from.y);
+            line.setAttribute('x2', to.x);
+            line.setAttribute('y2', to.y);
+            line.setAttribute('class', `connection-line ${conn.type}`);
+            svg.appendChild(line);
+        });
+
+        // 绘制元素
+        elementPositions.forEach((pos, index) => {
+            // 圆圈背景
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', pos.x);
+            circle.setAttribute('cy', pos.y);
+            circle.setAttribute('r', pos.r);
+            circle.setAttribute('fill', pos.color);
+            circle.setAttribute('class', 'element-circle');
+
+            // 金色元素添加边框
+            if (pos.id === 'metal') {
+                circle.setAttribute('stroke', 'var(--theme-border)');
+                circle.setAttribute('stroke-width', '2');
+            }
+
+            svg.appendChild(circle);
+
+            // 元素名称
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', pos.x);
+            label.setAttribute('y', pos.y - 4);
+            label.setAttribute('class', 'element-label');
+            label.textContent = pos.name;
+            svg.appendChild(label);
+
+            // 百分比
+            const percent = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            percent.setAttribute('x', pos.x);
+            percent.setAttribute('y', pos.y + 12);
+            percent.setAttribute('class', 'element-percent');
+            percent.textContent = `${elementPercentages[pos.id]}%`;
+            svg.appendChild(percent);
+
+            // 日主标记
+            if (pos.isDayMaster) {
+                const starSize = 8;
+                const starOffset = pos.r + 4;
+                const starX = pos.x;
+                const starY = pos.y - starOffset;
+
+                const star = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                const starPoints = [];
+                for (let i = 0; i < 5; i++) {
+                    const outerAngle = (i * 72 - 90) * Math.PI / 180;
+                    const innerAngle = ((i * 72) + 36 - 90) * Math.PI / 180;
+                    starPoints.push(`${starX + starSize * Math.cos(outerAngle)},${starY + starSize * Math.sin(outerAngle)}`);
+                    starPoints.push(`${starX + starSize * 0.4 * Math.cos(innerAngle)},${starY + starSize * 0.4 * Math.sin(innerAngle)}`);
+                }
+                star.setAttribute('points', starPoints.join(' '));
+                star.setAttribute('class', 'daymaster-star');
+                svg.appendChild(star);
+            }
+        });
+
+        // 主题切换
+        function toggleTheme() {
+            document.documentElement.classList.toggle('light-theme');
+            localStorage.setItem('theme', document.documentElement.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+    </script>
+</body>
+</html>

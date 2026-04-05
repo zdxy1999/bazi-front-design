@@ -1,0 +1,267 @@
+/* ===================================
+   过渡动画 - 太极汇聚
+   =================================== */
+
+/* 过渡动画层 */
+.transition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.transition-overlay.active {
+    opacity: 1;
+}
+
+/* 太极容器 */
+.taichi-container {
+    position: relative;
+    width: var(--taichi-size);
+    height: var(--taichi-size);
+    opacity: 0;
+    transform: scale(1);
+}
+
+/* 阴阳鱼 SVG */
+.taichi-yin,
+.taichi-yang {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+}
+
+.taichi-container:not(.rotating) .taichi-yin,
+.taichi-container:not(.rotating) .taichi-yang {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 阳鱼 - 从左侧进入 */
+.taichi-yang {
+    transform: translateX(-150vw);
+    z-index: 1;
+    opacity: 0.9;
+}
+
+/* 阴鱼 - 从右侧进入 */
+.taichi-yin {
+    transform: translateX(150vw);
+    z-index: 2;
+    opacity: 0.9;
+}
+
+/* SVG 样式 */
+.taichi-yang svg,
+.taichi-yin svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.taichi-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+}
+
+/* 汇聚动画状态 - 飞入到中心 */
+.transition-overlay.assemble .taichi-yang {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.transition-overlay.assemble .taichi-yin {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* 旋转动画 - 汇聚后整体旋转 */
+.taichi-container.rotating .taichi-yang,
+.taichi-container.rotating .taichi-yin {
+    transform: translateX(0) !important;
+    opacity: 1;
+}
+
+/* 显示动画 */
+.transition-overlay.show .taichi-container {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+/* 渐隐动画 */
+.transition-overlay.fade-out .taichi-container {
+    opacity: 0;
+    transition: opacity var(--fade-out-duration) ease;
+}
+
+/* 浅色主题适配 */
+body.light-theme .taichi-yang path[fill="#ffffff"],
+body.light-theme .taichi-yin path[fill="#ffffff"] {
+    fill: #ffffff !important;
+}
+
+body.light-theme .taichi-yang path[fill="#1a1a1a"],
+body.light-theme .taichi-yin path[fill="#1a1a1a"] {
+    fill: #2a2a2a !important;
+}
+
+body.light-theme .taichi-yang circle[fill="#1a1a1a"],
+body.light-theme .taichi-yin circle[fill="#1a1a1a"] {
+    fill: #2a2a2a !important;
+}
+
+body.light-theme .taichi-yang circle[fill="#ffffff"],
+body.light-theme .taichi-yin circle[fill="#ffffff"] {
+    fill: #ffffff !important;
+}
+
+/* 太极外圈辉光 */
+.taichi-glow {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        #ff3333 0deg,
+        #ff3333 50deg,
+        #ffcc00 50deg,
+        #ffcc00 100deg,
+        #00cc66 100deg,
+        #00cc66 140deg,
+        #0099ff 140deg,
+        #0099ff 180deg,
+        #ffffff 180deg,
+        #0099ff 180deg,
+        #0099ff 220deg,
+        #00cc66 220deg,
+        #00cc66 260deg,
+        #ffcc00 260deg,
+        #ffcc00 310deg,
+        #ff3333 310deg,
+        #ff3333 360deg
+    );
+    filter: blur(15px);
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 0 30px 10px rgba(255, 204, 0, 0.3),
+                0 0 30px 10px rgba(255, 51, 51, 0.3),
+                0 0 30px 10px rgba(0, 204, 102, 0.3),
+                0 0 30px 10px rgba(0, 153, 255, 0.3);
+}
+
+.taichi-container.rotating .taichi-glow {
+    animation: glowFadeIn 1s ease-out forwards, glowPulse 3s ease-in-out 1s infinite;
+}
+
+@keyframes glowFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* 页面内容过渡 */
+.page-content {
+    transition: opacity var(--fade-out-duration) ease;
+}
+
+.page-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 加载动画 - 五行小点 */
+.loading-dots {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.loading-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+}
+
+.loading-dot:nth-child(1) {
+    background: var(--metal-color);
+    box-shadow: 0 0 10px var(--metal-color);
+}
+
+.loading-dot:nth-child(2) {
+    background: var(--wood-color);
+    box-shadow: 0 0 10px var(--wood-color);
+}
+
+.loading-dot:nth-child(3) {
+    background: var(--water-color);
+    box-shadow: 0 0 10px var(--water-color);
+}
+
+.loading-dot:nth-child(4) {
+    background: var(--fire-color);
+    box-shadow: 0 0 10px var(--fire-color);
+}
+
+.loading-dot:nth-child(5) {
+    background: var(--earth-color);
+    box-shadow: 0 0 10px var(--earth-color);
+}
+
+.loading-container.animate .loading-dot {
+    animation: rotateDot 2s linear infinite;
+}
+
+.loading-dot:nth-child(1) { animation-delay: 0s; }
+.loading-dot:nth-child(2) { animation-delay: -0.4s; }
+.loading-dot:nth-child(3) { animation-delay: -0.8s; }
+.loading-dot:nth-child(4) { animation-delay: -1.2s; }
+.loading-dot:nth-child(5) { animation-delay: -1.6s; }
+
+@keyframes rotateDot {
+    0% {
+        transform: rotate(0deg) translateX(30px) rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg) translateX(30px) rotate(-360deg);
+    }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    :root {
+        --taichi-size: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --taichi-size: 120px;
+    }
+}

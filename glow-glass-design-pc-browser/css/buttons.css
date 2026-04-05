@@ -1,0 +1,147 @@
+/* ===================================
+   玻璃质感按钮
+   =================================== */
+
+.glass-button {
+    position: relative;
+    padding: 12px 32px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+body.light-theme .glass-button {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333333;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.light-theme .glass-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.glass-button:active {
+    transform: scale(0.98);
+}
+
+/* 五色辉光效果 */
+.glass-button::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50px;
+    background: conic-gradient(
+        from 0deg,
+        #ff3333 0deg,
+        #ff3333 50deg,
+        #ffcc00 50deg,
+        #ffcc00 100deg,
+        #00cc66 100deg,
+        #00cc66 140deg,
+        #0099ff 140deg,
+        #0099ff 180deg,
+        #ffffff 180deg,
+        #0099ff 180deg,
+        #0099ff 220deg,
+        #00cc66 220deg,
+        #00cc66 260deg,
+        #ffcc00 260deg,
+        #ffcc00 310deg,
+        #ff3333 310deg,
+        #ff3333 360deg
+    );
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.glass-button:hover::after {
+    opacity: 0.3;
+}
+
+.glass-button:active::after {
+    opacity: 0.6;
+}
+
+/* 内部辉光 */
+.glass-button::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 48px;
+    background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.15),
+        transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.glass-button:hover::before {
+    opacity: 1;
+}
+
+.glass-button span {
+    position: relative;
+    z-index: 1;
+}
+
+/* 按钮组 */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+/* 大按钮 */
+.glass-button.large {
+    padding: 16px 48px;
+    font-size: 18px;
+}
+
+/* 小按钮 */
+.glass-button.small {
+    padding: 8px 20px;
+    font-size: 14px;
+}
+
+/* 图标按钮 */
+.glass-button.icon-button {
+    padding: 12px;
+    border-radius: 50%;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-button.icon-button svg {
+    width: 24px;
+    height: 24px;
+}

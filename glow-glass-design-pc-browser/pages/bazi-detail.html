@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字详情 - 八字命理</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/background.css">
+    <link rel="stylesheet" href="../css/glass-card.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <style>
+        .bazi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .bazi-pillar {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme .bazi-pillar {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .pillar-label {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-bottom: 12px;
+        }
+
+        .pillar-content {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .pillar-heaven,
+        .pillar-earth {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        body.light-theme .pillar-heaven,
+        body.light-theme .pillar-earth {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .pillar-earth:last-child {
+            border-bottom: none;
+        }
+
+        .element-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin: 0 2px;
+        }
+
+        .element-wood { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
+        .element-fire { background: rgba(244, 67, 54, 0.2); color: #F44336; }
+        .element-earth { background: rgba(255, 193, 7, 0.2); color: #FFC107; }
+        .element-metal { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+        .element-water { background: rgba(33, 150, 243, 0.2); color: #2196F3; }
+
+        .dayuan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .dayuan-item {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        body.light-theme .dayuan-item {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .dayuan-item label {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .dayuan-item span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .bazi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回首页链接 -->
+    <a href="../index.html" class="home-link">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+    </a>
+
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- 背景光晕系统 -->
+    <div class="background-container">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+        <div class="glow-visibility-mask"></div>
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>八字详情</h1>
+            <p>深入了解您的八字命盘，详尽的命理解析</p>
+        </header>
+
+        <main class="content-area">
+            <div class="glass-card profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">甲</div>
+                    <div class="profile-info">
+                        <h2>甲木命卦</h2>
+                        <p>阳木 · 仁者 · 生机勃勃</p>
+                    </div>
+                </div>
+
+                <!-- 八字四柱 -->
+                <h3 style="text-align: center; margin-bottom: 20px;">八字命盘</h3>
+                <div class="bazi-grid">
+                    <div class="bazi-pillar">
+                        <div class="pillar-label">年柱</div>
+                        <div class="pillar-content">
+                            <div class="pillar-heaven">
+                                <span>甲</span>
+                                <span class="element-tag element-wood">木</span>
+                            </div>
+                            <div class="pillar-earth">
+                                <span>子</span>
+                                <span class="element-tag element-water">水</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bazi-pillar">
+                        <div class="pillar-label">月柱</div>
+                        <div class="pillar-content">
+                            <div class="pillar-heaven">
+                                <span>丙</span>
+                                <span class="element-tag element-fire">火</span>
+                            </div>
+                            <div class="pillar-earth">
+                                <span>寅</span>
+                                <span class="element-tag element-wood">木</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bazi-pillar">
+                        <div class="pillar-label">日柱</div>
+                        <div class="pillar-content">
+                            <div class="pillar-heaven">
+                                <span>甲</span>
+                                <span class="element-tag element-wood">木</span>
+                            </div>
+                            <div class="pillar-earth">
+                                <span>辰</span>
+                                <span class="element-tag element-earth">土</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bazi-pillar">
+                        <div class="pillar-label">时柱</div>
+                        <div class="pillar-content">
+                            <div class="pillar-heaven">
+                                <span>戊</span>
+                                <span class="element-tag element-earth">土</span>
+                            </div>
+                            <div class="pillar-earth">
+                                <span>辰</span>
+                                <span class="element-tag element-earth">土</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 大运信息 -->
+                <h3 style="text-align: center; margin: 30px 0 20px;">大运</h3>
+                <div class="dayuan-grid">
+                    <div class="dayuan-item">
+                        <label>第一步大运</label>
+                        <span>丁卯</span>
+                    </div>
+                    <div class="dayuan-item">
+                        <label>第二步大运</label>
+                        <span>戊辰</span>
+                    </div>
+                    <div class="dayuan-item">
+                        <label>第三步大运</label>
+                        <span>己巳</span>
+                    </div>
+                    <div class="dayuan-item">
+                        <label>第四步大运</label>
+                        <span>庚午</span>
+                    </div>
+                    <div class="dayuan-item">
+                        <label>第五步大运</label>
+                        <span>辛未</span>
+                    </div>
+                    <div class="dayuan-item">
+                        <label>第六步大运</label>
+                        <span>壬申</span>
+                    </div>
+                </div>
+
+                <!-- 详细信息 -->
+                <div class="info-grid" style="margin-top: 30px;">
+                    <div class="info-item">
+                        <label>日元</label>
+                        <span>甲木</span>
+                    </div>
+                    <div class="info-item">
+                        <label>命卦</label>
+                        <span>巽卦</span>
+                    </div>
+                    <div class="info-item">
+                        <label>五行</label>
+                        <span>木命</span>
+                    </div>
+                    <div class="info-item">
+                        <label>纳音</label>
+                        <span>大海水</span>
+                    </div>
+                    <div class="info-item">
+                        <label>生肖</label>
+                        <span>鼠</span>
+                    </div>
+                    <div class="info-item">
+                        <label>星座</label>
+                        <span>白羊座</span>
+                    </div>
+                    <div class="info-item">
+                        <label>胎元</label>
+                        <span>壬辰</span>
+                    </div>
+                    <div class="info-item">
+                        <label>命宫</label>
+                        <span>癸酉</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="glass-button" onclick="window.location.href='bazi-analysis.html'">
+                    <span>查看命盘分析</span>
+                </button>
+                <button class="glass-button" onclick="window.location.href='../index.html'">
+                    <span>返回首页</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>

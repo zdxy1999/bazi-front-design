@@ -1,0 +1,91 @@
+/* ===================================
+   CSS 变量定义
+   =================================== */
+
+:root {
+    /* ========== 基础尺寸 ========== */
+    --border-size: 2px;
+    --spotlight-size: 200px;
+
+    /* ========== 背景光晕颜色配置 ========== */
+    /* 红 - 火 */
+    --orbit-glow-1-hue: 0;
+    --orbit-glow-1-saturation: 70;
+    --orbit-glow-1-lightness: 20;
+    --orbit-edge-opacity-1: 0;
+
+    /* 黄 - 土 */
+    --orbit-glow-2-hue: 60;
+    --orbit-glow-2-saturation: 90;
+    --orbit-glow-2-lightness: 30;
+    --orbit-edge-opacity-2: 0;
+
+    /* 绿 - 木 */
+    --orbit-glow-3-hue: 120;
+    --orbit-glow-3-saturation: 90;
+    --orbit-glow-3-lightness: 20;
+    --orbit-edge-opacity-3: 0;
+
+    /* 蓝 - 水 */
+    --orbit-glow-4-hue: 210;
+    --orbit-glow-4-saturation: 90;
+    --orbit-glow-4-lightness: 30;
+    --orbit-edge-opacity-4: 0;
+
+    /* 白 - 金 */
+    --orbit-glow-5-hue: 0;
+    --orbit-glow-5-saturation: 0;
+    --orbit-glow-5-lightness: 30;
+    --orbit-edge-opacity-5: 0;
+
+    /* ========== 边缘高光位置 ========== */
+    --highlight-x-1: 960;
+    --highlight-y-1: 540;
+    --highlight-x-2: 960;
+    --highlight-y-2: 540;
+    --highlight-x-3: 960;
+    --highlight-y-3: 540;
+    --highlight-x-4: 960;
+    --highlight-y-4: 540;
+    --highlight-x-5: 960;
+    --highlight-y-5: 540;
+
+    /* ========== 玻璃卡片 ========== */
+    --backdrop: transparent;
+    --backup-border: hsl(0 0% 50% / 0.2);
+    --radius: 12px;
+
+    /* ========== 过渡动画 ========== */
+    --transition-duration: 3s;
+    --fade-out-duration: 0.5s;
+    --taichi-size: 200px;
+
+    /* ========== 五行颜色 ========== */
+    --wood-color: rgba(76, 175, 80, 0.9);
+    --wood-border: #4CAF50;
+
+    --fire-color: rgba(244, 67, 54, 0.9);
+    --fire-border: #F44336;
+
+    --earth-color: rgba(255, 193, 7, 0.9);
+    --earth-border: #FFC107;
+
+    --metal-color: rgba(255, 255, 255, 0.9);
+    --metal-border: #FFFFFF;
+
+    --water-color: rgba(33, 150, 243, 0.9);
+    --water-border: #2196F3;
+}
+
+/* ========== 浅色主题 ========== */
+body.light-theme {
+    --orbit-glow-1-saturation: 100;
+    --orbit-glow-1-lightness: 40;
+    --orbit-glow-2-saturation: 100;
+    --orbit-glow-2-lightness: 50;
+    --orbit-glow-3-saturation: 100;
+    --orbit-glow-3-lightness: 40;
+    --orbit-glow-4-saturation: 100;
+    --orbit-glow-4-lightness: 50;
+    --orbit-glow-5-lightness: 70;
+}

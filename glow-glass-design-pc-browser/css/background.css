@@ -1,0 +1,257 @@
+/* ===================================
+   背景光晕系统
+   =================================== */
+
+/* 背景容器 */
+.background-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* 旋转光晕 */
+.orbiting-glow {
+    position: absolute;
+    width: calc(var(--spotlight-size) * 1.5);
+    height: calc(var(--spotlight-size) * 1.5);
+    border-radius: 50%;
+    z-index: 1;
+    background: radial-gradient(
+        circle,
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness) * 1%) / 0.6),
+        transparent 70%
+    );
+    filter: blur(20px);
+    opacity: 0.3;
+    transform-origin: center center;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+/* 呼吸动画 */
+@keyframes breathe {
+    0%, 100% {
+        opacity: 0.2;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+}
+
+/* 每个光晕的独特样式 */
+.orbiting-glow-1 {
+    animation-duration: 2.5s;
+    --glow-hue: var(--orbit-glow-1-hue);
+    --glow-saturation: var(--orbit-glow-1-saturation);
+    --glow-lightness: var(--orbit-glow-1-lightness);
+}
+
+.orbiting-glow-2 {
+    animation-duration: 3.2s;
+    animation-delay: -0.5s;
+    --glow-hue: var(--orbit-glow-2-hue);
+    --glow-saturation: var(--orbit-glow-2-saturation);
+    --glow-lightness: var(--orbit-glow-2-lightness);
+}
+
+.orbiting-glow-3 {
+    animation-duration: 4s;
+    animation-delay: -1s;
+    --glow-hue: var(--orbit-glow-3-hue);
+    --glow-saturation: var(--orbit-glow-3-saturation);
+    --glow-lightness: var(--orbit-glow-3-lightness);
+}
+
+.orbiting-glow-4 {
+    animation-duration: 2.8s;
+    animation-delay: -1.5s;
+    --glow-hue: var(--orbit-glow-4-hue);
+    --glow-saturation: var(--orbit-glow-4-saturation);
+    --glow-lightness: var(--orbit-glow-4-lightness);
+}
+
+.orbiting-glow-5 {
+    animation-duration: 3.5s;
+    animation-delay: -2s;
+    --glow-hue: var(--orbit-glow-5-hue);
+    --glow-saturation: var(--orbit-glow-5-saturation);
+    --glow-lightness: var(--orbit-glow-5-lightness);
+}
+
+/* 边缘光晕层 */
+.card-glow-border {
+    position: absolute;
+    inset: -10px;
+    pointer-events: none;
+    z-index: 10;
+    border-radius: calc(var(--radius) + 10px);
+    overflow: visible;
+}
+
+/* 5个光晕对应的边缘高光层 */
+.card-glow-highlight-1,
+.card-glow-highlight-2,
+.card-glow-highlight-3,
+.card-glow-highlight-4,
+.card-glow-highlight-5 {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 45;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* 边缘高光内部的光晕层 */
+.card-glow-highlight-1::before,
+.card-glow-highlight-2::before,
+.card-glow-highlight-3::before,
+.card-glow-highlight-4::before,
+.card-glow-highlight-5::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.card-glow-highlight-1::before {
+    --glow-hue: var(--orbit-glow-1-hue);
+    --glow-saturation: var(--orbit-glow-1-saturation);
+    --glow-lightness: var(--orbit-glow-1-lightness);
+    background-image: radial-gradient(
+        calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+        calc(var(--highlight-x-1, 960) * 1px)
+        calc(var(--highlight-y-1, 540) * 1px),
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+        transparent 100%
+    );
+    opacity: var(--orbit-edge-opacity-1);
+}
+
+.card-glow-highlight-2::before {
+    --glow-hue: var(--orbit-glow-2-hue);
+    --glow-saturation: var(--orbit-glow-2-saturation);
+    --glow-lightness: var(--orbit-glow-2-lightness);
+    background-image: radial-gradient(
+        calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+        calc(var(--highlight-x-2, 960) * 1px)
+        calc(var(--highlight-y-2, 540) * 1px),
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+        transparent 100%
+    );
+    opacity: var(--orbit-edge-opacity-2);
+}
+
+.card-glow-highlight-3::before {
+    --glow-hue: var(--orbit-glow-3-hue);
+    --glow-saturation: var(--orbit-glow-3-saturation);
+    --glow-lightness: var(--orbit-glow-3-lightness);
+    background-image: radial-gradient(
+        calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+        calc(var(--highlight-x-3, 960) * 1px)
+        calc(var(--highlight-y-3, 540) * 1px),
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+        transparent 100%
+    );
+    opacity: var(--orbit-edge-opacity-3);
+}
+
+.card-glow-highlight-4::before {
+    --glow-hue: var(--orbit-glow-4-hue);
+    --glow-saturation: var(--orbit-glow-4-saturation);
+    --glow-lightness: var(--orbit-glow-4-lightness);
+    background-image: radial-gradient(
+        calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+        calc(var(--highlight-x-4, 960) * 1px)
+        calc(var(--highlight-y-4, 540) * 1px),
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+        transparent 100%
+    );
+    opacity: var(--orbit-edge-opacity-4);
+}
+
+.card-glow-highlight-5::before {
+    --glow-hue: var(--orbit-glow-5-hue);
+    --glow-saturation: var(--orbit-glow-5-saturation);
+    --glow-lightness: var(--orbit-glow-5-lightness);
+    background-image: radial-gradient(
+        calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+        calc(var(--highlight-x-5, 960) * 1px)
+        calc(var(--highlight-y-5, 540) * 1px),
+        hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+        transparent 100%
+    );
+    opacity: var(--orbit-edge-opacity-5);
+}
+
+/* 浅色主题下增强边缘高光 */
+body.light-theme .card-glow-highlight-1::before,
+body.light-theme .card-glow-highlight-2::before,
+body.light-theme .card-glow-highlight-3::before,
+body.light-theme .card-glow-highlight-4::before {
+    opacity: 2;
+    filter: brightness(2) saturate(1.5);
+}
+
+body.light-theme .card-glow-highlight-5::before {
+    opacity: 2;
+    filter: brightness(1.5) saturate(0.5);
+}
+
+/* 内部遮罩 - 只显示边缘 */
+.card-glow-inner {
+    position: absolute;
+    inset: 4px;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+    border-radius: calc(var(--radius) - 4px);
+    z-index: 50;
+    opacity: 1;
+    pointer-events: none;
+    transition: background 0.5s ease;
+}
+
+body.light-theme .card-glow-inner {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+}
+
+/* 光晕可见性蒙版 - 中心暗淡，边缘明亮 */
+.glow-visibility-mask {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    z-index: 60;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at center,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 50%,
+        rgba(0, 0, 0, 0.9) 65%,
+        rgba(0, 0, 0, 0.6) 80%,
+        rgba(0, 0, 0, 0.2) 90%,
+        rgba(0, 0, 0, 0) 95%
+    );
+    transition: background 0.5s ease;
+}
+
+body.light-theme .glow-visibility-mask {
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.5) 40%,
+        rgba(255, 255, 255, 0.3) 60%,
+        rgba(255, 255, 255, 0.1) 80%,
+        rgba(255, 255, 255, 0) 90%
+    );
+}
+
+/* 浅色主题下增强光晕 */
+body.light-theme .orbiting-glow {
+    opacity: 0.7;
+}

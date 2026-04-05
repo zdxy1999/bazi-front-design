@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡片组件</title>
+    <link rel="stylesheet" href="../tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 100%);
+            padding: var(--space-8);
+            transition: background 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: var(--text-3xl);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+            margin-bottom: var(--space-8);
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+
+        /* 简约卡片组件 */
+        .simple-card {
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .simple-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--theme-border);
+        }
+
+        .card-title {
+            font-size: var(--text-xl);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+            margin-bottom: var(--space-3);
+        }
+
+        .card-content {
+            font-size: var(--text-base);
+            color: var(--theme-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .card-meta {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--theme-border);
+            font-size: var(--text-sm);
+            color: var(--theme-text-tertiary);
+        }
+
+        /* 五行颜色卡片变体 */
+        .card-wood { border-left: 3px solid var(--color-wood); }
+        .card-fire { border-left: 3px solid var(--color-fire); }
+        .card-earth { border-left: 3px solid var(--color-earth); }
+        .card-metal { border-left: 3px solid var(--color-metal); }
+        .card-water { border-left: 3px solid var(--color-water); }
+
+        /* 命卦示例卡片 */
+        .profile-card {
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-card-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--color-water), var(--color-wood));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: white;
+        }
+
+        .profile-name {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+        }
+
+        .profile-mingua {
+            font-size: var(--text-sm);
+            color: var(--theme-text-secondary);
+            padding: var(--space-1) var(--space-3);
+            background: var(--theme-bg-tertiary);
+            border-radius: var(--radius-full);
+            display: inline-block;
+            margin-top: var(--space-2);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+
+        .info-item {
+            padding: var(--space-3);
+            background: var(--theme-bg-tertiary);
+            border-radius: var(--radius-md);
+        }
+
+        .info-label {
+            font-size: var(--text-xs);
+            color: var(--theme-text-tertiary);
+            margin-bottom: var(--space-1);
+        }
+
+        .info-value {
+            font-size: var(--text-base);
+            font-weight: var(--font-medium);
+            color: var(--theme-text-primary);
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-fixed);
+            width: 48px;
+            height: 48px;
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--theme-text-primary);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-icon-light { display: none; }
+        .light-theme .theme-icon-dark { display: none; }
+        .light-theme .theme-icon-light { display: block; }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div class="container">
+        <h1>简约卡片组件</h1>
+
+        <div class="grid">
+            <!-- 基础卡片 -->
+            <div class="simple-card">
+                <h3 class="card-title">基础卡片</h3>
+                <p class="card-content">简约的卡片设计，包含毛玻璃背景效果和简洁的边框。Hover 时有轻微的上浮效果。</p>
+                <div class="card-meta">基础样式</div>
+            </div>
+
+            <!-- 五行颜色卡片 -->
+            <div class="simple-card card-wood">
+                <h3 class="card-title">木命卦</h3>
+                <p class="card-content">木命人的特点是仁慈、善良、有生命力。五行中以木为代表，象征生长和发展。</p>
+                <div class="card-meta">五行属木</div>
+            </div>
+
+            <div class="simple-card card-fire">
+                <h3 class="card-title">火命卦</h3>
+                <p class="card-content">火命人的特点是热情、积极、有领导力。五行中以火为代表，象征热情和光明。</p>
+                <div class="card-meta">五行属火</div>
+            </div>
+
+            <div class="simple-card card-earth">
+                <h3 class="card-title">土命卦</h3>
+                <p class="card-content">土命人的特点是稳重、踏实、值得信赖。五行中以土为代表，象征稳定和包容。</p>
+                <div class="card-meta">五行属土</div>
+            </div>
+
+            <div class="simple-card card-metal">
+                <h3 class="card-title">金命卦</h3>
+                <p class="card-content">金命人的特点是果断、坚强、有正义感。五行中以金为代表，象征坚固和纯洁。</p>
+                <div class="card-meta">五行属金</div>
+            </div>
+
+            <div class="simple-card card-water">
+                <h3 class="card-title">水命卦</h3>
+                <p class="card-content">水命人的特点是智慧、灵活、善于适应。五行中以水为代表，象征流动和变化。</p>
+                <div class="card-meta">五行属水</div>
+            </div>
+        </div>
+
+        <!-- 命卦卡片示例 -->
+        <div style="margin-top: var(--space-12);">
+            <h1 style="margin-bottom: var(--space-6);">八字命卦卡片</h1>
+            <div style="max-width: 500px; margin: 0 auto;">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">李</div>
+                        <div>
+                            <div class="profile-name">李明</div>
+                            <div class="profile-mingua">命卦：坎水命</div>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <div class="info-label">出生日期</div>
+                            <div class="info-value">1990年3月15日</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">性别</div>
+                            <div class="info-value">男</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">日主</div>
+                            <div class="info-value">甲木</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">用神</div>
+                            <div class="info-value">水</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('light-theme');
+            localStorage.setItem('theme', html.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+    </script>
+</body>
+</html>

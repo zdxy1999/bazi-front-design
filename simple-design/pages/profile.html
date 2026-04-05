@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字档案</title>
+    <link rel="stylesheet" href="../tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 100%);
+            transition: background 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-fixed);
+            width: 48px;
+            height: 48px;
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--theme-text-primary);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-icon-light { display: none; }
+        .light-theme .theme-icon-dark { display: none; }
+        .light-theme .theme-icon-light { display: block; }
+
+        /* 滑动容器 */
+        .swiper-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-6);
+        }
+
+        .swiper-slide {
+            width: 100%;
+            max-width: 500px;
+            flex-shrink: 0;
+            padding: 0 var(--space-2);
+            opacity: 0.3;
+            transform: scale(0.9);
+            transition: all var(--duration-base) var(--ease-out);
+        }
+
+        .swiper-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 档案卡片 */
+        .profile-card {
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--theme-card-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* 五行图区域 */
+        .wuxing-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        #wuxing-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 命卦信息区域 */
+        .mingua-section {
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--theme-border);
+        }
+
+        .mingua-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .mingua-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--color-water), var(--color-wood));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: white;
+        }
+
+        .mingua-info {
+            flex: 1;
+        }
+
+        .mingua-name {
+            font-size: var(--text-xl);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .mingua-type {
+            display: inline-block;
+            padding: var(--space-1) var(--space-2);
+            background: var(--color-water);
+            color: white;
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: var(--font-medium);
+        }
+
+        .bazi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2);
+            padding: var(--space-3);
+            background: var(--theme-bg-tertiary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+        }
+
+        .bazi-item {
+            text-align: center;
+            padding: var(--space-2);
+        }
+
+        .bazi-pillar {
+            font-size: var(--text-base);
+            font-weight: var(--font-semibold);
+            color: var(--theme-text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .bazi-label {
+            font-size: var(--text-xs);
+            color: var(--theme-text-tertiary);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--text-sm);
+            color: var(--theme-text-secondary);
+            padding: var(--space-2) 0;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: var(--theme-text-tertiary);
+        }
+
+        .info-value {
+            font-weight: var(--font-medium);
+            color: var(--theme-text-primary);
+        }
+
+        /* 新建按钮 */
+        .new-profile-btn {
+            background: var(--theme-card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--theme-border);
+            border-radius: var(--radius-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .new-profile-btn:hover {
+            border-color: var(--color-primary);
+            background: rgba(33, 150, 243, 0.05);
+        }
+
+        .new-profile-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            background: var(--theme-bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-3xl);
+            color: var(--theme-text-tertiary);
+            margin-bottom: var(--space-4);
+        }
+
+        .new-profile-text {
+            font-size: var(--text-lg);
+            color: var(--theme-text-secondary);
+        }
+
+        /* 导航指示器 */
+        .pagination {
+            position: fixed;
+            bottom: var(--space-6);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--space-2);
+            z-index: var(--z-sticky);
+        }
+
+        .pagination-bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: var(--radius-full);
+            background: var(--theme-text-tertiary);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .pagination-bullet.active {
+            width: 24px;
+            border-radius: var(--radius-full);
+            background: var(--theme-text-primary);
+        }
+
+        /* 五行图样式 */
+        .element-circle {
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .element-circle:hover {
+            filter: brightness(1.2);
+        }
+
+        .connection-line {
+            stroke: var(--theme-text-tertiary);
+            stroke-width: 2;
+            opacity: 0.4;
+        }
+
+        .connection-line.generation {
+            stroke-dasharray: none;
+        }
+
+        .connection-line.restriction {
+            stroke-dasharray: 5, 5;
+            opacity: 0.3;
+        }
+
+        .element-label {
+            font-size: var(--text-base);
+            font-weight: var(--font-medium);
+            fill: var(--theme-text-primary);
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        .element-percent {
+            font-size: var(--text-sm);
+            fill: var(--theme-text-secondary);
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        .daymaster-star {
+            fill: var(--color-earth);
+            filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.6));
+        }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            .swiper-container { padding: var(--space-4); }
+            .profile-card { height: 85vh; }
+            .new-profile-btn { height: 85vh; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div class="swiper-container" id="swiper">
+        <!-- 档案1 -->
+        <div class="swiper-slide active">
+            <div class="profile-card">
+                <div class="wuxing-section">
+                    <svg id="wuxing-chart-1" viewBox="0 0 400 400"></svg>
+                </div>
+                <div class="mingua-section">
+                    <div class="mingua-header">
+                        <div class="mingua-avatar">李</div>
+                        <div class="mingua-info">
+                            <div class="mingua-name">李明</div>
+                            <div class="mingua-type">坎水命</div>
+                        </div>
+                    </div>
+                    <div class="bazi-grid">
+                        <div class="bazi-item">
+                            <div class="bazi-pillar">庚</div>
+                            <div class="bazi-label">年</div>
+                        </div>
+                        <div class="bazi-item">
+                            <div class="bazi-pillar">午</div>
+                            <div class="bazi-label">干</div>
+                        </div>
+                        <div class="bazi-item">
+                            <div class="bazi-pillar">丙</div>
+                            <div class="bazi-label">月</div>
+                        </div>
+                        <div class="bazi-item">
+                            <div class="bazi-pillar">戌</div>
+                            <div class="bazi-label">支</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">日主</span>
+                        <span class="info-value">甲木</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">用神</span>
+                        <span class="info-value">水</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 档案2 -->
+        <div class="swiper-slide">
+            <div class="profile-card">
+                <div class="wuxing-section">
+                    <svg id="wuxing-chart-2" viewBox="0 0 400 400"></svg>
+                </div>
+                <div class="mingua-section">
+                    <div class="mingua-header">
+                        <div class="mingua-avatar" style="background: linear-gradient(135deg, var(--color-fire), var(--color-earth));">王</div>
+                        <div class="mingua-info">
+                            <div class="mingua-name">王芳</div>
+                            <div class="mingua-type" style="background: var(--color-wood);">震木命</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">日主</span>
+                        <span class="info-value">丙火</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">用神</span>
+                        <span class="info-value">木</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新建按钮 -->
+        <div class="swiper-slide">
+            <div class="new-profile-btn" onclick="alert('跳转到新建档案页面')">
+                <div class="new-profile-icon">+</div>
+                <div class="new-profile-text">新建档案</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+
+    <script>
+        // 档案数据
+        const profiles = [
+            {
+                elementPercentages: { wood: 25, fire: 15, earth: 30, metal: 20, water: 10 },
+                dayMaster: 0
+            },
+            {
+                elementPercentages: { wood: 35, fire: 25, earth: 15, metal: 15, water: 10 },
+                dayMaster: 0
+            }
+        ];
+
+        const elements = [
+            { id: 'wood', name: '木', color: '#4CAF50', angle: 198 },
+            { id: 'fire', name: '火', color: '#F44336', angle: 270 },
+            { id: 'earth', name: '土', color: '#FFC107', angle: 342 },
+            { id: 'metal', name: '金', color: '#FFFFFF', angle: 54 },
+            { id: 'water', name: '水', color: '#2196F3', angle: 126 }
+        ];
+
+        const connections = [
+            { from: 0, to: 1, type: 'generation' },
+            { from: 1, to: 2, type: 'generation' },
+            { from: 2, to: 3, type: 'generation' },
+            { from: 3, to: 4, type: 'generation' },
+            { from: 4, to: 0, type: 'generation' },
+            { from: 0, to: 2, type: 'restriction' },
+            { from: 2, to: 4, type: 'restriction' },
+            { from: 4, to: 1, type: 'restriction' },
+            { from: 1, to: 3, type: 'restriction' },
+            { from: 3, to: 0, type: 'restriction' }
+        ];
+
+        function createWuxingChart(svgId, elementPercentages, dayMasterIndex) {
+            const svg = document.getElementById(svgId);
+            const centerX = 200;
+            const centerY = 200;
+            const radius = 60;
+
+            const elementPositions = elements.map(el => ({
+                x: centerX + radius * Math.cos(el.angle * Math.PI / 180),
+                y: centerY + radius * Math.sin(el.angle * Math.PI / 180),
+                r: 15 + elementPercentages[el.id] * 0.5,
+                ...el
+            }));
+
+            connections.forEach(conn => {
+                const from = elementPositions[conn.from];
+                const to = elementPositions[conn.to];
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y);
+                line.setAttribute('class', `connection-line ${conn.type}`);
+                svg.appendChild(line);
+            });
+
+            elementPositions.forEach((pos, index) => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pos.x);
+                circle.setAttribute('cy', pos.y);
+                circle.setAttribute('r', pos.r);
+                circle.setAttribute('fill', pos.color);
+                circle.setAttribute('class', 'element-circle');
+
+                if (pos.id === 'metal') {
+                    circle.setAttribute('stroke', 'var(--theme-border)');
+                    circle.setAttribute('stroke-width', '2');
+                }
+
+                svg.appendChild(circle);
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', pos.x);
+                label.setAttribute('y', pos.y - 2);
+                label.setAttribute('class', 'element-label');
+                label.textContent = pos.name;
+                svg.appendChild(label);
+
+                const percent = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                percent.setAttribute('x', pos.x);
+                percent.setAttribute('y', pos.y + 10);
+                percent.setAttribute('class', 'element-percent');
+                percent.textContent = `${elementPercentages[pos.id]}%`;
+                svg.appendChild(percent);
+
+                if (index === dayMasterIndex) {
+                    const starSize = 6;
+                    const starOffset = pos.r + 4;
+                    const starX = pos.x;
+                    const starY = pos.y - starOffset;
+
+                    const star = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    const starPoints = [];
+                    for (let i = 0; i < 5; i++) {
+                        const outerAngle = (i * 72 - 90) * Math.PI / 180;
+                        const innerAngle = ((i * 72) + 36 - 90) * Math.PI / 180;
+                        starPoints.push(`${starX + starSize * Math.cos(outerAngle)},${starY + starSize * Math.sin(outerAngle)}`);
+                        starPoints.push(`${starX + starSize * 0.4 * Math.cos(innerAngle)},${starY + starSize * 0.4 * Math.sin(innerAngle)}`);
+                    }
+                    star.setAttribute('points', starPoints.join(' '));
+                    star.setAttribute('class', 'daymaster-star');
+                    svg.appendChild(star);
+                }
+            });
+        }
+
+        // 初始化图表
+        createWuxingChart('wuxing-chart-1', profiles[0].elementPercentages, profiles[0].dayMaster);
+        createWuxingChart('wuxing-chart-2', profiles[1].elementPercentages, profiles[1].dayMaster);
+
+        // 滑动逻辑
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.swiper-slide');
+        const pagination = document.getElementById('pagination');
+
+        function updatePagination() {
+            pagination.innerHTML = '';
+            slides.forEach((_, index) => {
+                const bullet = document.createElement('div');
+                bullet.className = 'pagination-bullet';
+                if (index === currentIndex) {
+                    bullet.classList.add('active');
+                }
+                bullet.onclick = () => goToSlide(index);
+                pagination.appendChild(bullet);
+            });
+        }
+
+        function goToSlide(index) {
+            slides[currentIndex].classList.remove('active');
+            currentIndex = index;
+            slides[currentIndex].classList.add('active');
+            updatePagination();
+        }
+
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0 && currentIndex < slides.length - 1) {
+                    goToSlide(currentIndex + 1);
+                } else if (diff < 0 && currentIndex > 0) {
+                    goToSlide(currentIndex - 1);
+                }
+            }
+        }
+
+        // 鼠标滚轮支持
+        document.addEventListener('wheel', e => {
+            if (e.deltaY > 0 && currentIndex < slides.length - 1) {
+                goToSlide(currentIndex + 1);
+            } else if (e.deltaY < 0 && currentIndex > 0) {
+                goToSlide(currentIndex - 1);
+            }
+        }, { passive: true });
+
+        updatePagination();
+
+        // 主题切换
+        function toggleTheme() {
+            document.documentElement.classList.toggle('light-theme');
+            localStorage.setItem('theme', document.documentElement.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+    </script>
+</body>
+</html>

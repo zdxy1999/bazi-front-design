@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字测算 - 创建档案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --border-size: 2px;
+            --spotlight-size: 200px;
+            --hue: 210;
+            --saturation: 100;
+            --lightness: 60;
+            --highlight-x: 960;
+            --highlight-y: 540;
+
+            /* 5个旋转光晕的颜色配置 */
+            --orbit-glow-1-hue: 0;
+            --orbit-glow-1-saturation: 70;
+            --orbit-glow-1-lightness: 20;
+            --orbit-edge-opacity-1: 0;
+
+            --orbit-glow-2-hue: 60;
+            --orbit-glow-2-saturation: 90;
+            --orbit-glow-2-lightness: 30;
+            --orbit-edge-opacity-2: 0;
+
+            --orbit-glow-3-hue: 120;
+            --orbit-glow-3-saturation: 90;
+            --orbit-glow-3-lightness: 20;
+            --orbit-edge-opacity-3: 0;
+
+            --orbit-glow-4-hue: 210;
+            --orbit-glow-4-saturation: 90;
+            --orbit-glow-4-lightness: 30;
+            --orbit-edge-opacity-4: 0;
+
+            --orbit-glow-5-hue: 0;
+            --orbit-glow-5-saturation: 0;
+            --orbit-glow-5-lightness: 30;
+            --orbit-edge-opacity-5: 0;
+
+            --highlight-x-1: 960;
+            --highlight-y-1: 540;
+            --highlight-x-2: 960;
+            --highlight-y-2: 540;
+            --highlight-x-3: 960;
+            --highlight-y-3: 540;
+            --highlight-x-4: 960;
+            --highlight-y-4: 540;
+            --highlight-x-5: 960;
+            --highlight-y-5: 540;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+            transition: background 0.5s ease;
+        }
+
+        /* 浅色主题 */
+        body.light-theme {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        body.light-theme {
+            --orbit-glow-1-saturation: 100;
+            --orbit-glow-1-lightness: 40;
+            --orbit-glow-2-saturation: 100;
+            --orbit-glow-2-lightness: 50;
+            --orbit-glow-3-saturation: 100;
+            --orbit-glow-3-lightness: 40;
+            --orbit-glow-4-saturation: 100;
+            --orbit-glow-4-lightness: 50;
+            --orbit-glow-5-lightness: 70;
+        }
+
+        /* ========== 主题切换按钮 ========== */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.9);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .theme-toggle svg {
+            stroke: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-theme .theme-toggle:active {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-icon-light {
+            display: none;
+        }
+
+        body.light-theme .theme-icon-dark {
+            display: none;
+        }
+
+        body.light-theme .theme-icon-light {
+            display: block;
+        }
+
+        /* ========== 旋转光晕背景 ========== */
+        .background-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .card-glow-border {
+            position: absolute;
+            inset: -10px;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 10px;
+            overflow: visible;
+        }
+
+        .card-glow-inner {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+            border-radius: 6px;
+            z-index: 50;
+            opacity: 1;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .card-glow-inner {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        .orbiting-glow {
+            position: absolute;
+            width: calc(var(--spotlight-size) * 1.5);
+            height: calc(var(--spotlight-size) * 1.5);
+            border-radius: 50%;
+            z-index: 55;
+            background: radial-gradient(
+                circle,
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness) * 1%) / 0.6),
+                transparent 70%
+            );
+            filter: blur(20px);
+            opacity: 0.4;
+            transform-origin: center center;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .orbiting-glow-1 {
+            animation-duration: 2.5s;
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+        }
+
+        .orbiting-glow-2 {
+            animation-duration: 3.2s;
+            animation-delay: -0.5s;
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+        }
+
+        .orbiting-glow-3 {
+            animation-duration: 4s;
+            animation-delay: -1s;
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+        }
+
+        .orbiting-glow-4 {
+            animation-duration: 2.8s;
+            animation-delay: -1.5s;
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+        }
+
+        .orbiting-glow-5 {
+            animation-duration: 3.5s;
+            animation-delay: -2s;
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+        }
+
+        .card-glow-highlight-1,
+        .card-glow-highlight-2,
+        .card-glow-highlight-3,
+        .card-glow-highlight-4,
+        .card-glow-highlight-5 {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 45;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .card-glow-highlight-1::before,
+        .card-glow-highlight-2::before,
+        .card-glow-highlight-3::before,
+        .card-glow-highlight-4::before,
+        .card-glow-highlight-5::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 0;
+            pointer-events: none;
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+
+        .card-glow-highlight-1::before {
+            --glow-hue: var(--orbit-glow-1-hue);
+            --glow-saturation: var(--orbit-glow-1-saturation);
+            --glow-lightness: var(--orbit-glow-1-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-1, 960) * 1px)
+                calc(var(--highlight-y-1, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-1);
+        }
+
+        .card-glow-highlight-2::before {
+            --glow-hue: var(--orbit-glow-2-hue);
+            --glow-saturation: var(--orbit-glow-2-saturation);
+            --glow-lightness: var(--orbit-glow-2-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-2, 960) * 1px)
+                calc(var(--highlight-y-2, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-2);
+        }
+
+        .card-glow-highlight-3::before {
+            --glow-hue: var(--orbit-glow-3-hue);
+            --glow-saturation: var(--orbit-glow-3-saturation);
+            --glow-lightness: var(--orbit-glow-3-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-3, 960) * 1px)
+                calc(var(--highlight-y-3, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-3);
+        }
+
+        .card-glow-highlight-4::before {
+            --glow-hue: var(--orbit-glow-4-hue);
+            --glow-saturation: var(--orbit-glow-4-saturation);
+            --glow-lightness: var(--orbit-glow-4-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-4, 960) * 1px)
+                calc(var(--highlight-y-4, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-4);
+        }
+
+        .card-glow-highlight-5::before {
+            --glow-hue: var(--orbit-glow-5-hue);
+            --glow-saturation: var(--orbit-glow-5-saturation);
+            --glow-lightness: var(--orbit-glow-5-lightness);
+            background-image: radial-gradient(
+                calc(var(--spotlight-size) * 0.6) calc(var(--spotlight-size) * 0.6) at
+                calc(var(--highlight-x-5, 960) * 1px)
+                calc(var(--highlight-y-5, 540) * 1px),
+                hsl(var(--glow-hue, 0) calc(var(--glow-saturation, 100) * 1%) calc(var(--glow-lightness, 50) * 1%) / 0.7),
+                transparent 100%
+            );
+            opacity: var(--orbit-edge-opacity-5);
+        }
+
+        body.light-theme .card-glow-highlight-1::before,
+        body.light-theme .card-glow-highlight-2::before,
+        body.light-theme .card-glow-highlight-3::before,
+        body.light-theme .card-glow-highlight-4::before {
+            filter: brightness(2) saturate(1.5);
+        }
+
+        body.light-theme .card-glow-highlight-5::before {
+            filter: brightness(1.5) saturate(0.5);
+        }
+
+        .glow-visibility-mask {
+            position: absolute;
+            inset: 0;
+            border-radius: 0;
+            z-index: 40;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 1) 50%,
+                rgba(0, 0, 0, 0.9) 65%,
+                rgba(0, 0, 0, 0.6) 80%,
+                rgba(0, 0, 0, 0.2) 90%,
+                rgba(0, 0, 0, 0) 95%
+            );
+            transition: background 0.5s ease;
+        }
+
+        body.light-theme .glow-visibility-mask {
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.6) 0%,
+                rgba(255, 255, 255, 0.5) 40%,
+                rgba(255, 255, 255, 0.3) 60%,
+                rgba(255, 255, 255, 0.1) 80%,
+                rgba(255, 255, 255, 0) 90%
+            );
+        }
+
+        /* ========== 输入表单容器 ========== */
+        .input-container {
+            position: relative;
+            z-index: 100;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: absolute;
+            top: -60px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:active {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .back-button {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body.light-theme .back-button:active {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 表单卡片 */
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .form-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+        }
+
+        body.light-theme .form-title {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .form-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.light-theme .form-subtitle {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* 输入模式切换 */
+        .input-mode-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 3px;
+            margin-bottom: 18px;
+        }
+
+        body.light-theme .input-mode-toggle {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .mode-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .mode-option {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .mode-option:active {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        body.light-theme .mode-option:active {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .mode-option.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .mode-option.active {
+            background: rgba(0, 0, 0, 0.06);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* 表单字段 */
+        .form-field {
+            margin-bottom: 14px;
+        }
+
+        .form-field-label {
+            display: block;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        body.light-theme .form-field-label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-field-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        body.light-theme .form-field-input {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .form-field-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        body.light-theme .form-field-input::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .form-field-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.light-theme .form-field-input:focus {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .form-field-input:active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme .form-field-input:active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* 字段组 */
+        .field-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .field-group .form-field {
+            margin-bottom: 0;
+        }
+
+        /* 提交按钮 */
+        .submit-button {
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        body.light-theme .submit-button {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .submit-button:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        body.light-theme .submit-button:active {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .submit-button svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 输入模式内容区 */
+        .input-mode-content {
+            display: none;
+        }
+
+        .input-mode-content.active {
+            display: block;
+        }
+
+        /* ========== 自定义下拉框 ========== */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            padding: 10px 32px 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        body.light-theme .custom-select {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .custom-select-value {
+            display: block;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .custom-select[data-value=""] .custom-select-value {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        body.light-theme .custom-select[data-value=""] .custom-select-value {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-theme .custom-select-value {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .custom-select-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        body.light-theme .custom-select-arrow {
+            stroke: rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-select.open .custom-select-arrow {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 25, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        body.light-theme .custom-select-options {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-select.open .custom-select-options {
+            max-height: 200px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-select-option {
+            padding: 10px 12px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        body.light-theme .custom-select-option {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .custom-select-option:active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme .custom-select-option:active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .custom-select-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        body.light-theme .custom-select-option:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .custom-select-option.selected {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        body.light-theme .custom-select-option.selected {
+            background: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 1);
+        }
+
+        /* 选择框 */
+        .form-field-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        body.light-theme .form-field-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(0,0,0,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-color: rgba(0, 0, 0, 0.03) !important;
+        }
+
+        /* 强制覆盖 select 及 option 的样式 */
+        select.form-field-select,
+        select.form-field-select option {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        body.light-theme select.form-field-select,
+        body.light-theme select.form-field-select option {
+            background-color: #ffffff !important;
+            color: rgba(0, 0, 0, 0.9) !important;
+        }
+
+        /* 为未选中的 option 设置特殊样式 */
+        select.form-field-select option:empty,
+        select.form-field-select option[value=""] {
+            color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        body.light-theme select.form-field-select option:empty,
+        body.light-theme select.form-field-select option[value=""] {
+            color: rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* 强制设置 select 的背景色 */
+        select {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        body.light-theme select {
+            background-color: rgba(0, 0, 0, 0.03) !important;
+        }
+
+        /* Safari 专属修复 */
+        @supports (-webkit-appearance: none) {
+            select.form-field-select {
+                -webkit-appearance: none;
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+
+            body.light-theme select.form-field-select {
+                background-color: #ffffff !important;
+            }
+        }
+
+        /* 五彩光效按钮点击效果 */
+        .submit-button-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .submit-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-ripple-new {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .submit-button.clicking .glow-ripple-new {
+            animation: glowRippleExpandNew 0.8s ease-out forwards;
+        }
+
+        .glow-ripple-new-1 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 70%, 50%) 0%,
+                hsl(0, 70%, 30%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0s;
+        }
+
+        .glow-ripple-new-2 {
+            background: radial-gradient(
+                circle,
+                hsl(60, 90%, 60%) 0%,
+                hsl(60, 90%, 40%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.08s;
+        }
+
+        .glow-ripple-new-3 {
+            background: radial-gradient(
+                circle,
+                hsl(120, 90%, 50%) 0%,
+                hsl(120, 90%, 30%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.16s;
+        }
+
+        .glow-ripple-new-4 {
+            background: radial-gradient(
+                circle,
+                hsl(210, 90%, 60%) 0%,
+                hsl(210, 90%, 40%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.24s;
+        }
+
+        .glow-ripple-new-5 {
+            background: radial-gradient(
+                circle,
+                hsl(0, 0%, 100%) 0%,
+                hsl(0, 0%, 80%) 50%,
+                transparent 70%
+            );
+            animation-delay: 0.32s;
+        }
+
+        @keyframes glowRippleExpandNew {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                width: 250%;
+                height: 250%;
+                opacity: 0;
+            }
+        }
+
+        .submit-button.clicking {
+            /* 点击时让按钮背景更不透明，防止波纹泄漏到外部 */
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        body.light-theme .submit-button.clicking {
+            background: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* 提示文字 */
+        .hint-text {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        body.light-theme .hint-text {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .input-container {
+                max-width: 100%;
+            }
+
+            .form-card {
+                padding: 24px 20px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .field-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 旋转光晕背景 -->
+    <div class="background-container">
+        <div class="orbiting-glow orbiting-glow-1"></div>
+        <div class="orbiting-glow orbiting-glow-2"></div>
+        <div class="orbiting-glow orbiting-glow-3"></div>
+        <div class="orbiting-glow orbiting-glow-4"></div>
+        <div class="orbiting-glow orbiting-glow-5"></div>
+
+        <div class="card-glow-border"></div>
+        <div class="card-glow-inner"></div>
+
+        <div class="card-glow-highlight-1"></div>
+        <div class="card-glow-highlight-2"></div>
+        <div class="card-glow-highlight-3"></div>
+        <div class="card-glow-highlight-4"></div>
+        <div class="card-glow-highlight-5"></div>
+
+        <div class="glow-visibility-mask"></div>
+    </div>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <svg class="theme-icon-dark" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="theme-icon-light" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </div>
+
+    <!-- 输入表单容器 -->
+    <div class="input-container">
+        <!-- 返回按钮 -->
+        <div class="back-button" onclick="goBack()">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>返回</span>
+        </div>
+
+        <!-- 表单卡片 -->
+        <div class="form-card">
+            <div class="form-header">
+                <h1 class="form-title">创建八字档案</h1>
+                <p class="form-subtitle">输入信息以生成您的命盘分析</p>
+            </div>
+
+            <!-- 输入模式切换 -->
+            <div class="input-mode-toggle">
+                <div class="mode-option active" data-mode="bazi" onclick="switchMode('bazi')">
+                    直接输入八字
+                </div>
+                <div class="mode-option" data-mode="date" onclick="switchMode('date')">
+                    出生日期时间
+                </div>
+            </div>
+
+            <!-- 模式1: 八字直接输入 -->
+            <div class="input-mode-content active" id="mode-bazi">
+                <form onsubmit="handleSubmitBazi(event, this)">
+                    <!-- 档案名称 -->
+                    <div class="form-field">
+                        <label class="form-field-label">档案名称</label>
+                        <input type="text" class="form-field-input" placeholder="例如：张三的命盘" required>
+                    </div>
+
+                    <!-- 八字四柱 -->
+                    <div class="field-group" style="margin-bottom: 12px;">
+                        <div class="form-field">
+                            <label class="form-field-label">年柱</label>
+                            <input type="text" class="form-field-input" placeholder="例如：甲子" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field-label">月柱</label>
+                            <input type="text" class="form-field-input" placeholder="例如：丙寅" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group" style="margin-bottom: 12px;">
+                        <div class="form-field">
+                            <label class="form-field-label">日柱</label>
+                            <input type="text" class="form-field-input" placeholder="例如：戊午" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field-label">时柱</label>
+                            <input type="text" class="form-field-input" placeholder="例如：庚申" required>
+                        </div>
+                    </div>
+
+                    <!-- 出生年份 -->
+                    <div class="form-field">
+                        <label class="form-field-label">出生年份</label>
+                        <input type="number" class="form-field-input" placeholder="例如：1990" min="1900" max="2100" required>
+                        <div class="hint-text">用于确定生肖和大运排法</div>
+                    </div>
+
+                    <!-- 性别 -->
+                    <div class="form-field">
+                        <label class="form-field-label">性别</label>
+                        <div class="custom-select" data-value="" onclick="toggleCustomSelect(this)">
+                            <span class="custom-select-value">请选择</span>
+                            <svg class="custom-select-arrow" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <div class="custom-select-options">
+                                <div class="custom-select-option" data-value="male" onclick="selectOption(event, this)">男</div>
+                                <div class="custom-select-option" data-value="female" onclick="selectOption(event, this)">女</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="gender" class="custom-select-input" required>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <button type="submit" class="submit-button" onclick="triggerButtonGlow(event, this)">
+                        <div class="submit-button-glow">
+                            <div class="glow-ripple-new glow-ripple-new-1"></div>
+                            <div class="glow-ripple-new glow-ripple-new-2"></div>
+                            <div class="glow-ripple-new glow-ripple-new-3"></div>
+                            <div class="glow-ripple-new glow-ripple-new-4"></div>
+                            <div class="glow-ripple-new glow-ripple-new-5"></div>
+                        </div>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2v20M2 12h20"/>
+                        </svg>
+                        <span>创建档案</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- 模式2: 出生日期时间输入 -->
+            <div class="input-mode-content" id="mode-date">
+                <form onsubmit="handleSubmitDate(event, this)">
+                    <!-- 档案名称 -->
+                    <div class="form-field">
+                        <label class="form-field-label">档案名称</label>
+                        <input type="text" class="form-field-input" placeholder="例如：李四的命盘" required>
+                    </div>
+
+                    <!-- 出生日期 -->
+                    <div class="field-group">
+                        <div class="form-field">
+                            <label class="form-field-label">年</label>
+                            <div class="custom-select" data-value="" onclick="toggleCustomSelect(this)" data-type="year">
+                                <span class="custom-select-value">请选择</span>
+                                <svg class="custom-select-arrow" viewBox="0 0 24 24">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                                <div class="custom-select-options" id="year-options">
+                                    <!-- JavaScript 生成年份选项 -->
+                                </div>
+                            </div>
+                            <input type="hidden" name="birth-year" class="custom-select-input" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field-label">月</label>
+                            <div class="custom-select" data-value="" onclick="toggleCustomSelect(this)" data-type="month">
+                                <span class="custom-select-value">请选择</span>
+                                <svg class="custom-select-arrow" viewBox="0 0 24 24">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                                <div class="custom-select-options" id="month-options">
+                                    <!-- JavaScript 生成月份选项 -->
+                                </div>
+                            </div>
+                            <input type="hidden" name="birth-month" class="custom-select-input" required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-field-label">日</label>
+                        <div class="custom-select" data-value="" onclick="toggleCustomSelect(this)" data-type="day">
+                            <span class="custom-select-value">请选择</span>
+                            <svg class="custom-select-arrow" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <div class="custom-select-options" id="day-options">
+                                <!-- JavaScript 生成日期选项 -->
+                            </div>
+                        </div>
+                        <input type="hidden" name="birth-day" class="custom-select-input" required>
+                    </div>
+
+                    <!-- 出生时间 -->
+                    <div class="field-group" style="margin-bottom: 12px;">
+                        <div class="form-field">
+                            <label class="form-field-label">小时 (0-23)</label>
+                            <input type="number" class="form-field-input" placeholder="14" min="0" max="23" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-field-label">分钟 (0-59)</label>
+                            <input type="number" class="form-field-input" placeholder="30" min="0" max="59" required>
+                        </div>
+                    </div>
+
+                    <!-- 性别 -->
+                    <div class="form-field">
+                        <label class="form-field-label">性别</label>
+                        <div class="custom-select" data-value="" onclick="toggleCustomSelect(this)">
+                            <span class="custom-select-value">请选择</span>
+                            <svg class="custom-select-arrow" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <div class="custom-select-options">
+                                <div class="custom-select-option" data-value="male" onclick="selectOption(event, this)">男</div>
+                                <div class="custom-select-option" data-value="female" onclick="selectOption(event, this)">女</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="gender" class="custom-select-input" required>
+                    </div>
+
+                    <div class="hint-text" style="margin-bottom: 12px;">
+                        系统将根据出生日期和时间自动推算八字四柱
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <button type="submit" class="submit-button" onclick="triggerButtonGlow(event, this)">
+                        <div class="submit-button-glow">
+                            <div class="glow-ripple-new glow-ripple-new-1"></div>
+                            <div class="glow-ripple-new glow-ripple-new-2"></div>
+                            <div class="glow-ripple-new glow-ripple-new-3"></div>
+                            <div class="glow-ripple-new glow-ripple-new-4"></div>
+                            <div class="glow-ripple-new glow-ripple-new-5"></div>
+                        </div>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2v20M2 12h20"/>
+                        </svg>
+                        <span>创建档案</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                darkIcon.style.display = 'block';
+                lightIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 切换输入模式
+        function switchMode(mode) {
+            // 更新模式选项状态
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.mode === mode) {
+                    option.classList.add('active');
+                }
+            });
+
+            // 更新内容区域显示
+            document.querySelectorAll('.input-mode-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`mode-${mode}`).classList.add('active');
+        }
+
+        // 返回上一页
+        function goBack() {
+            // TODO: 实现返回功能
+            console.log('返回上一页');
+        }
+
+        // ========== 自定义下拉框功能 ==========
+        // 初始化日期选项
+        function initDateOptions() {
+            // 生成年份选项（1900-当前年份）
+            const yearOptions = document.getElementById('year-options');
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear; year >= 1900; year--) {
+                const option = document.createElement('div');
+                option.className = 'custom-select-option';
+                option.dataset.value = year;
+                option.textContent = year + '年';
+                option.onclick = (e) => selectOption(e, option);
+                yearOptions.appendChild(option);
+            }
+
+            // 生成月份选项
+            const monthOptions = document.getElementById('month-options');
+            for (let month = 1; month <= 12; month++) {
+                const option = document.createElement('div');
+                option.className = 'custom-select-option';
+                option.dataset.value = month;
+                option.textContent = month + '月';
+                option.onclick = (e) => selectOption(e, option);
+                monthOptions.appendChild(option);
+            }
+
+            // 生成日期选项（默认31天）
+            updateDayOptions(31);
+        }
+
+        // 更新日期选项（根据选中的年月）
+        function updateDayOptions(days) {
+            const dayOptions = document.getElementById('day-options');
+            dayOptions.innerHTML = '';
+            for (let day = 1; day <= days; day++) {
+                const option = document.createElement('div');
+                option.className = 'custom-select-option';
+                option.dataset.value = day;
+                option.textContent = day + '日';
+                option.onclick = (e) => selectOption(e, option);
+                dayOptions.appendChild(option);
+            }
+        }
+
+        // 获取某年某月的天数
+        function getDaysInMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        // 切换下拉框展开/收起
+        function toggleCustomSelect(selectElement) {
+            const type = selectElement.dataset.type;
+
+            // 如果是日期选择，检查是否需要更新日期选项
+            if (type === 'year' || type === 'month') {
+                const yearSelect = document.querySelector('.custom-select[data-type="year"]');
+                const monthSelect = document.querySelector('.custom-select[data-type="month"]');
+                const year = yearSelect?.dataset.value;
+                const month = monthSelect?.dataset.value;
+
+                if (year && month) {
+                    const days = getDaysInMonth(parseInt(year), parseInt(month));
+                    updateDayOptions(days);
+                }
+            }
+
+            // 关闭其他所有下拉框
+            document.querySelectorAll('.custom-select.open').forEach(select => {
+                if (select !== selectElement) {
+                    select.classList.remove('open');
+                }
+            });
+
+            // 切换当前下拉框
+            selectElement.classList.toggle('open');
+        }
+
+        // 选择选项
+        function selectOption(event, optionElement) {
+            event.stopPropagation();
+
+            const selectElement = optionElement.closest('.custom-select');
+            const value = optionElement.dataset.value;
+            const text = optionElement.textContent;
+            const type = selectElement.dataset.type;
+
+            // 更新选中状态
+            selectElement.querySelectorAll('.custom-select-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            optionElement.classList.add('selected');
+
+            // 更新显示值
+            selectElement.dataset.value = value;
+            selectElement.querySelector('.custom-select-value').textContent = text;
+
+            // 更新隐藏的input值
+            const inputElement = selectElement.parentElement.querySelector('.custom-select-input');
+            if (inputElement) {
+                inputElement.value = value;
+            }
+
+            // 关闭下拉框
+            selectElement.classList.remove('open');
+
+            // 如果是年份或月份选择，更新日期选项
+            if (type === 'year' || type === 'month') {
+                const yearSelect = document.querySelector('.custom-select[data-type="year"]');
+                const monthSelect = document.querySelector('.custom-select[data-type="month"]');
+                const daySelect = document.querySelector('.custom-select[data-type="day"]');
+
+                const year = yearSelect?.dataset.value;
+                const month = monthSelect?.dataset.value;
+
+                if (year && month) {
+                    const days = getDaysInMonth(parseInt(year), parseInt(month));
+                    const currentDay = daySelect?.dataset.value;
+
+                    updateDayOptions(days);
+
+                    // 如果当前选中的日期超出了新的月份天数，清除日期选择
+                    if (currentDay && parseInt(currentDay) > days) {
+                        daySelect.dataset.value = '';
+                        daySelect.querySelector('.custom-select-value').textContent = '请选择';
+                        daySelect.parentElement.querySelector('.custom-select-input').value = '';
+                    }
+                }
+            }
+        }
+
+        // 点击其他地方关闭下拉框
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.custom-select')) {
+                document.querySelectorAll('.custom-select.open').forEach(select => {
+                    select.classList.remove('open');
+                });
+            }
+        });
+
+        // 处理八字表单提交
+        function handleSubmitBazi(event, form) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            console.log('八字表单提交：', Object.fromEntries(formData));
+            // TODO: 实现八字计算逻辑
+        }
+
+        // 处理日期表单提交
+        function handleSubmitDate(event, form) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            console.log('日期表单提交：', Object.fromEntries(formData));
+            // TODO: 实现八字计算逻辑
+        }
+
+        // 触发按钮五彩光效
+        function triggerButtonGlow(event, button) {
+            event.preventDefault();
+
+            // 移除可能存在的点击类
+            button.classList.remove('clicking');
+
+            // 强制重绘以重新触发动画
+            void button.offsetWidth;
+
+            // 添加点击类触发动画
+            button.classList.add('clicking');
+
+            // 动画结束后移除类
+            setTimeout(() => {
+                button.classList.remove('clicking');
+                // 触发表单提交
+                const form = button.closest('form');
+                if (form) {
+                    form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                }
+            }, 800);
+        }
+
+        // 旋转光晕动画
+        const orbitRadius = 160;
+        let rotationAngle = 0;
+        const rotationSpeed = 0.008;
+
+        let centerX = window.innerWidth / 2;
+        let centerY = window.innerHeight / 2;
+        let centerTargetX = window.innerWidth / 2;
+        let centerTargetY = window.innerHeight / 2;
+        const centerMoveSpeed = 0.002;
+        let centerAngle = 0;
+
+        function updateRandomCenter() {
+            centerAngle += centerMoveSpeed;
+            const maxRangeX = window.innerWidth * 0.4;
+            const maxRangeY = window.innerHeight * 0.4;
+
+            centerTargetX = window.innerWidth / 2 + Math.sin(centerAngle) * maxRangeX + Math.sin(centerAngle * 0.7) * (maxRangeX * 0.5);
+            centerTargetY = window.innerHeight / 2 + Math.cos(centerAngle * 0.8) * maxRangeY + Math.cos(centerAngle * 1.3) * (maxRangeY * 0.5);
+
+            centerX += (centerTargetX - centerX) * 0.01;
+            centerY += (centerTargetY - centerY) * 0.01;
+        }
+
+        function updateOrbitingGlows() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+
+            glows.forEach((glow, index) => {
+                const angle = rotationAngle + (index * Math.PI * 2 / 5);
+                const offsetX = Math.cos(angle) * orbitRadius;
+                const offsetY = Math.sin(angle) * orbitRadius;
+
+                const glowWidth = parseFloat(getComputedStyle(glow).width);
+                const glowHeight = parseFloat(getComputedStyle(glow).height);
+
+                glow.style.left = `${centerX + offsetX - glowWidth / 2}px`;
+                glow.style.top = `${centerY + offsetY - glowHeight / 2}px`;
+            });
+        }
+
+        // 更新边缘高光位置和透明度
+        function updateHighlightPositions() {
+            const glows = document.querySelectorAll('.orbiting-glow');
+            const maxDistance = 300;
+
+            glows.forEach((glow, index) => {
+                const rect = glow.getBoundingClientRect();
+                const glowCenterX = rect.left + rect.width / 2;
+                const glowCenterY = rect.top + rect.height / 2;
+
+                const distToLeft = glowCenterX;
+                const distToRight = window.innerWidth - glowCenterX;
+                const distToTop = glowCenterY;
+                const distToBottom = window.innerHeight - glowCenterY;
+
+                const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+                let edgeOpacity = Math.max(0, 1 - (minDist / maxDistance));
+                edgeOpacity = edgeOpacity * edgeOpacity;
+                edgeOpacity = Math.min(3, edgeOpacity);
+
+                if (document.body.classList.contains('light-theme')) {
+                    edgeOpacity *= 5;
+                }
+
+                let highlightX = glowCenterX;
+                let highlightY = glowCenterY;
+
+                if (minDist === distToLeft) {
+                    highlightX = 0;
+                } else if (minDist === distToRight) {
+                    highlightX = window.innerWidth;
+                } else if (minDist === distToTop) {
+                    highlightY = 0;
+                } else {
+                    highlightY = window.innerHeight;
+                }
+
+                const highlightIndex = index + 1;
+                document.documentElement.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.documentElement.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.documentElement.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+                document.body.style.setProperty(`--highlight-x-${highlightIndex}`, highlightX.toFixed(2));
+                document.body.style.setProperty(`--highlight-y-${highlightIndex}`, highlightY.toFixed(2));
+                document.body.style.setProperty(`--orbit-edge-opacity-${highlightIndex}`, edgeOpacity.toFixed(2));
+            });
+        }
+
+        function animateRotation() {
+            rotationAngle += rotationSpeed;
+            updateRandomCenter();
+            updateOrbitingGlows();
+            updateHighlightPositions();
+            requestAnimationFrame(animateRotation);
+        }
+
+        window.addEventListener('load', () => {
+            centerX = window.innerWidth / 2;
+            centerY = window.innerHeight / 2;
+            updateHighlightPositions();
+        });
+
+        animateRotation();
+
+        // 页面加载时恢复主题设置
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const lightIcon = document.querySelector('.theme-icon-light');
+
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'block';
+            }
+
+            // 初始化日期选项
+            initDateOptions();
+        });
+    </script>
+</body>
+</html>
