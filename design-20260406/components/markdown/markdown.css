@@ -1,0 +1,597 @@
+/* ============================================
+   Markdown解析器组件样式
+   ============================================ */
+
+/* ============================================
+   Markdown主体样式
+   ============================================ */
+.markdown-body {
+  /* 主题色HSL变量（与卡片系统一致） */
+  --theme-hue: 210;
+  --theme-saturation: 80;
+  --theme-lightness: 60;
+
+  /* 从HSL派生的颜色变量 */
+  --md-color: hsl(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%));
+  --md-glow: hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.3);
+  --md-border: hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.5);
+  --md-bg: hsla(var(--theme-hue) calc(var(--theme-saturation) * 1%) calc(var(--theme-lightness) * 1%) / 0.1);
+
+  color: var(--text-primary);
+  line-height: 1.6;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
+}
+
+/* ============================================
+   五行主题色系统（HSL）
+   ============================================ */
+
+/* 木主题（绿色）hue 140 */
+.markdown-body.theme-wood {
+  --theme-hue: 140;
+}
+
+/* 火主题（红色）hue 0 */
+.markdown-body.theme-fire {
+  --theme-hue: 0;
+}
+
+/* 土主题（黄色）hue 50 */
+.markdown-body.theme-earth {
+  --theme-hue: 50;
+}
+
+/* 金主题（白色/灰色）- 真正的灰色 */
+.markdown-body.theme-metal {
+  --theme-hue: 0;
+  --theme-saturation: 0;
+  --theme-lightness: 80;
+}
+
+/* 水主题（蓝色）hue 210 */
+.markdown-body.theme-water {
+  --theme-hue: 210;
+}
+
+/* ============================================
+   标题样式（保持原色 + 主题色下划线）
+   ============================================ */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 0.3em;
+}
+
+/* H1: 粗下划线 + 光晕 */
+.markdown-body h1 {
+  font-size: 2em;
+  border-bottom: 3px solid var(--md-color);
+  box-shadow: 0 4px 12px var(--md-glow);
+}
+
+/* H2: 中等下划线 */
+.markdown-body h2 {
+  font-size: 1.5em;
+  border-bottom: 2px solid var(--md-color);
+}
+
+/* H3: 细下划线 */
+.markdown-body h3 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--md-border);
+}
+
+/* H4-H6: 无下划线，保持原样 */
+.markdown-body h4 {
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-size: 0.875em;
+}
+
+.markdown-body h6 {
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* 段落 - 使用较浅的颜色以区分层次 */
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+/* 链接 - 使用标准链接颜色，不带主题色 */
+.markdown-body a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  border-bottom: 2px solid var(--md-theme-border);
+  padding-bottom: 0.3em;
+  box-shadow: 0 4px 12px var(--md-theme-glow);
+}
+
+.markdown-body h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--md-theme-border);
+  padding-bottom: 0.3em;
+}
+
+.markdown-body h3 {
+  font-size: 1.25em;
+  text-shadow:
+    0 0 8px var(--md-theme-glow),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-body h4 {
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-size: 0.875em;
+}
+
+.markdown-body h6 {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+/* 段落 */
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* 链接（带主题色和光晕） */
+.markdown-body a {
+  color: var(--md-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 5px var(--md-glow);
+}
+
+.markdown-body a:hover {
+  color: var(--md-color);
+  text-decoration: underline;
+  text-shadow:
+    0 0 10px var(--md-glow),
+    0 0 15px var(--md-glow);
+}
+
+/* 列表 */
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+.markdown-body li {
+  margin-bottom: 4px;
+}
+
+.markdown-body li > p {
+  margin-top: 16px;
+}
+
+.markdown-body li + li {
+  margin-top: 4px;
+}
+
+/* 引用块（带主题色和光晕） */
+.markdown-body blockquote {
+  margin: 16px 0;
+  padding: 0 16px;
+  border-left: 4px solid var(--md-color);
+  background: var(--md-bg);
+  color: var(--text-secondary);
+  box-shadow: 0 2px 8px var(--md-glow);
+  transition: all 0.3s ease;
+}
+
+.markdown-body blockquote:hover {
+  box-shadow: 0 4px 12px var(--md-glow);
+}
+
+.markdown-body blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* 水平分割线 */
+.markdown-body hr {
+  height: 2px;
+  padding: 0;
+  margin: 24px 0;
+  background-color: var(--border-color);
+  border: 0;
+}
+
+/* 表格（带主题色边框） */
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  border: 1px solid var(--md-border);
+  box-shadow: 0 2px 8px var(--md-glow);
+}
+
+.markdown-body table thead {
+  background: var(--md-bg);
+}
+
+.markdown-body table th {
+  font-weight: 600;
+  padding: 8px 16px;
+  border: 1px solid var(--md-border);
+  color: var(--md-color);
+  text-shadow: 0 0 5px var(--md-glow);
+}
+
+.markdown-body table td {
+  padding: 8px 16px;
+  border: 1px solid var(--md-border);
+  color: var(--text-secondary);
+}
+
+.markdown-body table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.markdown-body table tr:hover {
+  background: var(--md-bg);
+}
+
+/* 代码块（带主题色边框，但文字颜色正常） */
+.markdown-body code {
+  padding: 2px 6px;
+  margin: 0 2px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 85%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--md-border);
+  border-radius: 4px;
+  color: #4ade80;
+}
+
+.markdown-body pre {
+  padding: 16px;
+  margin: 16px 0;
+  overflow: auto;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.45;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--md-border);
+  border-radius: 8px;
+  box-shadow:
+    0 0 10px var(--md-glow),
+    inset 0 0 10px var(--md-glow);
+  transition: all 0.3s ease;
+}
+
+.markdown-body pre:hover {
+  box-shadow:
+    0 0 15px var(--md-glow),
+    inset 0 0 15px var(--md-glow);
+}
+
+.markdown-body pre code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+}
+
+/* Highlight.js代码高亮覆盖 */
+.markdown-body pre.hljs {
+  background: rgba(0, 0, 0, 0.4) !important;
+  padding: 16px;
+  border: 2px solid var(--md-border);
+}
+
+/* ============================================
+   Mermaid图表样式
+   ============================================ */
+.markdown-body .mermaid {
+  margin: 20px 0;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--md-border);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--md-glow);
+}
+
+.markdown-body .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 图片 */
+.markdown-body img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+/* 粗体、斜体 - 使用标准颜色 */
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markdown-body em {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* 删除线 */
+.markdown-body del {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+/* 任务列表 */
+.markdown-body input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* ============================================
+   页面样式
+   ============================================ */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.page-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.mb-8 {
+  margin-bottom: 60px;
+}
+
+.text-2xl {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* 使用说明 */
+.usage-section {
+  padding: 40px;
+}
+
+.usage-section h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.usage-section h3 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 30px 0 15px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.usage-section pre {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.usage-section code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: #4ade80;
+}
+
+.usage-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.usage-section ul li {
+  padding: 10px 0 10px 25px;
+  position: relative;
+  color: var(--text-secondary);
+}
+
+.usage-section ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+/* ============================================
+   原始Markdown源码显示
+   ============================================ */
+.markdown-source {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.markdown-source code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: #4ade80;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 28px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+  }
+
+  .markdown-body h1 {
+    font-size: 1.75em;
+  }
+
+  .markdown-body h2 {
+    font-size: 1.375em;
+  }
+
+  .markdown-body h3 {
+    font-size: 1.125em;
+  }
+
+  .markdown-body table {
+    font-size: 14px;
+  }
+
+  .markdown-body table th,
+  .markdown-body table td {
+    padding: 6px 12px;
+  }
+}
+
+/* ============================================
+   亮色主题适配
+   ============================================ */
+
+/* 亮色主题五行颜色（加深版，调整HSL值） */
+:root[data-theme="light"] .markdown-body.theme-wood {
+  --theme-hue: 140;
+  --theme-lightness: 45;
+}
+
+:root[data-theme="light"] .markdown-body.theme-fire {
+  --theme-hue: 0;
+  --theme-lightness: 50;
+}
+
+:root[data-theme="light"] .markdown-body.theme-earth {
+  --theme-hue: 50;
+  --theme-lightness: 45;
+}
+
+:root[data-theme="light"] .markdown-body.theme-metal {
+  --theme-hue: 0;
+  --theme-saturation: 0;
+  --theme-lightness: 70;
+}
+
+:root[data-theme="light"] .markdown-body.theme-water {
+  --theme-hue: 220;
+  --theme-lightness: 45;
+}
+
+:root[data-theme="light"] .markdown-body code {
+  background: rgba(0, 0, 0, 0.05);
+  color: #e11d48;
+}
+
+:root[data-theme="light"] .markdown-body pre {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .markdown-body pre.hljs {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+:root[data-theme="light"] .markdown-source {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .markdown-source code {
+  color: #e11d48;
+}
+
+:root[data-theme="light"] .usage-section pre {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .usage-section code {
+  color: #e11d48;
+}
+
+:root[data-theme="light"] .markdown-body table thead {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+:root[data-theme="light"] .markdown-body table tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+/* ============================================
+   可访问性
+   ============================================ */
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .markdown-body a {
+    transition: none;
+  }
+}

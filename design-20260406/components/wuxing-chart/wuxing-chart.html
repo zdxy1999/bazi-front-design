@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五行生克图 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../card/card.css">
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0;
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 五行图表容器 */
+    .chart-container {
+      width: 600px;
+      height: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* SVG样式 */
+    #wuxing-chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 元素圆圈 */
+    .element-circle {
+      transition: all 0.3s ease;
+    }
+
+    /* 元素光晕 */
+    .element-glow {
+      filter: blur(12px);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+    }
+
+    /* 玻璃背景 */
+    .element-glass-bg {
+      fill: rgba(255, 255, 255, 0.1);
+      stroke: rgba(255, 255, 255, 0.3);
+      stroke-width: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    :root[data-theme="light"] .element-glass-bg {
+      fill: rgba(255, 255, 255, 0.2);
+      stroke: rgba(0, 0, 0, 0.2);
+    }
+
+    /* 连线 */
+    .connection-line {
+      stroke: rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .connection-line.sheng {
+      stroke-width: 2;
+    }
+
+    .connection-line.ke {
+      stroke-width: 1.5;
+      stroke-dasharray: 5, 5;
+    }
+
+    :root[data-theme="light"] .connection-line {
+      stroke: rgba(0, 0, 0, 0.3);
+    }
+
+    /* 元素标签 */
+    .element-label {
+      font-size: 16px;
+      fill: var(--text-primary);
+      text-anchor: middle;
+      dominant-baseline: middle;
+      font-weight: 500;
+      pointer-events: none;
+    }
+
+    .element-percent {
+      font-size: 14px;
+      font-weight: 600;
+      fill: rgba(255, 255, 255, 0.95);
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    :root[data-theme="light"] .element-percent {
+      fill: rgba(0, 0, 0, 0.85);
+    }
+
+    /* 日主星星 */
+    .daymaster-star {
+      fill: rgba(255, 215, 0, 0.8);
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+      animation: starGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes starGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+      }
+      50% {
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1.2));
+      }
+    }
+
+    /* 悬浮效果 */
+    .element-wrapper {
+      cursor: pointer;
+    }
+
+    .element-wrapper:hover .element-glow {
+      opacity: 0.9;
+      filter: blur(16px);
+    }
+
+    .element-wrapper:hover .element-glass-bg {
+      stroke-width: 2.5;
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 木 - 绿色 -->
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 火 - 红色 -->
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 土 - 黄色 -->
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 金 - 白色/灰色 -->
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 水 - 蓝色 -->
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container">
+    <!-- 五行图表 -->
+    <div class="chart-container">
+      <svg id="wuxing-chart" viewBox="0 0 600 600">
+        <!-- 定义滤镜 -->
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script>
+    // 五行元素数据
+    const elements = [
+      {
+        id: 'wood',
+        name: '木',
+        color: '#86efac',
+        borderColor: 'rgba(134, 239, 172, 0.8)',
+        angle: 198, // 从顶部开始顺时针：木(198°)、火(270°)、土(342°)、金(54°)、水(126°)
+        percentage: 25,
+        isDayMaster: true
+      },
+      {
+        id: 'fire',
+        name: '火',
+        color: '#f87171',
+        borderColor: 'rgba(248, 113, 113, 0.8)',
+        angle: 270,
+        percentage: 15
+      },
+      {
+        id: 'earth',
+        name: '土',
+        color: '#fde047',
+        borderColor: 'rgba(253, 224, 71, 0.8)',
+        angle: 342,
+        percentage: 30
+      },
+      {
+        id: 'metal',
+        name: '金',
+        color: 'hsl(0, 0%, 90%)',
+        borderColor: 'hsla(0, 0%, 90%, 0.8)',
+        angle: 54,
+        percentage: 20
+      },
+      {
+        id: 'water',
+        name: '水',
+        color: '#60a5fa',
+        borderColor: 'rgba(96, 165, 250, 0.8)',
+        angle: 126,
+        percentage: 10
+      }
+    ];
+
+    // 连线配置
+    const connections = [
+      // 相生关系（顺时针）
+      { from: 0, to: 1, type: 'sheng' }, // 木→火
+      { from: 1, to: 2, type: 'sheng' }, // 火→土
+      { from: 2, to: 3, type: 'sheng' }, // 土→金
+      { from: 3, to: 4, type: 'sheng' }, // 金→水
+      { from: 4, to: 0, type: 'sheng' }, // 水→木
+
+      // 相克关系（隔一个）
+      { from: 0, to: 2, type: 'ke' },   // 木→土
+      { from: 2, to: 4, type: 'ke' },   // 土→水
+      { from: 4, to: 1, type: 'ke' },   // 水→火
+      { from: 1, to: 3, type: 'ke' },   // 火→金
+      { from: 3, to: 0, type: 'ke' }    // 金→木
+    ];
+
+    // 布局参数
+    const centerX = 300;
+    const centerY = 300;
+    const radius = 90;
+
+    // 根据百分比计算圆的半径
+    function getCircleRadius(percentage) {
+      return 25 + percentage * 0.6;
+    }
+
+    // 获取SVG元素
+    const svg = document.getElementById('wuxing-chart');
+
+    // 存储元素位置和动画状态
+    const elementStates = [];
+
+    // 计算元素位置
+    elements.forEach((el, index) => {
+      const x = centerX + radius * Math.cos(el.angle * Math.PI / 180);
+      const y = centerY + radius * Math.sin(el.angle * Math.PI / 180);
+      const r = getCircleRadius(el.percentage);
+
+      elementStates.push({
+        ...el,
+        x, y, r,
+        baseX: x,
+        baseY: y,
+        // 动画参数
+        phaseX: Math.random() * Math.PI * 2,
+        phaseY: Math.random() * Math.PI * 2,
+        speedX: 0.001 + Math.random() * 0.001,  // 增加速度：从0.0003改为0.001
+        speedY: 0.001 + Math.random() * 0.001,  // 增加速度：从0.0003改为0.001
+        rangeX: 5 + Math.random() * 3,  // 增加范围：从2改为5
+        rangeY: 5 + Math.random() * 3,  // 增加范围：从2改为5
+        time: Math.random() * 10000
+      });
+    });
+
+    // 绘制连线
+    const lineElements = [];
+
+    connections.forEach((conn, index) => {
+      const from = elementStates[conn.from];
+      const to = elementStates[conn.to];
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', from.x);
+      line.setAttribute('y1', from.y);
+      line.setAttribute('x2', to.x);
+      line.setAttribute('y2', to.y);
+      line.setAttribute('class', `connection-line ${conn.type}`);
+      svg.appendChild(line);
+      lineElements.push(line);
+    });
+
+    // 绘制元素
+    const glowElements = [];
+    const glassBgElements = [];
+    const labelElements = [];
+    const percentElements = [];
+    let starElement = null; // 日主星星元素
+    let starAngle = 0; // 星星当前角度
+
+    elementStates.forEach((state, index) => {
+      // 光晕
+      const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      glow.setAttribute('cx', state.x);
+      glow.setAttribute('cy', state.y);
+      glow.setAttribute('r', state.r);
+      glow.setAttribute('fill', state.color);
+      glow.setAttribute('class', 'element-glow');
+      svg.appendChild(glow);
+      glowElements.push(glow);
+
+      // 玻璃背景
+      const glassBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      glassBg.setAttribute('cx', state.x);
+      glassBg.setAttribute('cy', state.y);
+      glassBg.setAttribute('r', state.r);
+      glassBg.setAttribute('class', 'element-glass-bg');
+      svg.appendChild(glassBg);
+      glassBgElements.push(glassBg);
+
+      // 元素名称
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', state.x);
+      label.setAttribute('y', state.y);
+      label.setAttribute('class', 'element-label');
+      label.textContent = state.name;
+      svg.appendChild(label);
+      labelElements.push(label);
+
+      // 百分比
+      const percent = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      percent.setAttribute('x', state.x);
+      percent.setAttribute('y', state.y);
+      percent.setAttribute('dy', '1.2em');
+      percent.setAttribute('class', 'element-percent');
+      percent.textContent = `${state.percentage}%`;
+      svg.appendChild(percent);
+      percentElements.push(percent);
+
+      // 日主星星
+      if (state.isDayMaster) {
+        // 创建星星
+        const star = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        const starSize = 8;
+
+        const points = [];
+        for (let i = 0; i < 5; i++) {
+          const outerAngle = (i * 72 - 90) * Math.PI / 180;
+          const innerAngle = ((i * 72) + 36 - 90) * Math.PI / 180;
+          points.push(`${starSize * Math.cos(outerAngle)},${starSize * Math.sin(outerAngle)}`);
+          points.push(`${starSize * 0.4 * Math.cos(innerAngle)},${starSize * 0.4 * Math.sin(innerAngle)}`);
+        }
+
+        star.setAttribute('points', points.join(' '));
+        star.setAttribute('class', 'daymaster-star');
+        svg.appendChild(star);
+        starElement = star;
+      }
+    });
+
+    // 动画循环
+    function animate() {
+      elementStates.forEach((state, index) => {
+        // 更新时间
+        state.time += 16;
+
+        // 使用正弦波计算轻微浮动
+        const offsetX = Math.sin(state.phaseX + state.time * state.speedX) * state.rangeX;
+        const offsetY = Math.cos(state.phaseY + state.time * state.speedY) * state.rangeY;
+
+        const newX = state.baseX + offsetX;
+        const newY = state.baseY + offsetY;
+
+        // 更新光晕
+        glowElements[index].setAttribute('cx', newX);
+        glowElements[index].setAttribute('cy', newY);
+
+        // 更新玻璃背景
+        glassBgElements[index].setAttribute('cx', newX);
+        glassBgElements[index].setAttribute('cy', newY);
+
+        // 更新标签
+        labelElements[index].setAttribute('x', newX);
+        labelElements[index].setAttribute('y', newY);
+        percentElements[index].setAttribute('x', newX);
+        percentElements[index].setAttribute('y', newY);
+
+        // 更新日主星星位置和旋转
+        if (state.isDayMaster && starElement) {
+          // 更新星星旋转角度（每帧增加1度）
+          starAngle += 1;
+
+          // 计算星星在圆圈边缘的位置
+          const starOffset = state.r + 6; // 圆圈半径 + 6px
+          const starX = newX + starOffset * Math.cos(starAngle * Math.PI / 180);
+          const starY = newY + starOffset * Math.sin(starAngle * Math.PI / 180);
+
+          // 计算星星的点（需要平移到新位置）
+          const starSize = 8;
+          const points = [];
+          for (let i = 0; i < 5; i++) {
+            const outerAngle = (i * 72 - 90) * Math.PI / 180;
+            const innerAngle = ((i * 72) + 36 - 90) * Math.PI / 180;
+            points.push(`${starX + starSize * Math.cos(outerAngle)},${starY + starSize * Math.sin(outerAngle)}`);
+            points.push(`${starX + starSize * 0.4 * Math.cos(innerAngle)},${starY + starSize * 0.4 * Math.sin(innerAngle)}`);
+          }
+
+          starElement.setAttribute('points', points.join(' '));
+        }
+      });
+
+      // 更新连线
+      connections.forEach((conn, index) => {
+        const fromX = parseFloat(glowElements[conn.from].getAttribute('cx'));
+        const fromY = parseFloat(glowElements[conn.from].getAttribute('cy'));
+        const toX = parseFloat(glowElements[conn.to].getAttribute('cx'));
+        const toY = parseFloat(glowElements[conn.to].getAttribute('cy'));
+
+        lineElements[index].setAttribute('x1', fromX);
+        lineElements[index].setAttribute('y1', fromY);
+        lineElements[index].setAttribute('x2', toX);
+        lineElements[index].setAttribute('y2', toY);
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // 启动动画
+    animate();
+
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+    });
+  </script>
+</body>
+</html>

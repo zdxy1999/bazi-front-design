@@ -1,0 +1,66 @@
+/**
+ * 新建八字页面样式
+ */
+
+/* 主容器 */
+.new-bazi-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 表单卡片 */
+.form-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* 输入框标签 */
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 卡片底部按钮 */
+.form-card .glass-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* 响应式 */
+@media (max-width: 480px) {
+  .new-bazi-container {
+    padding: 10px;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+
+  .form-card .glass-card-footer {
+    flex-direction: column-reverse;
+  }
+
+  .form-card .glass-card-footer .button {
+    width: 100%;
+  }
+}

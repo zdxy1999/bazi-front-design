@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页测试 - 手动初始化</title>
+
+  <link rel="stylesheet" href="../../../style/tokens.css">
+  <link rel="stylesheet" href="../../../style/common.css">
+  <link rel="stylesheet" href="../../../components/background/background.css">
+  <link rel="stylesheet" href="../../../components/card/card.css">
+  <link rel="stylesheet" href="../../../components/swiper/swiper.css">
+  <link rel="stylesheet" href="../../../components/menu/menu.css">
+  <link rel="stylesheet" href="../../../components/button/button.css">
+  <link rel="stylesheet" href="../../../components/selector/selector.css">
+  <link rel="stylesheet" href="../../../components/wuxing-chart/wuxing-chart.css">
+  <link rel="stylesheet" href="home.css">
+
+  <style>
+    .debug-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: #0f0;
+      padding: 15px;
+      z-index: 9999;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .debug-btn {
+      padding: 8px 16px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .debug-btn:hover {
+      background: #16a34a;
+    }
+    .debug-btn.danger {
+      background: #ef4444;
+    }
+    .debug-btn.danger:hover {
+      background: #dc2626;
+    }
+    .status {
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+    .status.success { background: #22c55e; }
+    .status.error { background: #ef4444; }
+  </style>
+</head>
+<body>
+  <!-- 调试面板 -->
+  <div class="debug-panel">
+    <button class="debug-btn" onclick="testInit()">1. 测试初始化</button>
+    <button class="debug-btn" onclick="testLoadData()">2. 测试数据加载</button>
+    <button class="debug-btn" onclick="testRender()">3. 测试渲染卡片</button>
+    <button class="debug-btn" onclick="testWuxing()">4. 测试五行图</button>
+    <button class="debug-btn danger" onclick="clearConsole()">清除控制台</button>
+    <div id="status" class="status">等待测试...</div>
+  </div>
+
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)">
+        <animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主内容区 -->
+  <main class="home-container">
+    <h2 style="color: white; text-align: center;">八字小程序首页 - 测试版</h2>
+
+    <!-- Swiper翻页容器 -->
+    <div class="swiper" data-swiper="cards" data-swiper-loop data-swiper-simple>
+      <div class="swiper-wrapper" id="swiperWrapper">
+        <div style="color: white; text-align: center; padding: 40px;">
+          点击上方"测试初始化"按钮开始
+        </div>
+      </div>
+
+      <!-- PC端翻页按钮 -->
+      <button class="swiper-button-prev" aria-label="上一页">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15,18 9,12 15,6"></polyline>
+        </svg>
+      </button>
+      <button class="swiper-button-next" aria-label="下一页">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+
+      <!-- 分页指示器 -->
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- 环形菜单 -->
+    <div class="circular-menu" data-menu="3" data-arc="bottom">
+      <button class="menu-toggle" aria-label="打开菜单">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+        </svg>
+      </button>
+      <div class="menu-items">
+        <button class="menu-item wood-card" data-action="analysis" aria-label="八字详解">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </button>
+        <button class="menu-item fire-card" data-action="match" aria-label="姻缘匹配">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <button class="menu-item earth-card" data-action="new-bazi" aria-label="新建档案">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 脚本加载 -->
+  <script src="../../../components/background/background.js"></script>
+  <script src="../../../components/card/card.js"></script>
+  <script src="../../../components/swiper/swiper.js"></script>
+  <script src="../../../components/menu/menu.js"></script>
+  <script src="../../../components/button/button.js"></script>
+  <script src="../../../components/selector/selector.js"></script>
+  <script src="../../../components/wuxing-chart/wuxing-chart.js"></script>
+
+  <script>
+    // 调试函数
+    function setStatus(msg, isSuccess) {
+      const status = document.getElementById('status');
+      status.textContent = msg;
+      status.className = 'status ' + (isSuccess ? 'success' : 'error');
+      console.log(msg);
+    }
+
+    function clearConsole() {
+      console.clear();
+      setStatus('控制台已清除', true);
+    }
+
+    // 测试数据加载
+    let testProfiles = null;
+
+    async function testLoadData() {
+      try {
+        setStatus('正在加载数据...', false);
+        const response = await fetch('../../../mock-data/bazi-profiles.json');
+        const data = await response.json();
+        testProfiles = data.profiles;
+        setStatus(`✅ 数据加载成功！共 ${testProfiles.length} 个档案`, true);
+        console.log('档案数据:', testProfiles);
+      } catch (error) {
+        setStatus(`❌ 数据加载失败: ${error.message}`, false);
+        console.error('错误:', error);
+      }
+    }
+
+    // 测试渲染
+    function testRender() {
+      if (!testProfiles) {
+        setStatus('❌ 请先加载数据！', false);
+        return;
+      }
+
+      try {
+        setStatus('正在渲染卡片...', false);
+        const wrapper = document.getElementById('swiperWrapper');
+        wrapper.innerHTML = '';
+
+        // 只渲染第一个档案测试
+        const profile = testProfiles[0];
+        const slide = createProfileSlide(profile);
+        wrapper.appendChild(slide);
+
+        // 刷新卡片组件
+        if (window.cardComponent && typeof window.cardComponent.refresh === 'function') {
+          window.cardComponent.refresh();
+        }
+
+        setStatus('✅ 卡片渲染成功！', true);
+      } catch (error) {
+        setStatus(`❌ 渲染失败: ${error.message}`, false);
+        console.error('错误:', error);
+      }
+    }
+
+    // 测试五行图
+    function testWuxing() {
+      try {
+        setStatus('正在渲染五行图...', false);
+        const svgId = `wuxing-chart-profile_001`;
+        const svg = document.getElementById(svgId);
+
+        if (!svg) {
+          setStatus('❌ 找不到五行图SVG', false);
+          return;
+        }
+
+        const profile = testProfiles[0];
+        const chart = new WuxingChart(svgId, profile.elementProportion);
+        setStatus('✅ 五行图渲染成功！', true);
+      } catch (error) {
+        setStatus(`❌ 五行图失败: ${error.message}`, false);
+        console.error('错误:', error);
+      }
+    }
+
+    // 测试完整初始化
+    async function testInit() {
+      try {
+        setStatus('正在完整初始化...', false);
+
+        // 加载数据
+        if (!testProfiles) {
+          await testLoadData();
+        }
+
+        // 渲染所有卡片
+        const wrapper = document.getElementById('swiperWrapper');
+        wrapper.innerHTML = '';
+
+        testProfiles.forEach((profile, index) => {
+          console.log(`创建档案 ${index + 1}: ${profile.name}`);
+          const slide = createProfileSlide(profile);
+          wrapper.appendChild(slide);
+
+          setTimeout(() => {
+            try {
+              const chart = new WuxingChart(
+                `wuxing-chart-${profile.id}`,
+                profile.elementProportion
+              );
+              console.log(`五行图 ${profile.id} 创建成功`);
+            } catch (e) {
+              console.error(`五行图 ${profile.id} 失败:`, e);
+            }
+          }, index * 200);
+        });
+
+        // 刷新卡片组件
+        if (window.cardComponent && typeof window.cardComponent.refresh === 'function') {
+          console.log('刷新 CardComponent...');
+          window.cardComponent.refresh();
+        }
+
+        setStatus(`✅ 初始化完成！共 ${testProfiles.length} 个档案`, true);
+
+        // 3秒后隐藏调试面板
+        setTimeout(() => {
+          document.querySelector('.debug-panel').style.display = 'none';
+        }, 5000);
+
+      } catch (error) {
+        setStatus(`❌ 初始化失败: ${error.message}`, false);
+        console.error('错误:', error);
+      }
+    }
+
+    // 复制home.js中的函数
+    function createProfileSlide(profile) {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.dataset.profileId = profile.id;
+
+      const { hue, saturation, lightness } = profile.mingua.hsl;
+      const dayMasterElementNames = {
+        'wood': '木', 'fire': '火', 'earth': '土', 'metal': '金', 'water': '水'
+      };
+
+      slide.innerHTML = `
+        <div class="profile-slide">
+          <div class="profile-content">
+            <div class="wuxing-chart-container">
+              <svg id="wuxing-chart-${profile.id}" class="wuxing-chart" viewBox="0 0 600 600"></svg>
+            </div>
+
+            <div class="glass-card summary-card"
+                 data-card
+                 data-star="${profile.mingua.number}"
+                 style="--theme-hue: ${hue}; --theme-saturation: ${saturation}%; --theme-lightness: ${lightness}%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-logo glass-card-logo-center">
+                  <img src="../../../components/icons/mingua/${profile.mingua.gua}.svg"
+                       alt="${profile.mingua.name}"
+                       class="mingua-icon"
+                       onerror="this.src='../../../components/icons/mingua/kan.svg'">
+                </div>
+
+                <div class="glass-card-body">
+                  <h3 class="profile-name">${profile.name}</h3>
+                  <p class="profile-birth">${formatBirthDate(profile.birthDate)}</p>
+
+                  <div class="bazi-info">
+                    <span class="bazi-pillar">${profile.bazi.yearPillar.stem}${profile.bazi.yearPillar.branch}</span>
+                    <span class="bazi-pillar">${profile.bazi.monthPillar.stem}${profile.bazi.monthPillar.branch}</span>
+                    <span class="bazi-pillar">${profile.bazi.dayPillar.stem}${profile.bazi.dayPillar.branch}</span>
+                    <span class="bazi-pillar">${profile.bazi.hourPillar.stem}${profile.bazi.hourPillar.branch}</span>
+                  </div>
+
+                  <div class="mingua-info">
+                    <h4 class="mingua-name">${profile.mingua.name}</h4>
+                    <p class="mingua-details">${profile.mingua.position} / ${profile.mingua.element}</p>
+                  </div>
+
+                  <div class="daymaster-info">
+                    <span class="daymaster-tag">日主：${profile.dayMaster.stem} (${dayMasterElementNames[profile.dayMaster.element]})</span>
+                  </div>
+                </div>
+
+                <div class="glass-card-footer">
+                  <label class="toggle-switch">
+                    <input type="checkbox" ${profile.isDefault ? 'checked' : ''} data-profile-id="${profile.id}">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">设为默认</span>
+                  </label>
+
+                  <button class="btn btn-danger btn-sm" data-action="delete" data-profile-id="${profile.id}">
+                    删除
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return slide;
+    }
+
+    function formatBirthDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hour = String(date.getHours()).padStart(2, '0');
+      const minute = String(date.getMinutes()).padStart(2, '0');
+      return `${year}年${month}月${day}日 ${hour}:${minute}`;
+    }
+  </script>
+</body>
+</html>

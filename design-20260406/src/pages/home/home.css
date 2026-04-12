@@ -1,0 +1,677 @@
+/**
+ * 八字首页样式
+ * Home Page Styles
+ */
+
+/* 主容器 */
+.home-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平居中 */
+  justify-content: center; /* 垂直居中 - swiper在页面内居中 */
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden; /* PC端默认禁止滚动 */
+}
+
+/* Swiper容器 */
+.home-container .swiper {
+  width: 100%;
+  max-width: 100%;
+  height: auto !important;
+  overflow: visible !important;
+  position: relative !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important; /* swiper内部组件垂直居中 */
+  justify-content: center !important; /* swiper内部组件水平居中 */
+}
+
+/* Swiper Wrapper - 禁用transform，让slides正常显示 */
+.home-container .swiper-wrapper {
+  display: flex !important;
+  width: 100% !important;
+  height: auto !important;
+  transition: none !important;
+  transform: none !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important; /* 改为左对齐 */
+}
+
+/* 简单模式下的swiper-wrapper */
+.home-container .swiper.swiper-simple .swiper-wrapper {
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+}
+
+/* Swiper Slide - 完全覆盖swiper组件的3D效果 */
+.home-container .swiper-slide {
+  /* 覆盖swiper.css的所有定位和尺寸设置 */
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 420px !important;
+  flex-shrink: 0 !important;
+
+  /* 移除所有3D transform和滤镜效果 */
+  transform: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+
+  /* Flexbox布局 */
+  display: flex !important;
+  align-items: flex-start !important; /* 改为左对齐 */
+  justify-content: flex-start !important;
+  padding: 20px !important;
+
+  /* 默认可见 - 等swiper初始化后再隐藏非active的 */
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+/* 简单模式：只显示active的slide，隐藏其他所有slides */
+.home-container .swiper.swiper-simple .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  z-index: 0 !important;
+}
+
+/* 简单模式：active的slide */
+.home-container .swiper.swiper-simple .swiper-slide.swiper-slide-active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* 所有可能的swiper状态类 - 全部禁用transform */
+.home-container .swiper-slide.swiper-slide-active,
+.home-container .swiper-slide.swiper-slide-prev,
+.home-container .swiper-slide.swiper-slide-prev-prev,
+.home-container .swiper-slide.swiper-slide-next,
+.home-container .swiper-slide.swiper-slide-next-next,
+.home-container .swiper-slide.swiper-slide-hidden {
+  transform: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* 确保卡片不会填满slide - 覆盖swiper.css */
+.home-container .swiper-slide .glass-card {
+  width: auto !important;
+  height: auto !important;
+  max-width: 500px !important;
+}
+
+/* 确保卡片内容正常布局 - 覆盖swiper.css */
+.home-container .swiper-slide .glass-card .glass-card-content {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* 确保卡片不会填满slide */
+.home-container .swiper-slide .glass-card {
+  width: auto !important;
+  height: auto !important;
+  max-width: 500px;
+}
+
+/* 确保卡片内容正常布局 */
+.home-container .swiper-slide .glass-card .glass-card-content {
+  height: auto !important;
+}
+
+/* 覆盖swiper的固定宽度设置 */
+.home-container .swiper-slide {
+  transform: none !important; /* 先禁用3D效果测试 */
+}
+
+/* Profile Slide容器 */
+.profile-slide {
+  width: 100%;
+  max-width: 1200px !important; /* 限制最大宽度，让五行图不会太大 */
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 30px;
+  padding: 0 !important; /* 移除padding，让内容更紧凑 */
+}
+
+/* 档案内容区域 */
+.profile-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px; /* 从15px增加到20px，给分页指示点更多空间 */
+  width: 100%;
+  align-items: center; /* 改为居中对齐 */
+}
+
+/* 五行图容器 - 已移除，由inline style控制 */
+
+/* 五行图SVG - 让wuxing-chart.css自己控制尺寸 */
+.profile-content .wuxing-chart {
+  /* 移除覆盖，让组件自己的CSS生效 */
+}
+
+/* 摘要卡片 */
+.profile-content .summary-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* 档案Slide */
+.profile-slide {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 档案内容区域 */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* 五行图容器 - 已移除，由inline style控制 */
+
+/* 摘要卡片 */
+.profile-content .summary-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  min-width: 300px; /* 确保最小宽度 */
+}
+
+/* 卡片布局 */
+.summary-card .glass-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 命卦图标 - 使用命卦主题色 */
+.summary-card .glass-card-logo .mingua-icon,
+.glass-card .glass-card-logo .mingua-icon {
+  width: 48px;
+  height: 48px;
+  color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 1) !important; /* 使用命卦主题色 */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* 确保SVG正确显示 */
+.summary-card .glass-card-logo .mingua-icon svg,
+.glass-card .glass-card-logo .mingua-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 确保SVG内部元素也使用主题色 */
+.summary-card .glass-card-logo .mingua-icon svg text,
+.summary-card .glass-card-logo .mingua-icon svg circle,
+.summary-card .glass-card-logo .mingua-icon svg ellipse,
+.glass-card .glass-card-logo .mingua-icon svg text,
+.glass-card .glass-card-logo .mingua-icon svg circle,
+.glass-card .glass-card-logo .mingua-icon svg ellipse {
+  color: inherit !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* 档案名称 */
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 出生日期 */
+.profile-birth {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* 八字信息 */
+.bazi-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.bazi-pillar {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+:root[data-theme="light"] .bazi-pillar {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 命卦信息 */
+.mingua-info {
+  margin-top: 8px;
+  text-align: center; /* 确保命卦文字居中 */
+}
+
+.mingua-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  text-align: center; /* 确保命卦名称居中 */
+}
+
+.mingua-details {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center; /* 确保命卦详情居中 */
+}
+
+/* 日主信息 */
+.daymaster-info {
+  margin-top: 8px;
+}
+
+.daymaster-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+:root[data-theme="light"] .daymaster-tag {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* 卡片底部 */
+.summary-card .glass-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* 开关样式 */
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle-switch input[type="checkbox"] {
+  display: none;
+}
+
+.toggle-slider {
+  width: 44px;
+  height: 24px;
+  background: rgba(128, 128, 128, 0.2) !important; /* 强制灰色 */
+  border: 1px solid rgba(128, 128, 128, 0.3) !important; /* 强制灰色 */
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .toggle-slider {
+  background: rgba(128, 128, 128, 0.15) !important;
+  border-color: rgba(128, 128, 128, 0.2) !important;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: rgba(180, 180, 180, 0.8) !important; /* 浅灰色圆圈 */
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .toggle-slider::before {
+  background: rgba(150, 150, 150, 0.8) !important;
+}
+
+/* 选中状态：使用命卦主题色 */
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--toggle-color, var(--wood-primary)) !important;
+  border-color: var(--toggle-color, var(--wood-primary)) !important;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background: #ffffff !important; /* 选中状态：白色圆圈 */
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* 环形菜单位置 - 页面正下方居中 */
+.home-container .circular-menu {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+}
+
+/* 分页指示器位置 - 固定到页面底部 */
+.home-container .swiper-pagination,
+.swiper-pagination {
+  position: fixed !important;
+  bottom: 15% !important; /* 从10%改到15%，不要太靠下 */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 确保指示点的子元素也可见 */
+.home-container .swiper-pagination-bullet,
+.swiper-pagination-bullet {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 确保菜单按钮可见 */
+.home-container .circular-menu .menu-toggle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  z-index: 1001 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 确保菜单项也可见 */
+.home-container .circular-menu .menu-items {
+  position: absolute !important;
+  z-index: 1002 !important;
+}
+
+.home-container .circular-menu .menu-item {
+  position: absolute !important;
+  z-index: 1002 !important;
+}
+
+/* 确保SVG图标可见 */
+.home-container .circular-menu .menu-toggle svg,
+.home-container .circular-menu .menu-item svg {
+  display: block !important;
+  color: var(--text-primary) !important;
+}
+
+/* 菜单按钮背景和边框 */
+.home-container .circular-menu .menu-toggle {
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+}
+
+:root[data-theme="light"] .home-container .circular-menu .menu-toggle {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+/* PC端布局 */
+@media (min-width: 1024px) {
+  .home-container {
+    overflow: hidden !important; /* PC端明确禁止滚动 */
+  }
+
+  .profile-slide {
+    padding: 0 !important; /* 移除padding，让内容更紧凑 */
+  }
+
+  .profile-content {
+    flex-direction: row !important;
+    align-items: center !important; /* 保持center让五行图和卡片垂直居中对齐 */
+    justify-content: center !important; /* 改为center实现水平居中 */
+    gap: 30px !important; /* 增加gap到30px */
+    padding-left: 0 !important; /* 移除左padding，改为居中 */
+  }
+
+  /* PC端调整按钮位置 */
+  .home-container .swiper-button-prev,
+  .home-container .swiper-button-next {
+    top: 50% !important; /* 按钮在swiper内垂直居中 */
+  }
+
+  /* PC端指示点 */
+  .home-container .swiper-pagination {
+    position: fixed !important;
+    bottom: 15% !important; /* 与默认保持一致 */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+  /* 五行图尺寸 - 使用更强选择器 */
+  .home-container .wuxing-chart-container {
+    max-width: 900px !important; /* 从700px增加到900px */
+    width: 100% !important;
+    flex: 1 !important; /* 添加flex: 1让它占据剩余空间 */
+  }
+
+  .home-container .wuxing-chart {
+    width: 100% !important;
+    max-width: 900px !important;
+  }
+
+  .profile-content .summary-card {
+    width: 40%; /* 从45%减小到40%，给五行图更多空间 */
+    max-width: 550px;
+    flex-shrink: 0;
+  }
+
+  /* Swiper按钮 - 强制显示并确保可点击 */
+  .home-container .swiper-button-prev,
+  .home-container .swiper-button-next {
+    display: flex !important;
+    z-index: 1000 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+  .home-container .circular-menu {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+
+  .profile-slide {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .profile-content {
+    gap: 20px;
+  }
+}
+
+/* 小屏幕优化 - 移动端 */
+@media (max-width: 480px) {
+  .home-container {
+    padding: 10px !important;
+    overflow-y: auto !important;
+    justify-content: flex-start !important;
+    padding-top: 20px !important;
+    padding-bottom: 100px !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+
+  /* 强制设置所有容器使用vw单位 */
+  .home-container .profile-slide {
+    width: 90vw !important;
+    max-width: 90vw !important;
+    gap: 10px !important;
+    padding: 5px !important;
+    margin: 0 auto !important;
+  }
+
+  .home-container .profile-slide .profile-content {
+    width: 100% !important;
+    gap: 15px !important;
+    align-items: center !important;
+  }
+
+  /* 使用多重选择器强制覆盖glass-card */
+  .home-container .glass-card,
+  .home-container .profile-slide .glass-card,
+  .home-container .profile-slide .profile-content .glass-card,
+  .home-container .profile-slide .profile-content .glass-card.summary-card {
+    width: 90% !important;
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+
+  /* 卡片底部间距 */
+  .home-container .glass-card.summary-card {
+    margin-bottom: 10px !important;
+  }
+
+  /* 五行图响应式 */
+  .home-container .wuxing-chart-container,
+  .home-container .profile-slide .wuxing-chart-container,
+  .home-container .profile-slide .profile-content .wuxing-chart-container {
+    width: 90% !important;
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+
+  .bazi-info {
+    gap: 6px;
+  }
+
+  .bazi-pillar {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .summary-card .glass-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .toggle-switch {
+    justify-content: center;
+  }
+
+  /* 移动端指示点 */
+  .home-container .swiper-pagination {
+    bottom: 15% !important;
+  }
+
+  .profile-name {
+    font-size: 16px;
+  }
+
+  .mingua-name {
+    font-size: 15px;
+  }
+}
+
+/* ============================================
+   强制覆盖Swiper组件样式 - 最高优先级
+   ============================================ */
+
+/* 禁用swiper.js可能添加的inline样式 */
+.home-container .swiper-slide[style*="transform"] {
+  transform: none !important;
+}
+
+.home-container .swiper-wrapper[style*="transform"] {
+  transform: none !important;
+}
+
+/* 确保profile内容不受swiper影响，但保留必要的width */
+.home-container .profile-slide,
+.home-container .profile-content,
+.home-container .wuxing-chart-container,
+.home-container .summary-card {
+  transform: none !important;
+  height: auto !important;
+}
+
+/* 五行图需要width: 100%来正确显示 */
+.home-container .wuxing-chart {
+  transform: none !important;
+  height: auto !important;
+}
+
+/* 关键：禁用swiper的3D transform，但保留卡片的视觉效果 */
+/* 只对swiper-slide的直接子元素生效，不影响更深层级 */
+.home-container .swiper-slide {
+  transform: none !important;
+}
+
+/* profile-slide容器不需要transform */
+.home-container .profile-slide {
+  transform: none !important;
+}
+
+/* 确保五行图和摘要卡片的容器不受swiper影响 */
+.home-container .profile-content {
+  transform: none !important;
+}
+
+.home-container .wuxing-chart-container {
+  transform: none !important;
+}
+
+.home-container .summary-card {
+  transform: none !important;
+}

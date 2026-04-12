@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>调试 - 检查值传递</title>
+  <link rel="stylesheet" href="../../../style/tokens.css">
+  <link rel="stylesheet" href="../../../style/common.css">
+  <link rel="stylesheet" href="../../../components/card/card.css">
+  <link rel="stylesheet" href="home.css">
+  <style>
+    .debug-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      color: #0f0;
+      padding: 15px;
+      font-family: monospace;
+      font-size: 12px;
+      z-index: 9999;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .debug-item {
+      margin: 5px 0;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    .debug-value {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-panel" id="debugPanel"></div>
+
+  <main class="home-container" style="margin-top: 250px;">
+    <div class="profile-content">
+      <!-- 测试五行图容器 -->
+      <div class="wuxing-chart-container">
+        <div style="color: white; text-align: center; padding: 20px;">
+          五行图容器
+        </div>
+      </div>
+
+      <!-- 测试卡片 - 手动设置不同命卦颜色 -->
+      <div class="glass-card summary-card" data-card data-star="1"
+           style="--theme-hue: 0; --theme-saturation: 0%; --theme-lightness: 70%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-body">
+            <h3 class="profile-name">测试卡片 - 一白坎卦</h3>
+            <p class="profile-birth">应该显示白色/灰色主题</p>
+            <div class="debug-info-card">
+              <p>CSS变量：</p>
+              <p>hue: <span class="debug-value">0</span></p>
+              <p>saturation: <span class="debug-value">0%</span></p>
+              <p>lightness: <span class="debug-value">70%</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 测试绿色命卦 -->
+      <div class="glass-card summary-card" data-card data-star="3"
+           style="--theme-hue: 120; --theme-saturation: 80%; --theme-lightness: 65%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-body">
+            <h3 class="profile-name">测试卡片 - 三碧震卦</h3>
+            <p class="profile-birth">应该显示绿色主题</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../../../components/card/card.js"></script>
+  <script>
+    const debugPanel = document.getElementById('debugPanel');
+
+    function addDebug(title, value) {
+      const div = document.createElement('div');
+      div.className = 'debug-item';
+      div.innerHTML = `<strong>${title}:</strong> <span class="debug-value">${value}</span>`;
+      debugPanel.appendChild(div);
+    }
+
+    // 检查五行图容器尺寸
+    const chartContainer = document.querySelector('.wuxing-chart-container');
+    if (chartContainer) {
+      const rect = chartContainer.getBoundingClientRect();
+      const styles = window.getComputedStyle(chartContainer);
+      addDebug('五行图容器宽度', `${Math.round(rect.width)}px`);
+      addDebug('五行图容器max-width', styles.maxWidth);
+      addDebug('五行图容器border', styles.border);
+    }
+
+    // 检查卡片CSS变量
+    const cards = document.querySelectorAll('.glass-card');
+    cards.forEach((card, index) => {
+      const styles = window.getComputedStyle(card);
+      const hue = styles.getPropertyValue('--theme-hue');
+      const sat = styles.getPropertyValue('--theme-saturation');
+      const light = styles.getPropertyValue('--theme-lightness');
+      addDebug(`卡片${index + 1} hue`, hue);
+      addDebug(`卡片${index + 1} saturation`, sat);
+      addDebug(`卡片${index + 1} lightness`, light);
+    });
+
+    // 检查wuxing-chart元素
+    addDebug('页面URL', window.location.href);
+    addDebug('屏幕宽度', window.innerWidth);
+    addDebug('用户代理', navigator.userAgent);
+  </script>
+</body>
+</html>

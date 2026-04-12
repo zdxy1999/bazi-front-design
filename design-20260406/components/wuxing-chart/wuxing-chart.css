@@ -1,0 +1,144 @@
+/**
+ * 五行生克图组件样式
+ * Wuxing Chart Component Styles
+ */
+
+/* 五行图表容器 */
+.wuxing-chart-container {
+  width: 100%;
+  max-width: none !important; /* 移除max-width限制 */
+  margin: 0 !important;
+  position: relative;
+}
+
+/* 响应式尺寸 */
+@media (max-width: 768px) {
+  .wuxing-chart-container {
+    max-width: 100%; /* 移动端占满可用宽度 */
+  }
+}
+
+@media (max-width: 480px) {
+  .wuxing-chart-container {
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+/* SVG样式 */
+.wuxing-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* 裁剪掉上下多余的空白 */
+  overflow: visible;
+}
+
+/* 元素圆圈 */
+.element-circle {
+  transition: all 0.3s ease;
+}
+
+/* 元素光晕 */
+.element-glow {
+  filter: blur(12px);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+/* 玻璃背景 */
+.element-glass-bg {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .element-glass-bg {
+  fill: rgba(255, 255, 255, 0.2);
+  stroke: rgba(0, 0, 0, 0.2);
+}
+
+/* 连线 */
+.connection-line {
+  stroke: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.connection-line.sheng {
+  stroke-width: 2;
+}
+
+.connection-line.ke {
+  stroke-width: 1.5;
+  stroke-dasharray: 5, 5;
+}
+
+:root[data-theme="light"] .connection-line {
+  stroke: rgba(0, 0, 0, 0.3);
+}
+
+/* 元素标签 */
+.element-label {
+  font-size: 16px;
+  fill: var(--text-primary);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .element-label {
+    font-size: 14px;
+  }
+}
+
+.element-percent {
+  font-size: 14px;
+  font-weight: 600;
+  fill: rgba(255, 255, 255, 0.95);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+:root[data-theme="light"] .element-percent {
+  fill: rgba(0, 0, 0, 0.85);
+}
+
+@media (max-width: 480px) {
+  .element-percent {
+    font-size: 12px;
+  }
+}
+
+/* 日主星星 */
+.daymaster-star {
+  fill: rgba(255, 215, 0, 0.8);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+  animation: starGlow 2s ease-in-out infinite;
+}
+
+@keyframes starGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1.2));
+  }
+}
+
+/* 悬浮效果 */
+.element-wrapper {
+  cursor: pointer;
+}
+
+.element-wrapper:hover .element-glow {
+  opacity: 0.9;
+  filter: blur(16px);
+}
+
+.element-wrapper:hover .element-glass-bg {
+  stroke-width: 2.5;
+}

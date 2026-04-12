@@ -1,0 +1,443 @@
+/* ============================================
+   翻页容器组件样式
+   ============================================ */
+
+/* ============================================
+   Swiper容器
+   ============================================ */
+.swiper {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+/* 左右柔和渐变遮罩层 - 已移除 */
+
+/* Swiper包装器 - 承载所有幻灯片 */
+.swiper-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* 单个幻灯片 */
+.swiper-slide {
+  position: absolute;
+  width: 320px;
+  height: 400px;
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), -webkit-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+/* 响应式幻灯片大小 */
+@media (min-width: 768px) {
+  .swiper-slide {
+    width: 360px;
+    height: 440px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .swiper-slide {
+    width: 400px;
+    height: 480px;
+  }
+}
+
+/* 确保卡片填满幻灯片 */
+.swiper-slide .glass-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+/* ============================================
+   3D Coverflow效果
+   ============================================ */
+
+/* 当前激活的幻灯片 - 中间正常大小 */
+.swiper-slide.swiper-slide-active {
+  transform: translateX(0) scale(1) translateZ(0);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* 前一个幻灯片 - 左侧缩小 */
+.swiper-slide.swiper-slide-prev {
+  transform: translateX(-120%) scale(0.85) translateZ(-100px) rotateY(15deg);
+  opacity: 0.6;
+  z-index: 5;
+}
+
+/* 前前一个幻灯片 - 更左侧更小 */
+.swiper-slide.swiper-slide-prev-prev {
+  transform: translateX(-220%) scale(0.7) translateZ(-200px) rotateY(25deg);
+  opacity: 0.3;
+  z-index: 3;
+}
+
+/* 后一个幻灯片 - 右侧缩小 */
+.swiper-slide.swiper-slide-next {
+  transform: translateX(120%) scale(0.85) translateZ(-100px) rotateY(-15deg);
+  opacity: 0.6;
+  z-index: 5;
+}
+
+/* 后后一个幻灯片 - 更右侧更小 */
+.swiper-slide.swiper-slide-next-next {
+  transform: translateX(220%) scale(0.7) translateZ(-200px) rotateY(-25deg);
+  opacity: 0.3;
+  z-index: 3;
+}
+
+/* PC端：添加轻微模糊效果到两侧幻灯片 */
+@media (min-width: 768px) {
+  .swiper-slide.swiper-slide-prev {
+    filter: blur(0.5px);
+    -webkit-filter: blur(0.5px);
+  }
+
+  .swiper-slide.swiper-slide-prev-prev {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+  }
+
+  .swiper-slide.swiper-slide-next {
+    filter: blur(0.5px);
+    -webkit-filter: blur(0.5px);
+  }
+
+  .swiper-slide.swiper-slide-next-next {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+  }
+}
+
+/* 其他隐藏的幻灯片 */
+.swiper-slide.swiper-slide-hidden {
+  transform: translateX(0) scale(0.5) translateZ(-300px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   幻灯片内容样式
+   ============================================ */
+
+/* 确保卡片填满幻灯片 */
+.swiper-slide .glass-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+/* 确保卡片内容区域也填满 */
+.swiper-slide .glass-card .glass-card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper-slide .glass-card .glass-card-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   导航按钮
+   ============================================ */
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-out);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.swiper-button-prev {
+  left: var(--space-4);
+}
+
+.swiper-button-next {
+  right: var(--space-4);
+}
+
+/* 导航按钮主题色叠加层 */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.08) 0%,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.03) 100%
+  );
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* 亮色主题下的导航按钮 */
+:root[data-theme="light"] .swiper-button-prev,
+:root[data-theme="light"] .swiper-button-next {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
+}
+
+:root[data-theme="light"] .swiper-button-prev::after,
+:root[data-theme="light"] .swiper-button-next::after {
+  mix-blend-mode: normal;
+  opacity: 0.5;
+}
+
+/* 确保图标在伪元素之上 */
+.swiper-button-prev svg,
+.swiper-button-next svg {
+  position: relative;
+  z-index: 2;
+}
+
+/* 导航按钮悬停效果 */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  transform: translateY(-50%) scale(1.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.swiper-button-prev:active,
+.swiper-button-next:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* 导航按钮禁用状态 */
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============================================
+   分页指示器
+   ============================================ */
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.swiper-pagination-bullet:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================
+   页面样式
+   ============================================ */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.page-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.mb-8 {
+  margin-bottom: 60px;
+}
+
+.text-2xl {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* 使用说明 */
+.usage-section {
+  padding: 40px;
+}
+
+.usage-section h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.usage-section h3 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 30px 0 15px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.usage-section pre {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.usage-section code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: #4ade80;
+}
+
+.usage-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.usage-section ul li {
+  padding: 10px 0 10px 25px;
+  position: relative;
+  color: var(--text-secondary);
+}
+
+.usage-section ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+/* 移动端：隐藏导航按钮 */
+@media (max-width: 767px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+
+  .swiper-pagination {
+    padding: var(--space-2) 0;
+  }
+}
+
+/* PC端：启用导航按钮 */
+@media (min-width: 768px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: flex;
+  }
+}
+
+/* ============================================
+   平滑滚动
+   ============================================ */
+.swiper-wrapper {
+  scroll-behavior: smooth;
+}
+
+/* 启用硬件加速 */
+.swiper-slide {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* ============================================
+   可访问性
+   ============================================ */
+
+/* 键盘焦点 */
+.swiper-button-prev:focus,
+.swiper-button-next:focus,
+.swiper-pagination-bullet:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .swiper-wrapper,
+  .swiper-button-prev,
+  .swiper-button-next,
+  .swiper-pagination-bullet {
+    transition: none;
+  }
+}

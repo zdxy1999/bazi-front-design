@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown解析器组件 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../card/card.css">
+
+  <!-- Highlight.js 代码高亮主题 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <style id="highlight-theme"></style>
+
+  <link rel="stylesheet" href="markdown.css">
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 木 - 绿色 -->
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 火 - 红色 -->
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 土 - 黄色 -->
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 金 - 白色/灰色 -->
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 水 - 蓝色 -->
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 混合渐变 -->
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)">
+        <animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+
+    <!-- 边缘发光效果 -->
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+
+    <!-- 毛玻璃垫层 -->
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="page-header">
+      <h1 class="page-title">Markdown解析器组件</h1>
+      <p class="page-subtitle">支持代码高亮、主题适配的增强Markdown解析器</p>
+    </div>
+
+    <!-- Markdown渲染演示 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">基础演示：八字命盘解析</h2>
+
+      <!-- 五行颜色选择器 -->
+      <div class="color-selector" style="margin-bottom: 20px;">
+        <style>
+          .color-selector {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+          }
+
+          .color-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+          }
+
+          .color-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+          }
+
+          .color-btn.active {
+            border-color: #fff;
+            box-shadow: 0 0 25px currentColor, 0 0 35px currentColor;
+            transform: scale(1.15);
+          }
+
+          .color-btn-wood { background: #86efac; color: #86efac; }
+          .color-btn-fire { background: #f87171; color: #f87171; }
+          .color-btn-earth { background: #fde047; color: #fde047; }
+          .color-btn-metal { background: #fafafa; color: #fafafa; }
+          .color-btn-water { background: #60a5fa; color: #60a5fa; }
+
+          .color-label {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+          }
+        </style>
+        <button class="color-btn color-btn-wood" data-theme="wood" title="木（绿色）">木</button>
+        <button class="color-btn color-btn-fire" data-theme="fire" title="火（红色）">火</button>
+        <button class="color-btn color-btn-earth" data-theme="earth" title="土（黄色）">土</button>
+        <button class="color-btn color-btn-metal" data-theme="metal" title="金（白色）">金</button>
+        <button class="color-btn color-btn-water" data-theme="water" title="水（蓝色）">水</button>
+      </div>
+
+      <!-- Markdown内容卡片 -->
+      <div class="glass-card" data-card id="markdown-card">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-header">
+            <h3 class="glass-card-title">命盘解析结果</h3>
+          </div>
+          <div class="glass-card-body">
+            <!-- Markdown渲染区域 -->
+            <div id="markdown-content" class="markdown-body theme-water">
+              <!-- Markdown内容将被渲染到这里 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 原始Markdown展示 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">原始Markdown文本</h2>
+
+      <div class="glass-card" data-card style="--theme-hue: 210;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-header">
+            <h3 class="glass-card-title">源码</h3>
+          </div>
+          <div class="glass-card-body">
+            <pre class="markdown-source"><code id="markdown-source"></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>基础用法</h3>
+      <pre><code>&lt;div id="markdown-content" class="markdown-body"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  const markdownText = '# 标题\n\n这是**粗体**文字。';
+  const html = marked.parse(markdownText);
+  document.getElementById('markdown-content').innerHTML = html;
+&lt;/script&gt;</code></pre>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 使用Marked.js解析Markdown</li>
+        <li>✅ 代码语法高亮（Highlight.js）</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+        <li>✅ 玻璃质感卡片样式</li>
+        <li>✅ 响应式设计</li>
+        <li>✅ 支持所有标准Markdown语法</li>
+        <li>✅ 自定义样式与设计系统统一</li>
+        <li>✅ 表格、列表、引用等元素美化</li>
+      </ul>
+
+      <h3>支持的Markdown语法</h3>
+      <ul>
+        <li>标题（H1-H6）</li>
+        <li>粗体、斜体、删除线</li>
+        <li>有序列表、无序列表</li>
+        <li>代码块、行内代码</li>
+        <li>引用块</li>
+        <li>表格</li>
+        <li>链接、图片</li>
+        <li>分割线</li>
+      </ul>
+
+      <h3>依赖库</h3>
+      <ul>
+        <li><a href="https://marked.js.org/" target="_blank">Marked.js</a> - Markdown解析器</li>
+        <li><a href="https://highlightjs.org/" target="_blank">Highlight.js</a> - 代码高亮</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Marked.js (使用兼容版本) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+
+  <!-- Highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+
+  <script src="../background/background.js"></script>
+  <script src="markdown.js"></script>
+  <script>
+    // 初始化Mermaid
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      securityLevel: 'loose',
+      themeVariables: {
+        darkMode: true,
+        background: 'rgba(0, 0, 0, 0.2)',
+        primaryColor: '#60a5fa',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#60a5fa',
+        lineColor: '#60a5fa',
+        secondaryColor: '#86efac',
+        tertiaryColor: '#fde047',
+        fontFamily: 'Arial, sans-serif'
+      }
+    });
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      console.log('已切换到', newTheme === 'dark' ? '暗色主题' : '亮色主题');
+    });
+
+    // 直接渲染HTML内容（不使用marked.js）
+    window.addEventListener('load', async function() {
+      // 初始化五行颜色选择器
+      const markdownContent = document.getElementById('markdown-content');
+      const markdownCard = document.getElementById('markdown-card');
+      const colorButtons = document.querySelectorAll('.color-btn');
+
+      // 五行HUE映射
+      const themeHues = {
+        wood: 140,    // 木 - 绿色
+        fire: 0,      // 火 - 红色
+        earth: 50,    // 土 - 黄色
+        metal: 0,     // 金 - 灰色（hue不重要，关键是低saturation）
+        water: 210    // 水 - 蓝色
+      };
+
+      // 五行饱和度和亮度映射
+      const themeSettings = {
+        wood: { saturation: 80, lightness: 60 },
+        fire: { saturation: 80, lightness: 60 },
+        earth: { saturation: 80, lightness: 60 },
+        metal: { saturation: 0, lightness: 80 },  // 真正的灰色：饱和度为0
+        water: { saturation: 80, lightness: 60 }
+      };
+
+      // 设置初始主题（水）
+      markdownCard.style.setProperty('--theme-hue', themeHues.water);
+      document.querySelector('.color-btn-water').classList.add('active');
+
+      colorButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const theme = this.getAttribute('data-theme');
+
+          // 移除所有按钮的active状态
+          colorButtons.forEach(b => b.classList.remove('active'));
+
+          // 添加当前按钮的active状态
+          this.classList.add('active');
+
+          // 移除所有主题类
+          markdownContent.classList.remove('theme-wood', 'theme-fire', 'theme-earth', 'theme-metal', 'theme-water');
+
+          // 添加新主题类
+          markdownContent.classList.add(`theme-${theme}`);
+
+          // 同步卡片的颜色设置
+          const hue = themeHues[theme];
+          const settings = themeSettings[theme];
+
+          markdownCard.style.setProperty('--theme-hue', hue);
+          markdownCard.style.setProperty('--theme-saturation', settings.saturation);
+          markdownCard.style.setProperty('--theme-lightness', settings.lightness);
+
+          console.log('已切换到五行主题:', theme, 'HUE:', hue, 'Saturation:', settings.saturation, 'Lightness:', settings.lightness);
+        });
+      });
+      const markdownText = `
+# 八字命盘全面解析
+
+## 五行关系图（Mermaid示例）
+
+\`\`\`mermaid
+graph TD
+    A[木] -->|生| B[火]
+    B -->|生| C[土]
+    C -->|生| D[金]
+    D -->|生| E[水]
+    E -->|生| A
+
+    A -.->|克| C
+    C -.->|克| E
+    E -.->|克| B
+    B -.->|克| D
+    D -.->|克| A
+
+    style A fill:#86efac,stroke:#22c55e,stroke-width:2px
+    style B fill:#f87171,stroke:#ef4444,stroke-width:2px
+    style C fill:#fde047,stroke:#eab308,stroke-width:2px
+    style D fill:#fafafa,stroke:#78716c,stroke-width:2px
+    style E fill:#60a5fa,stroke:#2563eb,stroke-width:2px
+\`\`\`
+
+## 命主基本信息
+
+| 项目 | 内容 |
+|:---:|:---|
+| 性别 | 男 |
+| 出生时间 | 2002年6月1日 14时30分 |
+| 农历 | 壬午年四月廿一日未时 |
+| 日主 | **丙火** |
+| 命卦 | 巽命（东四命） |
+
+---
+
+## 命盘结构
+
+### 四柱八字
+
+\`\`\`
+年柱：壬午  坐下：丁巳
+月柱：乙巳  坐下：甲辰
+日柱：丙申  坐下：乙未
+时柱：乙未  坐下：甲午
+\`\`\`
+
+### 十神分析
+
+- 比肩：丙火（日主）
+- 劫财：丁火
+- 食神：戊土
+- 伤官：己土
+- 偏财：庚金
+- 正财：辛金
+- 七杀：壬水
+- 正官：癸水
+- 偏印：甲木
+- 正印：乙木
+
+---
+
+## 五行力量分析
+
+### 五行占比图表
+
+\`\`\`
+木：30%  得令而旺
+火：25%  日主当令
+土：20%  泄秀之气
+金：15%  财星受制
+水：10%  官星微弱
+\`\`\`
+
+### 五行生克关系
+
+> **整体格局**：火旺土相，木火通明，金水偏弱
+
+**火旺（得令）**
+- 日主丙火生于午月，火势当令
+- 得年支午火、月支巳火帮扶
+- 天干透出丙火，火势旺盛
+
+**木相（生火）**
+- 月干乙木、时干乙木生助日主
+- 木在火月处于相地，力量较强
+- **优势**：印星有力，学业事业有望
+
+**土休（泄火）**
+- 日支申金泄火，时支未土耗火
+- 火生土，但土不旺
+- **注意**：食伤不旺，才华难以施展
+
+---
+
+## 性格特征分析
+
+### 核心性格
+
+> 火旺之人，热情开朗，待人真诚，如夏日骄阳，光芒四射
+
+**优点**
+- 热情大方，善于交际
+- 积极进取，行动力强
+- 乐观向上，抗压能力强
+- 正直善良，富有同情心
+
+**需要注意**
+- 容易急躁，需控制脾气
+- 做事冲动，三思而后行
+- 耐心不足，需培养定力
+
+---
+
+## 事业财运分析
+
+### 适合行业
+
+五行属木、火的行业最佳：
+
+1. 文化教育：教师、作家、编辑
+2. 能源电子：电力、IT、互联网
+3. 餐饮服务：餐饮、酒店、旅游
+4. 艺术表演：演艺、设计、广告
+
+### 财运分析
+
+- **正财**（辛金）：年干壬水生辛金，正财得生
+- **偏财**（庚金）：日支申金为偏财，可经商
+- **最佳财位**：西北方（金位）
+- **财运建议**：从事火、木行业，秋季收获
+
+---
+
+## 开运建议
+
+### 颜色开运
+
+**幸运色**
+- 绿色（木）- 利学业事业
+- 红色、紫色（火）- 旺运势
+- 黄色、棕色（土）- 稳财运
+
+**忌讳色**
+- 黑色、蓝色（水）- 冲日主
+- 金色、白色（金）- 克日主
+
+### 数字开运
+
+- **幸运数字**：2、7（火）、3、8（木）
+- **忌讳数字**：4、9（金）、1、6（水）
+
+---
+
+## 重要提醒
+
+> **声明**：本解析仅供娱乐参考，命运掌握在自己手中。**三分天命，七分人为**，通过努力可以改变命运轨迹。
+
+**建议**
+- 积极向上，心存善念
+- 努力学习，提升自己
+- 广结善缘，善待他人
+- 顺应天时，把握机遇
+
+---
+
+*解析时间：2026年4月11日*
+*命理师：AI助手 v1.0*
+      `;
+
+      // 使用MarkdownRenderer渲染内容
+      const renderer = new MarkdownRenderer({
+        breaks: true,
+        gfm: true,
+        highlight: true,
+        mermaid: true
+      });
+
+      await renderer.render(markdownText, '#markdown-content');
+
+      // 显示源码
+      document.getElementById('markdown-source').textContent = markdownText;
+
+      console.log('Markdown内容渲染完成');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>处理中动画 - 太极旋转</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../card/card.css">
+  <link rel="stylesheet" href="processing.css">
+</head>
+<body>
+  <!-- 背景组件 -->
+  <div class="background-container">
+    <div class="wuxing-flow-layer"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+    <div class="glow-orb glow-orb-4"></div>
+    <div class="glow-orb glow-orb-5"></div>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="glass rounded-2xl p-6 mb-8">
+      <h1 class="text-3xl font-bold mb-4">处理中动画 - 太极旋转</h1>
+      <p class="text-secondary mb-2">
+        太极旋转动画，用于长时间计算任务处理
+      </p>
+      <p class="text-sm text-tertiary">
+        适用于八字分析计算、缘分匹配等耗时操作
+      </p>
+    </div>
+
+    <!-- 默认示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">太极旋转动画</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content flex items-center justify-center py-12">
+          <div class="processing">
+            <div class="processing-taichi processing-rotating">
+              <div class="processing-glow"></div>
+              <!-- 阳鱼（白色） -->
+              <div class="processing-yang">
+                <svg viewBox="0 0 100 100" class="taichi-svg">
+                  <path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/>
+                  <circle cx="50" cy="75" r="12.5" fill="#1a1a1a"/>
+                </svg>
+              </div>
+              <!-- 阴鱼（黑色） -->
+              <div class="processing-yin">
+                <svg viewBox="0 0 100 100" class="taichi-svg">
+                  <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/>
+                  <circle cx="50" cy="25" r="12.5" fill="#ffffff"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带文字的示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">带文字提示</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <div class="processing-container">
+              <div class="processing">
+                <div class="processing-taichi processing-rotating">
+                  <div class="processing-glow"></div>
+                  <div class="processing-yang">
+                    <svg viewBox="0 0 100 100" class="taichi-svg">
+                      <path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/>
+                      <circle cx="50" cy="75" r="12.5" fill="#1a1a1a"/>
+                    </svg>
+                  </div>
+                  <div class="processing-yin">
+                    <svg viewBox="0 0 100 100" class="taichi-svg">
+                      <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/>
+                      <circle cx="50" cy="25" r="12.5" fill="#ffffff"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <p class="processing-text">正在计算八字...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <div class="processing-container">
+              <div class="processing">
+                <div class="processing-taichi processing-rotating">
+                  <div class="processing-glow"></div>
+                  <div class="processing-yang">
+                    <svg viewBox="0 0 100 100" class="taichi-svg">
+                      <path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/>
+                      <circle cx="50" cy="75" r="12.5" fill="#1a1a1a"/>
+                    </svg>
+                  </div>
+                  <div class="processing-yin">
+                    <svg viewBox="0 0 100 100" class="taichi-svg">
+                      <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/>
+                      <circle cx="50" cy="25" r="12.5" fill="#ffffff"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <p class="processing-text">正在分析缘分匹配...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 演示按钮 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">交互演示</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content">
+          <h3 class="glass-card-title mb-4">点击按钮触发处理动画</h3>
+          <div class="flex gap-4 flex-wrap">
+            <button id="demoBtn1" class="glass px-6 py-3 rounded-lg wood-text font-medium clickable transition">
+              处理3秒
+            </button>
+            <button id="demoBtn2" class="glass px-6 py-3 rounded-lg fire-text font-medium clickable transition">
+              处理5秒
+            </button>
+            <button id="demoBtn3" class="glass px-6 py-3 rounded-lg water-text font-medium clickable transition">
+              全屏处理
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用示例 -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">使用示例</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content">
+          <h3 class="glass-card-title">代码示例</h3>
+          <pre class="text-sm text-secondary bg-secondary/10 rounded-lg p-4 mt-4 overflow-x-auto"><code>&lt;!-- 基础用法 --&gt;
+&lt;div class="processing"&gt;
+  &lt;div class="processing-taichi"&gt;
+    &lt;div class="processing-glow"&gt;&lt;/div&gt;
+    &lt;div class="processing-yang"&gt;
+      &lt;svg viewBox="0 0 100 100" class="taichi-svg"&gt;
+        &lt;path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/&gt;
+        &lt;circle cx="50" cy="75" r="12.5" fill="#1a1a1a"/&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;div class="processing-yin"&gt;
+      &lt;svg viewBox="0 0 100 100" class="taichi-svg"&gt;
+        &lt;path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/&gt;
+        &lt;circle cx="50" cy="25" r="12.5" fill="#ffffff"/&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 带文字 --&gt;
+&lt;div class="processing-container"&gt;
+  &lt;div class="processing"&gt;...&lt;/div&gt;
+  &lt;p class="processing-text"&gt;处理中...&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="../card/card.js"></script>
+  <script src="processing.js"></script>
+</body>
+</html>

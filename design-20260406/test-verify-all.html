@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>验证所有卡片效果</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="components/card/card.css">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .test-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      max-width: 1400px;
+    }
+    .card-wrapper {
+      width: 320px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .test-info {
+      color: white;
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.8;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <h1>卡片效果验证测试</h1>
+  <p class="test-info">
+    测试内容：1. 静态光晕显示（所有卡片都应有柔和的颜色）<br>
+    2. 五行颜色正确（坎-蓝、坤-黄、震-绿、巽-绿、中宫-黄、乾-灰、兑-白、艮-白、离-红）<br>
+    3. 鼠标跟随边缘高光（PC端hover时，边缘发光跟随鼠标）
+  </p>
+
+  <div class="test-section">
+    <!-- 坎卦 - 水 - 蓝 -->
+    <div class="card-wrapper">
+      <div class="glass-card water-card static-glow"
+           data-card
+           data-star="1"
+           style="--theme-hue: 210; --theme-saturation: 60%; --theme-lightness: 65%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-logo glass-card-logo-center">
+            <div class="mingua-icon" style="width: 48px; height: 48px; color: hsla(210, 60%, 65%, 1);">
+              <svg viewBox="0 0 48 48">
+                <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☵</text>
+              </svg>
+            </div>
+          </div>
+          <div class="glass-card-body">
+            <h3 class="profile-name">坎卦（水）</h3>
+            <p class="profile-birth">一白坎卦 / 水</p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+              应显示柔和蓝色光晕，hover时有边缘高光跟随鼠标
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 坤卦 - 土 - 黄 -->
+    <div class="card-wrapper">
+      <div class="glass-card earth-card static-glow"
+           data-card
+           data-star="2"
+           style="--theme-hue: 45; --theme-saturation: 70%; --theme-lightness: 60%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-logo glass-card-logo-center">
+            <div class="mingua-icon" style="width: 48px; height: 48px; color: hsla(45, 70%, 60%, 1);">
+              <svg viewBox="0 0 48 48">
+                <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☷</text>
+              </svg>
+            </div>
+          </div>
+          <div class="glass-card-body">
+            <h3 class="profile-name">坤卦（土）</h3>
+            <p class="profile-birth">二黑坤卦 / 土</p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+              应显示柔和黄色光晕
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 震卦 - 木 - 绿 -->
+    <div class="card-wrapper">
+      <div class="glass-card wood-card static-glow"
+           data-card
+           data-star="3"
+           style="--theme-hue: 120; --theme-saturation: 50%; --theme-lightness: 50%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-logo glass-card-logo-center">
+            <div class="mingua-icon" style="width: 48px; height: 48px; color: hsla(120, 50%, 50%, 1);">
+              <svg viewBox="0 0 48 48">
+                <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☳</text>
+              </svg>
+            </div>
+          </div>
+          <div class="glass-card-body">
+            <h3 class="profile-name">震卦（木）</h3>
+            <p class="profile-birth">三碧震卦 / 木</p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+              应显示柔和绿色光晕
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 离卦 - 火 - 红 -->
+    <div class="card-wrapper">
+      <div class="glass-card fire-card static-glow"
+           data-card
+           data-star="9"
+           style="--theme-hue: 0; --theme-saturation: 65%; --theme-lightness: 60%;">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-logo glass-card-logo-center">
+            <div class="mingua-icon" style="width: 48px; height: 48px; color: hsla(0, 65%, 60%, 1);">
+              <svg viewBox="0 0 48 48">
+                <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☲</text>
+              </svg>
+            </div>
+          </div>
+          <div class="glass-card-body">
+            <h3 class="profile-name">离卦（火）</h3>
+            <p class="profile-birth">九紫离卦 / 火</p>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+              应显示柔和红色光晕
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 加载CardComponent的鼠标跟踪脚本 -->
+  <script src="components/card/card.js"></script>
+</body>
+</html>

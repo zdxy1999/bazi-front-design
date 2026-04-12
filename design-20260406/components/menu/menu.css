@@ -1,0 +1,471 @@
+/* ============================================
+   环形菜单组件样式
+   ============================================ */
+
+/* 主题切换按钮 */
+.theme-toggle {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-out);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--text-on-accent);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 演示容器 */
+.demo-container {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-8);
+  min-height: 100vh;
+  /* 确保内容可见 */
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.demo-title {
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+  /* 确保标题可见 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.demo-subtitle {
+  font-size: var(--text-base);
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-12);
+  /* 确保副标题可见 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 演示区域布局 */
+.demo-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+}
+
+.demo-section {
+  text-align: center;
+}
+
+.demo-section h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  margin-bottom: var(--space-6);
+  color: var(--text-primary);
+}
+
+/* 菜单包装器 - 定位上下文 */
+.menu-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   环形菜单核心样式
+   ============================================ */
+
+.circular-menu {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 主按钮 - 液态玻璃效果 */
+.menu-toggle {
+  position: relative;
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  color: var(--text-primary);
+  transition: all 0.3s var(--ease-out);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 亮色主题下的按钮 */
+:root[data-theme="light"] .menu-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 按钮主题色叠加层 */
+.menu-toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.08) 0%,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.03) 100%
+  );
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+:root[data-theme="light"] .menu-toggle::after {
+  mix-blend-mode: normal;
+  opacity: 0.5;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.menu-toggle:active {
+  transform: scale(0.95);
+}
+
+.menu-toggle svg {
+  transition: transform 0.3s var(--ease-out);
+}
+
+/* 展开状态：主按钮旋转 */
+.circular-menu.active .menu-toggle svg {
+  transform: rotate(45deg);
+}
+
+.circular-menu.active .menu-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   菜单项容器
+   ============================================ */
+
+.menu-items {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* 菜单项基础样式 - 液态玻璃效果 */
+.menu-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  color: var(--text-primary);
+  opacity: 0;
+  /* 关键：让菜单项的中心对齐到基准点，然后缩放到0 */
+  transform: translate(-50%, -50%) translate(0, 0) scale(0);
+  transition: all 0.4s var(--ease-out);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* 亮色主题下的菜单项 */
+:root[data-theme="light"] .menu-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 菜单项主题色叠加层 */
+.menu-item::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-1) var(--space-2);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  border-radius: var(--radius-sm);
+  z-index: 10;
+}
+
+/* 菜单项内部主题色叠加 */
+.menu-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.08) 0%,
+    hsl(var(--theme-hue, 210) 80% 60% / 0.03) 100%
+  );
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+:root[data-theme="light"] .menu-item::before {
+  mix-blend-mode: normal;
+  opacity: 0.5;
+}
+
+/* 确保图标在伪元素之上 */
+.menu-item svg,
+.menu-toggle svg {
+  position: relative;
+  z-index: 2;
+}
+
+/* 展开状态：菜单项显示 */
+.circular-menu.active .menu-item {
+  opacity: 1;
+  /* 让菜单项的中心对齐到基准点，移动到目标位置，然后缩放到1 */
+  transform: translate(-50%, -50%) translate(var(--translate-x), var(--translate-y)) scale(1);
+}
+
+/* 菜单项悬停效果 */
+.menu-item:hover {
+  /* 保持中心对齐和位置，稍微放大 */
+  transform: translate(-50%, -50%) translate(var(--translate-x), var(--translate-y)) scale(1.1);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:active {
+  /* 保持中心对齐和位置，稍微缩小 */
+  transform: translate(-50%, -50%) translate(var(--translate-x), var(--translate-y)) scale(0.95);
+}
+
+/* 显示工具提示 */
+.menu-item:hover::after {
+  opacity: 1;
+}
+  opacity: 1;
+}
+
+/* ============================================
+   使用说明区域
+   ============================================ */
+
+.usage-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.usage-section h3 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+}
+
+.usage-content p {
+  margin-bottom: var(--space-3);
+  color: var(--text-secondary);
+}
+
+.usage-content pre {
+  background: var(--code-bg);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+}
+
+.usage-content code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: var(--text-sm);
+  color: var(--code-text);
+}
+
+.usage-content ul {
+  list-style: none;
+  padding-left: 0;
+  margin: var(--space-3) 0;
+}
+
+.usage-content ul li {
+  padding: var(--space-2) 0 var(--space-2) var(--space-6);
+  position: relative;
+  color: var(--text-secondary);
+}
+
+.usage-content ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+/* 移动端 */
+@media (max-width: 768px) {
+  .demo-container {
+    padding: var(--space-4);
+  }
+
+  .demo-title {
+    font-size: var(--text-2xl);
+  }
+
+  .demo-sections {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .menu-wrapper {
+    height: 250px;
+  }
+
+  .menu-toggle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .menu-item {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* 移动端：菜单项半径缩小 */
+  .circular-menu.active .menu-item {
+    transform: translate(-50%, -50%) translate(calc(var(--translate-x) * 0.8), calc(var(--translate-y) * 0.8)) scale(1);
+  }
+}
+
+/* 小屏幕移动端 */
+@media (max-width: 480px) {
+  .menu-wrapper {
+    height: 200px;
+  }
+
+  .menu-toggle {
+    width: 52px;
+    height: 52px;
+  }
+
+  .menu-item {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* 小屏幕：进一步缩小半径 */
+  .circular-menu.active .menu-item {
+    transform: translate(-50%, -50%) translate(calc(var(--translate-x) * 0.7), calc(var(--translate-y) * 0.7)) scale(1);
+  }
+}
+
+/* ============================================
+   可访问性
+   ============================================ */
+
+/* 键盘焦点 */
+.menu-toggle:focus,
+.menu-item:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .menu-toggle,
+  .menu-item {
+    border: 2px solid var(--text-primary);
+  }
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle,
+  .menu-item,
+  .menu-toggle svg,
+  .menu-item::after {
+    transition: none;
+  }
+}

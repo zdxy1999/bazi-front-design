@@ -1,0 +1,745 @@
+/* ============================================
+   按钮组件样式 - 液态玻璃质感
+   ============================================ */
+
+/* ============================================
+   基础按钮样式
+   ============================================ */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  overflow: hidden;
+
+  /* 液态玻璃质感 */
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* 圆角 - 胶囊形状（左右圆润，上下是直的） */
+  border-radius: 9999px;
+
+  /* 文字颜色 - 更自然的颜色 */
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 按钮内发光效果 */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.1),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+/* 按钮光晕效果 */
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    var(--btn-glow, rgba(255, 255, 255, 0.3)),
+    transparent 70%
+  );
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.btn:hover::after {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* 悬停状态 */
+.btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 激活状态 */
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 焦点状态 */
+.btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   按钮变体
+   ============================================ */
+
+/* 主要按钮 */
+.btn-primary {
+  --btn-glow: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: rgba(74, 222, 128, 0.95);
+}
+
+.btn-primary:hover {
+  background: rgba(74, 222, 128, 0.18);
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+/* 次要按钮 */
+.btn-secondary {
+  --btn-glow: rgba(96, 165, 250, 0.4);
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  color: rgba(96, 165, 250, 0.95);
+}
+
+.btn-secondary:hover {
+  background: rgba(96, 165, 250, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+/* 危险按钮 */
+.btn-danger {
+  --btn-glow: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: rgba(248, 113, 113, 0.95);
+}
+
+.btn-danger:hover {
+  background: rgba(248, 113, 113, 0.18);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+/* 幽灵按钮 */
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* ============================================
+   五行主题色
+   ============================================ */
+
+/* 木 - 绿色 */
+.btn-wood {
+  --btn-glow: rgba(134, 239, 172, 0.4);
+  background: rgba(134, 239, 172, 0.12);
+  border: 1px solid rgba(134, 239, 172, 0.25);
+  color: rgba(134, 239, 172, 0.95);
+}
+
+.btn-wood:hover {
+  background: rgba(134, 239, 172, 0.18);
+  border-color: rgba(134, 239, 172, 0.35);
+}
+
+/* 火 - 红色 */
+.btn-fire {
+  --btn-glow: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: rgba(248, 113, 113, 0.95);
+}
+
+.btn-fire:hover {
+  background: rgba(248, 113, 113, 0.18);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+/* 土 - 黄色 */
+.btn-earth {
+  --btn-glow: rgba(253, 224, 71, 0.4);
+  background: rgba(253, 224, 71, 0.12);
+  border: 1px solid rgba(253, 224, 71, 0.25);
+  color: rgba(253, 224, 71, 0.95);
+}
+
+.btn-earth:hover {
+  background: rgba(253, 224, 71, 0.18);
+  border-color: rgba(253, 224, 71, 0.35);
+}
+
+/* 金 - 白色/灰色 */
+.btn-metal {
+  --btn-glow: rgba(250, 250, 250, 0.4);
+  background: rgba(250, 250, 250, 0.12);
+  border: 1px solid rgba(250, 250, 250, 0.25);
+  color: rgba(250, 250, 250, 0.95);
+}
+
+.btn-metal:hover {
+  background: rgba(250, 250, 250, 0.18);
+  border-color: rgba(250, 250, 250, 0.35);
+}
+
+/* 水 - 蓝色 */
+.btn-water {
+  --btn-glow: rgba(96, 165, 250, 0.4);
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  color: rgba(96, 165, 250, 0.95);
+}
+
+.btn-water:hover {
+  background: rgba(96, 165, 250, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+/* ============================================
+   按钮尺寸
+   ============================================ */
+
+/* 小按钮 */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+  gap: 6px;
+  border-radius: 9999px;
+}
+
+/* 大按钮 */
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 18px;
+  gap: 10px;
+  border-radius: 9999px;
+}
+
+/* 超大按钮 */
+.btn-xl {
+  padding: 20px 40px;
+  font-size: 20px;
+  gap: 12px;
+  border-radius: 9999px;
+}
+
+/* ============================================
+   图标按钮
+   ============================================ */
+
+.btn-icon {
+  padding: 12px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+}
+
+.btn-icon.btn-sm {
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.btn-icon.btn-lg {
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.btn-icon.btn-xl {
+  padding: 20px;
+  border-radius: 16px;
+}
+
+/* 圆形按钮 */
+.btn-circle {
+  border-radius: 50%;
+  padding: 12px;
+  aspect-ratio: 1;
+}
+
+.btn-circle.btn-sm {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-circle.btn-lg {
+  padding: 16px;
+  width: 52px;
+  height: 52px;
+}
+
+.btn-circle.btn-xl {
+  padding: 20px;
+  width: 60px;
+  height: 60px;
+}
+
+/* ============================================
+   加载状态
+   ============================================ */
+
+.btn-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+.btn-sm .btn-spinner {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+
+.btn-lg .btn-spinner {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-xl .btn-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   禁用状态
+   ============================================ */
+
+.btn:disabled,
+.btn.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover,
+.btn.disabled:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   按钮组
+   ============================================ */
+
+.btn-group {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-group-vertical {
+  flex-direction: column;
+}
+
+/* ============================================
+   页面样式
+   ============================================ */
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.page-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.mb-8 {
+  margin-bottom: 60px;
+}
+
+.text-2xl {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* 演示网格 */
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.demo-card {
+  padding: 30px;
+  text-align: center;
+}
+
+.demo-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.demo-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.demo-area {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 使用说明 */
+.usage-section {
+  padding: 40px;
+}
+
+.usage-section h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.usage-section h3 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 30px 0 15px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.usage-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.usage-section pre {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 15px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.usage-section code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  color: #4ade80;
+}
+
+.usage-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.usage-section ul li {
+  padding: 10px 0 10px 25px;
+  position: relative;
+  color: var(--text-secondary);
+}
+
+.usage-section ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 28px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+  }
+
+  .demo-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .btn-lg {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+
+  .btn-xl {
+    padding: 16px 32px;
+    font-size: 18px;
+  }
+}
+
+/* ============================================
+   亮色主题适配
+   ============================================ */
+
+:root[data-theme="light"] .btn {
+  background: rgba(0, 0, 0, 0.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.85);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.95);
+}
+
+:root[data-theme="light"] .btn-primary {
+  background: rgba(74, 222, 128, 0.15);
+  color: rgba(34, 197, 94, 0.95);
+}
+
+:root[data-theme="light"] .btn-primary:hover {
+  background: rgba(74, 222, 128, 0.25);
+}
+
+:root[data-theme="light"] .btn-secondary {
+  background: rgba(96, 165, 250, 0.15);
+  color: rgba(59, 130, 246, 0.95);
+}
+
+:root[data-theme="light"] .btn-secondary:hover {
+  background: rgba(96, 165, 250, 0.25);
+}
+
+:root[data-theme="light"] .btn-danger {
+  background: rgba(248, 113, 113, 0.15);
+  color: rgba(239, 68, 68, 0.95);
+}
+
+:root[data-theme="light"] .btn-danger:hover {
+  background: rgba(248, 113, 113, 0.25);
+}
+
+:root[data-theme="light"] .btn-wood {
+  background: rgba(134, 239, 172, 0.18);
+  color: rgba(34, 197, 94, 0.95);
+}
+
+:root[data-theme="light"] .btn-fire {
+  background: rgba(248, 113, 113, 0.18);
+  color: rgba(239, 68, 68, 0.95);
+}
+
+:root[data-theme="light"] .btn-earth {
+  background: rgba(253, 224, 71, 0.18);
+  color: rgba(234, 179, 8, 0.95);
+}
+
+:root[data-theme="light"] .btn-metal {
+  background: rgba(250, 250, 250, 0.18);
+  color: rgba(107, 114, 128, 0.95);
+}
+
+:root[data-theme="light"] .btn-water {
+  background: rgba(96, 165, 250, 0.18);
+  color: rgba(59, 130, 246, 0.95);
+}
+
+:root[data-theme="light"] .btn-ghost {
+  background: rgba(0, 0, 0, 0.02);
+  color: rgba(0, 0, 0, 0.75);
+}
+
+:root[data-theme="light"] .btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+:root[data-theme="light"] .demo-area {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .usage-section pre {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .usage-section code {
+  color: #e11d48;
+}
+
+/* ============================================
+   点击波纹效果
+   ============================================ */
+
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   按钮激活状态
+   ============================================ */
+
+.btn.btn-active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary.btn-active {
+  background: rgba(74, 222, 128, 0.3);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+.btn-secondary.btn-active {
+  background: rgba(96, 165, 250, 0.3);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.btn-danger.btn-active {
+  background: rgba(248, 113, 113, 0.3);
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+/* ============================================
+   可访问性
+   ============================================ */
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn::before,
+  .btn::after {
+    transition: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+
+  .btn-spinner {
+    animation: none;
+  }
+
+  .btn-ripple {
+    animation: none;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .btn {
+    border: 2px solid currentColor;
+  }
+}

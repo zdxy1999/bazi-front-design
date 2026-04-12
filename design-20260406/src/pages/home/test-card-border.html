@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡片边框颜色测试</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #1a1a2e;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .test-card {
+      width: 300px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 红色卡片 - 硬编码 */
+    .card-red {
+      border: 3px solid rgba(255, 0, 0, 0.8);
+      box-shadow: 
+        0 0 15px rgba(255, 0, 0, 0.5),
+        inset 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    /* 蓝色卡片 - 硬编码 */
+    .card-blue {
+      border: 3px solid rgba(0, 100, 255, 0.8);
+      box-shadow: 
+        0 0 15px rgba(0, 100, 255, 0.5),
+        inset 0 0 10px rgba(0, 100, 255, 0.2);
+    }
+
+    /* 绿色卡片 - 硬编码 */
+    .card-green {
+      border: 3px solid rgba(0, 255, 100, 0.8);
+      box-shadow: 
+        0 0 15px rgba(0, 255, 100, 0.5),
+        inset 0 0 10px rgba(0, 255, 100, 0.2);
+    }
+
+    h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .card-title {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .info {
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      font-size: 12px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h2>卡片边框和光晕测试</h2>
+
+  <div class="test-card card-red">
+    <div class="card-title">🔴 红色卡片</div>
+    <div class="card-desc">如果你能看到红色边框和红色光晕，说明CSS正常</div>
+  </div>
+
+  <div class="test-card card-blue">
+    <div class="card-title">🔵 蓝色卡片</div>
+    <div class="card-desc">如果你能看到蓝色边框和蓝色光晕，说明CSS正常</div>
+  </div>
+
+  <div class="test-card card-green">
+    <div class="card-title">🟢 绿色卡片</div>
+    <div class="card-desc">如果你能看到绿色边框和绿色光晕，说明CSS正常</div>
+  </div>
+
+  <div class="info">
+    <p>如果看不到颜色，请：</p>
+    <p>1. 强制刷新浏览器 (Ctrl+Shift+R 或 Cmd+Shift+R)</p>
+    <p>2. 清除浏览器缓存</p>
+    <p>3. 检查浏览器Console是否有错误</p>
+  </div>
+
+  <script>
+    console.log('✅ 卡片边框颜色测试页面加载完成');
+    console.log('🔴 红色卡片：border + box-shadow');
+    console.log('🔵 蓝色卡片：border + box-shadow');
+    console.log('🟢 绿色卡片：border + box-shadow');
+  </script>
+</body>
+</html>

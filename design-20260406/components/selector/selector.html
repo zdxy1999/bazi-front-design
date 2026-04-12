@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>选择器组件库 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../button/button.css">
+  <link rel="stylesheet" href="selector.css">
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)"><animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate><animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)"><animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)"><animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate><animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)"><animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate><animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)"><animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate><animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)"><animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform></rect>
+    </svg>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="page-header">
+      <h1 class="page-title">选择器组件库</h1>
+      <p class="page-subtitle">统一发光效果 · 简洁优雅</p>
+    </div>
+
+    <!-- 基础选择器 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">基础选择器</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Radio 单选框</h3>
+          <p class="demo-desc">选中时整个圆圈填充并发光</p>
+          <div class="demo-area">
+            <label class="radio">
+              <input type="radio" name="radio-demo1" value="option1" checked>
+              <span class="radio-text">选项一</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="radio-demo1" value="option2">
+              <span class="radio-text">选项二</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="radio-demo1" value="option3">
+              <span class="radio-text">选项三</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Checkbox 复选框</h3>
+          <p class="demo-desc">选中时整个方框填充并发光</p>
+          <div class="demo-area">
+            <label class="checkbox">
+              <input type="checkbox" name="checkbox-demo1" value="1" checked>
+              <span class="checkbox-text">选项一</span>
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" name="checkbox-demo1" value="2">
+              <span class="checkbox-text">选项二</span>
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" name="checkbox-demo1" value="3">
+              <span class="checkbox-text">选项三</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Radio Button 按钮式单选</h3>
+          <p class="demo-desc">选中时边框发光</p>
+          <div class="demo-area" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+            <label class="radio-button">
+              <input type="radio" name="radio-demo4" value="wood" checked>
+              <span class="radio-button-text">木</span>
+            </label>
+            <label class="radio-button">
+              <input type="radio" name="radio-demo4" value="fire">
+              <span class="radio-button-text">火</span>
+            </label>
+            <label class="radio-button">
+              <input type="radio" name="radio-demo4" value="earth">
+              <span class="radio-button-text">土</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Toggle 开关</h3>
+          <p class="demo-desc">iOS风格开关</p>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="toggle">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">开启</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">关闭</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 五行主题色 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">五行主题色</h2>
+      <p class="demo-desc" style="text-align: center; margin-bottom: 30px;">选中时通过五行颜色光晕突出显示</p>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>🟢 木（绿色）</h3>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="radio radio-wood">
+              <input type="radio" name="theme-wood" checked>
+              <span class="radio-text">木 Radio</span>
+            </label>
+            <label class="checkbox checkbox-wood">
+              <input type="checkbox" checked>
+              <span class="checkbox-text">木 Checkbox</span>
+            </label>
+            <label class="radio-button radio-button-wood">
+              <input type="radio" name="theme-wood-btn" checked>
+              <span class="radio-button-text">木 Button</span>
+            </label>
+            <label class="toggle toggle-wood">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">木 Toggle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>🔴 火（红色）</h3>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="radio radio-fire">
+              <input type="radio" name="theme-fire">
+              <span class="radio-text">火 Radio</span>
+            </label>
+            <label class="checkbox checkbox-fire">
+              <input type="checkbox">
+              <span class="checkbox-text">火 Checkbox</span>
+            </label>
+            <label class="radio-button radio-button-fire">
+              <input type="radio" name="theme-fire-btn">
+              <span class="radio-button-text">火 Button</span>
+            </label>
+            <label class="toggle toggle-fire">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">火 Toggle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>🟡 土（黄色）</h3>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="radio radio-earth">
+              <input type="radio" name="theme-earth">
+              <span class="radio-text">土 Radio</span>
+            </label>
+            <label class="checkbox checkbox-earth">
+              <input type="checkbox">
+              <span class="checkbox-text">土 Checkbox</span>
+            </label>
+            <label class="radio-button radio-button-earth">
+              <input type="radio" name="theme-earth-btn">
+              <span class="radio-button-text">土 Button</span>
+            </label>
+            <label class="toggle toggle-earth">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">土 Toggle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>⚪ 金（白色）</h3>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="radio radio-metal">
+              <input type="radio" name="theme-metal">
+              <span class="radio-text">金 Radio</span>
+            </label>
+            <label class="checkbox checkbox-metal">
+              <input type="checkbox">
+              <span class="checkbox-text">金 Checkbox</span>
+            </label>
+            <label class="radio-button radio-button-metal">
+              <input type="radio" name="theme-metal-btn">
+              <span class="radio-button-text">金 Button</span>
+            </label>
+            <label class="toggle toggle-metal">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">金 Toggle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>🔵 水（蓝色）</h3>
+          <div class="demo-area" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <label class="radio radio-water">
+              <input type="radio" name="theme-water">
+              <span class="radio-text">水 Radio</span>
+            </label>
+            <label class="checkbox checkbox-water">
+              <input type="checkbox">
+              <span class="checkbox-text">水 Checkbox</span>
+            </label>
+            <label class="radio-button radio-button-water">
+              <input type="radio" name="theme-water-btn">
+              <span class="radio-button-text">水 Button</span>
+            </label>
+            <label class="toggle toggle-water">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">水 Toggle</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">实际应用示例</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">八字命盘表单示例</p>
+        <div class="demo-area" style="align-items: stretch; max-width: 500px;">
+          <form class="form">
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 12px; color: var(--text-primary); font-weight: 500;">性别</p>
+              <div style="display: flex; gap: 12px;">
+                <label class="radio-button">
+                  <input type="radio" name="gender" value="male" checked>
+                  <span class="radio-button-text">男</span>
+                </label>
+                <label class="radio-button">
+                  <input type="radio" name="gender" value="female">
+                  <span class="radio-button-text">女</span>
+                </label>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 12px; color: var(--text-primary); font-weight: 500;">八字排盘选项</p>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label class="checkbox">
+                  <input type="checkbox" checked>
+                  <span class="checkbox-text">显示大运</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" checked>
+                  <span class="checkbox-text">显示小运</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox">
+                  <span class="checkbox-text">显示流年</span>
+                </label>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <p style="margin-bottom: 12px; color: var(--text-primary); font-weight: 500;">设置</p>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label class="toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-text">启用自动保存</span>
+                </label>
+                <label class="toggle">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-text">启用推送通知</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">提交</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>基础用法</h3>
+      <pre><code>&lt;!-- Radio 单选框 --&gt;
+&lt;label class="radio"&gt;
+  &lt;input type="radio" name="group" value="1" checked&gt;
+  &lt;span class="radio-text"&gt;选项一&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Checkbox 复选框 --&gt;
+&lt;label class="checkbox"&gt;
+  &lt;input type="checkbox" name="item" value="1" checked&gt;
+  &lt;span class="checkbox-text"&gt;选项一&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Radio Button 按钮式单选 --&gt;
+&lt;label class="radio-button"&gt;
+  &lt;input type="radio" name="group" value="1" checked&gt;
+  &lt;span class="radio-button-text"&gt;选项一&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Toggle 开关 --&gt;
+&lt;label class="toggle"&gt;
+  &lt;input type="checkbox" checked&gt;
+  &lt;span class="toggle-slider"&gt;&lt;/span&gt;
+  &lt;span class="toggle-text"&gt;开启&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+
+      <h3>五行主题色</h3>
+      <pre><code>&lt;!-- 木（绿色） --&gt;
+&lt;label class="radio radio-wood"&gt;
+  &lt;input type="radio" name="theme" checked&gt;
+  &lt;span class="radio-text"&gt;木&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;label class="checkbox checkbox-wood"&gt;
+  &lt;input type="checkbox" checked&gt;
+  &lt;span class="checkbox-text"&gt;木&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;label class="radio-button radio-button-wood"&gt;
+  &lt;input type="radio" name="theme-btn" checked&gt;
+  &lt;span class="radio-button-text"&gt;木&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;label class="toggle toggle-wood"&gt;
+  &lt;input type="checkbox" checked&gt;
+  &lt;span class="toggle-slider"&gt;&lt;/span&gt;
+  &lt;span class="toggle-text"&gt;木&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+
+      <h3>自定义颜色</h3>
+      <pre><code>&lt;!-- 通过 CSS 变量自定义颜色 --&gt;
+&lt;style&gt;
+:root {
+  --accent-primary: rgba(255, 105, 180, 1); /* 粉红色 */
+}
+&lt;/style&gt;
+
+&lt;!-- 或使用内联样式 --&gt;
+&lt;label class="radio" style="--accent-primary: rgba(34, 197, 94, 1);"&gt;
+  &lt;input type="radio" name="custom" value="1"&gt;
+  &lt;span class="radio-text"&gt;绿色选项&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 统一选中效果：所有选择器选中时整个内部点亮</li>
+        <li>✅ 液态玻璃质感</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+        <li>✅ 五行主题色：wood、fire、earth、metal、water</li>
+        <li>✅ 自定义颜色：通过 CSS 变量 --accent-primary</li>
+        <li>✅ 禁用状态支持</li>
+        <li>✅ 平滑动画过渡</li>
+        <li>✅ 键盘导航支持</li>
+        <li>✅ 可访问性优化</li>
+      </ul>
+
+      <h3>Class列表</h3>
+
+      <p><strong>Radio</strong></p>
+      <ul>
+        <li><code>radio</code> - 基础单选框</li>
+        <li><code>radio-text</code> - 单选文本</li>
+        <li><code>radio-button</code> - 按钮式单选</li>
+        <li><code>radio-button-text</code> - 按钮文本</li>
+      </ul>
+
+      <p><strong>Checkbox</strong></p>
+      <ul>
+        <li><code>checkbox</code> - 基础复选框</li>
+        <li><code>checkbox-text</code> - 复选文本</li>
+      </ul>
+
+      <p><strong>Toggle</strong></p>
+      <ul>
+        <li><code>toggle</code> - 基础开关</li>
+        <li><code>toggle-slider</code> - 滑块</li>
+        <li><code>toggle-text</code> - 开关文本</li>
+      </ul>
+
+      <p><strong>主题色</strong></p>
+      <ul>
+        <li><code>radio-wood</code>、<code>checkbox-wood</code>、<code>radio-button-wood</code>、<code>toggle-wood</code> - 木（绿色）</li>
+        <li><code>radio-fire</code>、<code>checkbox-fire</code>、<code>radio-button-fire</code>、<code>toggle-fire</code> - 火（红色）</li>
+        <li><code>radio-earth</code>、<code>checkbox-earth</code>、<code>radio-button-earth</code>、<code>toggle-earth</code> - 土（黄色）</li>
+        <li><code>radio-metal</code>、<code>checkbox-metal</code>、<code>radio-button-metal</code>、<code>toggle-metal</code> - 金（白色）</li>
+        <li><code>radio-water</code>、<code>checkbox-water</code>、<code>radio-button-water</code>、<code>toggle-water</code> - 水（蓝色）</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="selector.js"></script>
+  <script>
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+    });
+  </script>
+</body>
+</html>

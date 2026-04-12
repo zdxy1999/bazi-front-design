@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>环形菜单组件 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="menu.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 40px 20px;
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .demo-card {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .demo-card h2 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 40px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+    }
+
+    /* 使用说明 */
+    .usage-section {
+      padding: 40px;
+      margin-top: 60px;
+    }
+
+    .usage-section h2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 30px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .usage-section h3 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 30px 0 15px 0;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .usage-section p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 15px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .usage-section pre {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 15px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .usage-section code {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      color: #4ade80;
+    }
+
+    .usage-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+    }
+
+    .usage-section ul li {
+      padding: 10px 0 10px 25px;
+      position: relative;
+      color: var(--text-secondary);
+    }
+
+    .usage-section ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+      font-weight: bold;
+    }
+
+    .usage-section ul ul {
+      padding-left: 30px;
+    }
+
+    .usage-section ul ul li::before {
+      content: '•';
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 木 - 绿色 -->
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 火 - 红色 -->
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 土 - 黄色 -->
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 金 - 白色/灰色 -->
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 水 - 蓝色 -->
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 混合渐变 -->
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)">
+        <animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+
+    <!-- 边缘发光效果 -->
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+
+    <!-- 毛玻璃垫层 -->
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 页面内容 - 放在背景容器外部 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <!-- 页面标题 -->
+    <div class="page-header">
+      <h1 class="page-title">环形菜单组件</h1>
+      <p class="page-subtitle">通用组件，支持任意数量菜单项自动等距排列，支持全圆和半圆排列方式</p>
+    </div>
+
+    <!-- 演示区域 -->
+    <div class="demo-grid">
+      <!-- 全圆排列 -->
+      <div class="demo-card">
+        <h2>全圆排列（3项）</h2>
+        <div class="menu-center">
+          <div class="circular-menu" data-menu="3">
+            <button class="menu-toggle" aria-label="打开菜单">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="menu-items">
+              <button class="menu-item" aria-label="菜单1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="菜单2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="菜单3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 22,20 2,20"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 上半圆 -->
+      <div class="demo-card">
+        <h2>上半圆排列</h2>
+        <div class="menu-center">
+          <div class="circular-menu" data-menu="4" data-arc="top">
+            <button class="menu-toggle" aria-label="打开菜单">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="menu-items">
+              <button class="menu-item" aria-label="1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 22,20 2,20"></polygon>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 下半圆 -->
+      <div class="demo-card">
+        <h2>下半圆排列</h2>
+        <div class="menu-center">
+          <div class="circular-menu" data-menu="4" data-arc="bottom">
+            <button class="menu-toggle" aria-label="打开菜单">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="menu-items">
+              <button class="menu-item" aria-label="1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 22,20 2,20"></polygon>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 左半圆 -->
+      <div class="demo-card">
+        <h2>左半圆排列</h2>
+        <div class="menu-center">
+          <div class="circular-menu" data-menu="4" data-arc="left">
+            <button class="menu-toggle" aria-label="打开菜单">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="menu-items">
+              <button class="menu-item" aria-label="1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 22,20 2,20"></polygon>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右半圆 -->
+      <div class="demo-card">
+        <h2>右半圆排列</h2>
+        <div class="menu-center">
+          <div class="circular-menu" data-menu="4" data-arc="right">
+            <button class="menu-toggle" aria-label="打开菜单">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="menu-items">
+              <button class="menu-item" aria-label="1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12,2 22,20 2,20"></polygon>
+                </svg>
+              </button>
+              <button class="menu-item" aria-label="4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用说明 -->
+    <div class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>HTML结构</h3>
+      <pre><code>&lt;div class="circular-menu" data-menu="4" data-arc="top"&gt;
+  &lt;button class="menu-toggle"&gt;
+    &lt;!-- 三横线图标 --&gt;
+  &lt;/button&gt;
+  &lt;div class="menu-items"&gt;
+    &lt;button class="menu-item" aria-label="菜单项1"&gt;
+      &lt;!-- 图标 --&gt;
+    &lt;/button&gt;
+    &lt;!-- 更多菜单项 --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+      <h3>关键属性</h3>
+      <ul>
+        <li><code>data-menu="n"</code> - 菜单项数量（自动计算角度）</li>
+        <li><code>data-arc="方向"</code> - 排列方式（可选）：
+          <ul>
+            <li>不设置或 <code>"full"</code> - 全圆排列（360°）</li>
+            <li><code>"top"</code> - 上半圆排列（从左上到右上）</li>
+            <li><code>"bottom"</code> - 下半圆排列（从右下到左下）</li>
+            <li><code>"left"</code> - 左半圆排列（从上左到下左）</li>
+            <li><code>"right"</code> - 右半圆排列（从上右到下右）</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 支持任意数量菜单项</li>
+        <li>✅ 自动等距排列</li>
+        <li>✅ 多种排列方式：全圆、上半圆、下半圆、左半圆、右半圆</li>
+        <li>✅ 展开/收起动画</li>
+        <li>✅ 统一主题色</li>
+        <li>✅ 玻璃质感设计</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+        <li>✅ 触摸和鼠标交互</li>
+        <li>✅ 点击外部自动关闭</li>
+        <li>✅ 键盘支持（ESC关闭）</li>
+      </ul>
+
+      <!-- 使用说明 -->
+      <div class="usage-section">
+        <h2>使用说明</h2>
+
+        <h3>HTML结构</h3>
+        <pre><code>&lt;div class="circular-menu" data-menu="4" data-arc="top"&gt;
+  &lt;button class="menu-toggle"&gt;
+    &lt;!-- 三横线图标 --&gt;
+  &lt;/button&gt;
+  &lt;div class="menu-items"&gt;
+    &lt;button class="menu-item" aria-label="菜单项1"&gt;
+      &lt;!-- 图标 --&gt;
+    &lt;/button&gt;
+    &lt;!-- 更多菜单项 --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+        <h3>关键属性</h3>
+        <ul>
+          <li><code>data-menu="n"</code> - 菜单项数量（自动计算角度）</li>
+          <li><code>data-arc="方向"</code> - 排列方式（可选）：
+            <ul>
+              <li>不设置或 <code>"full"</code> - 全圆排列（360°）</li>
+              <li><code>"top"</code> - 上半圆排列（从左上到右上）</li>
+              <li><code>"bottom"</code> - 下半圆排列（从右下到左下）</li>
+              <li><code>"left"</code> - 左半圆排列（从上左到下左）</li>
+              <li><code>"right"</code> - 右半圆排列（从上右到下右）</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>组件特性</h3>
+        <ul>
+          <li>✅ 支持任意数量菜单项</li>
+          <li>✅ 自动等距排列</li>
+          <li>✅ 多种排列方式：全圆、上半圆、下半圆、左半圆、右半圆</li>
+          <li>✅ 展开/收起动画</li>
+          <li>✅ 统一主题色</li>
+          <li>✅ 玻璃质感设计</li>
+          <li>✅ 暗黑/明亮主题适配</li>
+          <li>✅ 触摸和鼠标交互</li>
+          <li>✅ 点击外部自动关闭</li>
+          <li>✅ 键盘支持（ESC关闭）</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题" style="z-index: 9999; position: fixed; top: 20px; left: 20px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <script src="../background/background.js"></script>
+  <script>
+    console.log('=== 菜单脚本开始执行 ===');
+
+    // 初始化所有环形菜单
+    function initCircularMenus() {
+      console.log('=== 开始初始化环形菜单 ===');
+
+      const menus = document.querySelectorAll('.circular-menu');
+      console.log(`找到 ${menus.length} 个菜单`);
+
+      if (menus.length === 0) {
+        console.warn('未找到任何菜单元素');
+        return;
+      }
+
+      menus.forEach((menu, menuIndex) => {
+        console.log(`\n初始化菜单 ${menuIndex + 1}:`);
+
+        const toggle = menu.querySelector('.menu-toggle');
+        const items = menu.querySelectorAll('.menu-item');
+
+        if (!toggle) {
+          console.error(`菜单 ${menuIndex + 1}: 未找到主按钮`);
+          return;
+        }
+
+        console.log(`  主按钮: ${toggle ? '✓' : '✗'}`);
+        console.log(`  菜单项数量: ${items.length}`);
+
+        // 获取排列方式
+        const arc = menu.getAttribute('data-arc') || 'full';
+        console.log(`  排列方式: ${arc}`);
+
+        // 计算位置
+        const radius = 80;
+        const itemCount = items.length;
+
+        // 根据排列方式确定角度范围
+        let angleRange, startAngle;
+        switch(arc) {
+          case 'top':    // 上半圆：-180° 到 0°（从左上到右上）
+            angleRange = 180;
+            startAngle = -180;
+            break;
+          case 'bottom': // 下半圆：0° 到 180°（从右下到左下）
+            angleRange = 180;
+            startAngle = 0;
+            break;
+          case 'left':   // 左半圆：90° 到 270°（从上左到下左）
+            angleRange = 180;
+            startAngle = 90;
+            break;
+          case 'right':  // 右半圆：-90° 到 90°（从上右到下右）
+            angleRange = 180;
+            startAngle = -90;
+            break;
+          default:       // 全圆：360°，从正上方开始
+            angleRange = 360;
+            startAngle = -90;
+        }
+
+        // 计算角度步长
+        let angleStep;
+        if (arc === 'full' || arc === null) {
+          angleStep = itemCount > 0 ? angleRange / itemCount : 0;
+        } else {
+          angleStep = itemCount > 1 ? angleRange / (itemCount - 1) : 0;
+        }
+
+        console.log(`  角度范围: ${angleRange}°, 起始角度: ${startAngle}°, 步长: ${angleStep.toFixed(1)}°`);
+
+        items.forEach((item, index) => {
+          let angle;
+          if (itemCount === 1) {
+            angle = startAngle + (angleRange / 2);
+          } else {
+            angle = startAngle + (index * angleStep);
+          }
+
+          const radians = (angle * Math.PI) / 180;
+          const x = Math.cos(radians) * radius;
+          const y = Math.sin(radians) * radius;
+
+          console.log(`  菜单项 ${index + 1}: 角度=${angle.toFixed(1)}°, x=${x.toFixed(1)}px, y=${y.toFixed(1)}px`);
+
+          item.style.setProperty('--translate-x', `${x}px`);
+          item.style.setProperty('--translate-y', `${y}px`);
+          item.style.transitionDelay = `${index * 0.05}s`;
+        });
+
+        toggle.addEventListener('click', function(e) {
+          console.log(`菜单 ${menuIndex + 1} 按钮被点击`);
+          e.stopPropagation();
+          menu.classList.toggle('active');
+        });
+
+        items.forEach((item, index) => {
+          item.addEventListener('click', function(e) {
+            console.log(`菜单 ${menuIndex + 1} - 菜单项 ${index + 1} 被点击`);
+            e.stopPropagation();
+            menu.classList.remove('active');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (menu.classList.contains('active') && !menu.contains(e.target)) {
+            menu.classList.remove('active');
+          }
+        });
+      });
+
+      console.log('\n=== 所有菜单初始化完成 ===');
+    }
+
+    // 主题切换
+    function initThemeToggle() {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          const html = document.documentElement;
+          const currentTheme = html.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          html.setAttribute('data-theme', newTheme);
+          console.log(`主题切换: ${currentTheme} → ${newTheme}`);
+        });
+      }
+    }
+
+    // 页面加载完成后初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initCircularMenus();
+        initThemeToggle();
+      });
+    } else {
+      initCircularMenus();
+      initThemeToggle();
+    }
+  </script>
+</body>
+</html>

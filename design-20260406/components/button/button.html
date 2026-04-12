@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>按钮组件库 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="button.css">
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)"><animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate><animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)"><animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)"><animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate><animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)"><animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate><animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)"><animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate><animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)"><animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform></rect>
+    </svg>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="page-header">
+      <h1 class="page-title">按钮组件库</h1>
+      <p class="page-subtitle">液态玻璃质感的按钮组件，支持多种变体和状态</p>
+    </div>
+
+    <!-- 按钮变体 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">按钮变体</h2>
+
+      <div class="demo-grid">
+        <!-- 主要按钮 -->
+        <div class="demo-card">
+          <h3>主要按钮</h3>
+          <p class="demo-desc">用于主要操作</p>
+          <div class="demo-area">
+            <button class="btn btn-primary">主要按钮</button>
+          </div>
+        </div>
+
+        <!-- 次要按钮 -->
+        <div class="demo-card">
+          <h3>次要按钮</h3>
+          <p class="demo-desc">用于次要操作</p>
+          <div class="demo-area">
+            <button class="btn btn-secondary">次要按钮</button>
+          </div>
+        </div>
+
+        <!-- 危险按钮 -->
+        <div class="demo-card">
+          <h3>危险按钮</h3>
+          <p class="demo-desc">用于删除等危险操作</p>
+          <div class="demo-area">
+            <button class="btn btn-danger">危险按钮</button>
+          </div>
+        </div>
+
+        <!-- 幽灵按钮 -->
+        <div class="demo-card">
+          <h3>幽灵按钮</h3>
+          <p class="demo-desc">轻量级按钮</p>
+          <div class="demo-area">
+            <button class="btn btn-ghost">幽灵按钮</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 按钮尺寸 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">按钮尺寸</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">不同大小的按钮</p>
+        <div class="demo-area" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm">小按钮</button>
+          <button class="btn btn-primary">默认按钮</button>
+          <button class="btn btn-primary btn-lg">大按钮</button>
+          <button class="btn btn-primary btn-xl">超大按钮</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 五行主题色 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">五行主题色</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>木</h3>
+          <div class="demo-area">
+            <button class="btn btn-wood">木</button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>火</h3>
+          <div class="demo-area">
+            <button class="btn btn-fire">火</button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>土</h3>
+          <div class="demo-area">
+            <button class="btn btn-earth">土</button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>金</h3>
+          <div class="demo-area">
+            <button class="btn btn-metal">金</button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>水</h3>
+          <div class="demo-area">
+            <button class="btn btn-water">水</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带图标的按钮 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">图标按钮</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>图标+文字</h3>
+          <div class="demo-area">
+            <button class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+              </svg>
+              <span>返回</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>仅图标</h3>
+          <div class="demo-area">
+            <button class="btn btn-primary btn-icon" aria-label="添加">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>圆形图标</h3>
+          <div class="demo-area">
+            <button class="btn btn-primary btn-circle" aria-label="编辑">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10l-7-7z"></path>
+                <line x1="13" y1="20" x2="21" y2="20"></line>
+                <line x1="16" y1="17" x2="20" y2="13"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>更多图标示例</h3>
+          <div class="demo-area" style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>保存</span>
+            </button>
+
+            <button class="btn btn-danger">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,6 5,6 21,6"></polyline>
+                <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"></path>
+              </svg>
+              <span>删除</span>
+            </button>
+
+            <button class="btn btn-wood">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12,6 12,12 16,14"></polyline>
+              </svg>
+              <span>历史</span>
+            </button>
+
+            <button class="btn btn-ghost btn-icon" aria-label="设置">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4,15a1.65,1.65,0,0,0,.33,1.82l.06.06a2,2,0,0,1,0,2.83,2,2,0,0,1-2.83,0l-.06-.06a1.65,1.65,0,0,0-1.82-.33,1.65,1.65,0,0,0-1,1.51V21a2,2,0,0,1-2,2,2,2,0,0,1-2-2v-.09A1.65,1.65,0,0,0,9,19.4a1.65,1.65,0,0,0-1.82.33l-.06.06a2,2,0,0,1-2.83,0,2,2,0,0,1,0-2.83l.06-.06a1.65,1.65,0,0,0,.33-1.82,1.65,1.65,0,0,0-1.51-1H3a2,2,0,0,1-2-2,2,2,0,0,1,2-2H4.09A1.65,1.65,0,0,0,5.6,9a1.65,1.65,0,0,0-.33-1.82l-.06-.06a2,2,0,0,1,0-2.83,2,2,0,0,1,2.83,0l.06.06a1.65,1.65,0,0,0,1.82.33H9a1.65,1.65,0,0,0,1-1.51V3a2,2,0,0,1,2-2,2,2,0,0,1,2,2V4.09a1.65,1.65,0,0,0,1,1.51,1.65,1.65,0,0,0,1.82-.33l.06-.06a2,2,0,0,1,2.83,0,2,2,0,0,1,0,2.83l-.06.06a1.65,1.65,0,0,0-.33,1.82V9a1.65,1.65,0,0,0,1.51,1H21a2,2,0,0,1,2,2,2,2,0,0,1-2,2H19.4a1.65,1.65,0,0,0-1.51,1Z"></path>
+              </svg>
+            </button>
+
+            <button class="btn btn-circle btn-secondary" aria-label="分享">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 加载状态 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">加载状态</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">按钮的加载中状态</p>
+        <div class="demo-area" style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-loading">
+            <span class="btn-spinner"></span>
+            <span>加载中...</span>
+          </button>
+          <button class="btn btn-secondary btn-loading">
+            <span class="btn-spinner"></span>
+            <span>处理中...</span>
+          </button>
+          <button class="btn btn-danger btn-loading">
+            <span class="btn-spinner"></span>
+            <span>删除中...</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 禁用状态 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">禁用状态</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">不可点击的按钮</p>
+        <div class="demo-area" style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <button class="btn btn-primary" disabled>主要按钮</button>
+          <button class="btn btn-secondary" disabled>次要按钮</button>
+          <button class="btn btn-danger" disabled>危险按钮</button>
+          <button class="btn btn-ghost" disabled>幽灵按钮</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>基础用法</h3>
+      <pre><code>&lt;button class="btn btn-primary"&gt;主要按钮&lt;/button&gt;
+&lt;button class="btn btn-secondary btn-sm"&gt;小次要按钮&lt;/button&gt;
+&lt;button class="btn btn-danger btn-lg"&gt;大危险按钮&lt;/button&gt;
+&lt;button class="btn btn-wood"&gt;木主题按钮&lt;/button&gt;</code></pre>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 液态玻璃质感</li>
+        <li>✅ 胶囊形状（左右圆润，上下直边）</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+        <li>✅ 多种变体：primary、secondary、danger、ghost</li>
+        <li>✅ 多种尺寸：sm、默认、lg、xl</li>
+        <li>✅ 五行主题色：wood、fire、earth、metal、water</li>
+        <li>✅ 图标按钮支持（SVG图标）</li>
+        <li>✅ 加载状态</li>
+        <li>✅ 禁用状态</li>
+        <li>✅ 平滑动画过渡</li>
+        <li>✅ 键盘导航支持</li>
+      </ul>
+
+      <h3>图标使用</h3>
+      <pre><code>&lt;!-- 图标+文字 --&gt;
+&lt;button class="btn btn-primary"&gt;
+  &lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+    &lt;polyline points="15,18 9,12 15,6"&gt;&lt;/polyline&gt;
+  &lt;/svg&gt;
+  &lt;span&gt;返回&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- 仅图标 --&gt;
+&lt;button class="btn btn-primary btn-icon" aria-label="添加"&gt;
+  &lt;svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+    &lt;line x1="12" y1="5" x2="12" y2="19"&gt;&lt;/line&gt;
+    &lt;line x1="5" y1="12" x2="19" y2="12"&gt;&lt;/line&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- 圆形图标 --&gt;
+&lt;button class="btn btn-secondary btn-circle" aria-label="分享"&gt;
+  &lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+    &lt;circle cx="18" cy="5" r="3"&gt;&lt;/circle&gt;
+    &lt;circle cx="6" cy="12" r="3"&gt;&lt;/circle&gt;
+    &lt;circle cx="18" cy="19" r="3"&gt;&lt;/circle&gt;
+    &lt;line x1="8.59" y1="13.51" x2="15.42" y2="17.49"&gt;&lt;/line&gt;
+    &lt;line x1="15.41" y1="6.51" x2="8.59" y2="10.49"&gt;&lt;/line&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+
+      <h3>Class列表</h3>
+
+      <p><strong>变体</strong></p>
+      <ul>
+        <li><code>btn-primary</code> - 主要按钮</li>
+        <li><code>btn-secondary</code> - 次要按钮</li>
+        <li><code>btn-danger</code> - 危险按钮</li>
+        <li><code>btn-ghost</code> - 幽灵按钮</li>
+      </ul>
+
+      <p><strong>尺寸</strong></p>
+      <ul>
+        <li><code>btn-sm</code> - 小按钮</li>
+        <li><code>btn-lg</code> - 大按钮</li>
+        <li><code>btn-xl</code> - 超大按钮</li>
+      </ul>
+
+      <p><strong>主题色</strong></p>
+      <ul>
+        <li><code>btn-wood</code> - 木（绿色）</li>
+        <li><code>btn-fire</code> - 火（红色）</li>
+        <li><code>btn-earth</code> - 土（黄色）</li>
+        <li><code>btn-metal</code> - 金（白色）</li>
+        <li><code>btn-water</code> - 水（蓝色）</li>
+      </ul>
+
+      <p><strong>状态</strong></p>
+      <ul>
+        <li><code>btn-loading</code> - 加载中</li>
+        <li><code>btn-icon</code> - 仅图标</li>
+        <li><code>btn-circle</code> - 圆形</li>
+        <li><code>disabled</code> - 禁用</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="button.js"></script>
+  <script>
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+    });
+
+    // 按钮加载状态演示（自动切换）
+    const loadingButtons = document.querySelectorAll('.btn-loading');
+    loadingButtons.forEach(btn => {
+      // 点击后3秒后停止加载
+      btn.addEventListener('click', function() {
+        // 这里只是演示，实际使用时由业务逻辑控制
+        console.log('按钮进入加载状态');
+      });
+    });
+  </script>
+</body>
+</html>

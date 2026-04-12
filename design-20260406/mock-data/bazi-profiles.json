@@ -1,0 +1,685 @@
+{
+  "profiles": [
+    {
+      "id": "profile_001",
+      "name": "用户_坎卦",
+      "gender": "male",
+      "birthDate": "1990-05-15T14:30:00",
+      "birthYear": 1990,
+      "birthMonth": 5,
+      "birthDay": 15,
+      "birthHour": 14,
+      "birthMinute": 30,
+      "bazi": {
+        "yearPillar": {
+          "stem": "庚",
+          "branch": "午",
+          "nayin": "路旁土"
+        },
+        "monthPillar": {
+          "stem": "辛",
+          "branch": "巳",
+          "nayin": "白蜡金"
+        },
+        "dayPillar": {
+          "stem": "甲",
+          "branch": "寅",
+          "nayin": "大溪水"
+        },
+        "hourPillar": {
+          "stem": "壬",
+          "branch": "申",
+          "nayin": "剑锋金"
+        }
+      },
+      "dayMaster": {
+        "element": "wood",
+        "stem": "甲",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 1,
+        "name": "一白坎卦",
+        "gua": "kan",
+        "element": "water",
+        "position": "east",
+        "colorName": "白",
+        "hsl": {
+          "hue": 210,
+          "saturation": "60%",
+          "lightness": "65%"
+        },
+        "direction": "北"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 25,
+          "isDayMaster": true
+        },
+        "fire": {
+          "percentage": 15
+        },
+        "earth": {
+          "percentage": 30
+        },
+        "metal": {
+          "percentage": 20
+        },
+        "water": {
+          "percentage": 10
+        }
+      },
+      "isDefault": true,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为庚午年、辛巳月、甲寅日、壬申时。日主甲木生于巳月，火旺之时。\n\n## 五行分析\n- 木：25%（日主）\n- 火：15%\n- 土：30%（最强）\n- 金：20%\n- 水：10%\n\n## 命卦解析\n一白坎卦，属水，方位北方。坎卦象征险陷，也象征智慧与流动。\n\n## 性格特点\n甲木日主，性格正直向上，有生长不息之意。生于巳月，火气较旺，为人热情开朗但有时略显急躁。",
+      "matchStatus": "HAS_RESULTS",
+      "matchResults": [
+        {
+          "id": "match_001",
+          "name": "推荐对象1",
+          "reason": "## 匹配理由\n五行相生，木火相生，性格互补。对方命卦为离卦，与您的坎卦形成水火既济之象。"
+        }
+      ]
+    },
+    {
+      "id": "profile_002",
+      "name": "用户_坤卦",
+      "gender": "female",
+      "birthDate": "1992-08-22T10:15:00",
+      "birthYear": 1992,
+      "birthMonth": 8,
+      "birthDay": 22,
+      "birthHour": 10,
+      "birthMinute": 15,
+      "bazi": {
+        "yearPillar": {
+          "stem": "壬",
+          "branch": "申",
+          "nayin": "剑锋金"
+        },
+        "monthPillar": {
+          "stem": "戊",
+          "branch": "申",
+          "nayin": "大驿土"
+        },
+        "dayPillar": {
+          "stem": "丙",
+          "branch": "辰",
+          "nayin": "沙中土"
+        },
+        "hourPillar": {
+          "stem": "甲",
+          "branch": "午",
+          "nayin": "砂中金"
+        }
+      },
+      "dayMaster": {
+        "element": "fire",
+        "stem": "丙",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 2,
+        "name": "二黑坤卦",
+        "gua": "kun",
+        "element": "earth",
+        "position": "southwest",
+        "colorName": "黑",
+        "hsl": {
+          "hue": 45,
+          "saturation": "70%",
+          "lightness": "60%"
+        },
+        "direction": "西南"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 10
+        },
+        "fire": {
+          "percentage": 28,
+          "isDayMaster": true
+        },
+        "earth": {
+          "percentage": 25
+        },
+        "metal": {
+          "percentage": 22
+        },
+        "water": {
+          "percentage": 15
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为壬申年、戊申月、丙辰日、甲午时。日主丙火生于申月，金旺之时。\n\n## 五行分析\n- 木：10%\n- 火：28%（日主）\n- 土：25%\n- 金：22%（最强）\n- 水：15%\n\n## 命卦解析\n二黑坤卦，属土，方位西南。坤卦象征大地，包容万物，具有母性特质。",
+      "matchStatus": "HAS_RESULTS",
+      "matchResults": []
+    },
+    {
+      "id": "profile_003",
+      "name": "用户_震卦",
+      "gender": "male",
+      "birthDate": "1988-03-10T08:45:00",
+      "birthYear": 1988,
+      "birthMonth": 3,
+      "birthDay": 10,
+      "birthHour": 8,
+      "birthMinute": 45,
+      "bazi": {
+        "yearPillar": {
+          "stem": "戊",
+          "branch": "辰",
+          "nayin": "大林木"
+        },
+        "monthPillar": {
+          "stem": "乙",
+          "branch": "卯",
+          "nayin": "城头土"
+        },
+        "dayPillar": {
+          "stem": "庚",
+          "branch": "申",
+          "nayin": "石榴木"
+        },
+        "hourPillar": {
+          "stem": "戊",
+          "branch": "寅",
+          "nayin": "金箔金"
+        }
+      },
+      "dayMaster": {
+        "element": "metal",
+        "stem": "庚",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 3,
+        "name": "三碧震卦",
+        "gua": "zhen",
+        "element": "wood",
+        "position": "east",
+        "colorName": "碧",
+        "hsl": {
+          "hue": 170,
+          "saturation": "50%",
+          "lightness": "55%"
+        },
+        "direction": "东"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 20
+        },
+        "fire": {
+          "percentage": 12
+        },
+        "earth": {
+          "percentage": 28
+        },
+        "metal": {
+          "percentage": 25,
+          "isDayMaster": true
+        },
+        "water": {
+          "percentage": 15
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为戊辰年、乙卯月、庚申日、戊寅时。日主庚金生于卯月，木旺之时。",
+      "matchStatus": "NOT_STARTED",
+      "matchResults": []
+    },
+    {
+      "id": "profile_004",
+      "name": "用户_巽卦",
+      "gender": "female",
+      "birthDate": "1995-06-18T16:20:00",
+      "birthYear": 1995,
+      "birthMonth": 6,
+      "birthDay": 18,
+      "birthHour": 16,
+      "birthMinute": 20,
+      "bazi": {
+        "yearPillar": {
+          "stem": "乙",
+          "branch": "亥",
+          "nayin": "山头火"
+        },
+        "monthPillar": {
+          "stem": "壬",
+          "branch": "午",
+          "nayin": "杨柳木"
+        },
+        "dayPillar": {
+          "stem": "辛",
+          "branch": "巳",
+          "nayin": "白蜡金"
+        },
+        "hourPillar": {
+          "stem": "丙",
+          "branch": "申",
+          "nayin": "山下火"
+        }
+      },
+      "dayMaster": {
+        "element": "metal",
+        "stem": "辛",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 4,
+        "name": "四绿巽卦",
+        "gua": "xun",
+        "element": "wood",
+        "position": "southeast",
+        "colorName": "绿",
+        "hsl": {
+          "hue": 120,
+          "saturation": "50%",
+          "lightness": "55%"
+        },
+        "direction": "东南"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 22
+        },
+        "fire": {
+          "percentage": 18
+        },
+        "earth": {
+          "percentage": 20
+        },
+        "metal": {
+          "percentage": 30,
+          "isDayMaster": true
+        },
+        "water": {
+          "percentage": 10
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "CALCULATING",
+      "analysisResult": "",
+      "matchStatus": "NOT_STARTED",
+      "matchResults": []
+    },
+    {
+      "id": "profile_005",
+      "name": "用户_中宫",
+      "gender": "male",
+      "birthDate": "1987-12-05T20:30:00",
+      "birthYear": 1987,
+      "birthMonth": 12,
+      "birthDay": 5,
+      "birthHour": 20,
+      "birthMinute": 30,
+      "bazi": {
+        "yearPillar": {
+          "stem": "丁",
+          "branch": "卯",
+          "nayin": "炉中火"
+        },
+        "monthPillar": {
+          "stem": "壬",
+          "branch": "子",
+          "nayin": "桑柘木"
+        },
+        "dayPillar": {
+          "stem": "癸",
+          "branch": "酉",
+          "nayin": "剑锋金"
+        },
+        "hourPillar": {
+          "stem": "壬",
+          "branch": "戌",
+          "nayin": "大海水"
+        }
+      },
+      "dayMaster": {
+        "element": "water",
+        "stem": "癸",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 5,
+        "name": "五黄中宫",
+        "gua": "zhonggong",
+        "element": "earth",
+        "position": "center",
+        "colorName": "黄",
+        "hsl": {
+          "hue": 45,
+          "saturation": "70%",
+          "lightness": "60%"
+        },
+        "direction": "中央"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 12
+        },
+        "fire": {
+          "percentage": 20
+        },
+        "earth": {
+          "percentage": 18
+        },
+        "metal": {
+          "percentage": 15
+        },
+        "water": {
+          "percentage": 35,
+          "isDayMaster": true
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为丁卯年、壬子月、癸酉日、壬戌时。日主癸水生于子月，水旺之时。",
+      "matchStatus": "HAS_RESULTS",
+      "matchResults": []
+    },
+    {
+      "id": "profile_006",
+      "name": "用户_乾卦",
+      "gender": "female",
+      "birthDate": "1993-09-28T12:00:00",
+      "birthYear": 1993,
+      "birthMonth": 9,
+      "birthDay": 28,
+      "birthHour": 12,
+      "birthMinute": 0,
+      "bazi": {
+        "yearPillar": {
+          "stem": "癸",
+          "branch": "酉",
+          "nayin": "剑锋金"
+        },
+        "monthPillar": {
+          "stem": "辛",
+          "branch": "酉",
+          "nayin": "石榴木"
+        },
+        "dayPillar": {
+          "stem": "己",
+          "branch": "丑",
+          "nayin": "霹雳火"
+        },
+        "hourPillar": {
+          "stem": "庚",
+          "branch": "午",
+          "nayin": "路旁土"
+        }
+      },
+      "dayMaster": {
+        "element": "earth",
+        "stem": "己",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 6,
+        "name": "六白乾卦",
+        "gua": "qian",
+        "element": "metal",
+        "position": "northwest",
+        "colorName": "白",
+        "hsl": {
+          "hue": 220,
+          "saturation": "10%",
+          "lightness": "92%"
+        },
+        "direction": "西北"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 8
+        },
+        "fire": {
+          "percentage": 15
+        },
+        "earth": {
+          "percentage": 32,
+          "isDayMaster": true
+        },
+        "metal": {
+          "percentage": 30
+        },
+        "water": {
+          "percentage": 15
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为癸酉年、辛酉月、己丑日、庚午时。日主己土生于酉月，金旺之时。",
+      "matchStatus": "HAS_RESULTS",
+      "matchResults": []
+    },
+    {
+      "id": "profile_007",
+      "name": "用户_兑卦",
+      "gender": "male",
+      "birthDate": "1991-11-12T18:50:00",
+      "birthYear": 1991,
+      "birthMonth": 11,
+      "birthDay": 12,
+      "birthHour": 18,
+      "birthMinute": 50,
+      "bazi": {
+        "yearPillar": {
+          "stem": "辛",
+          "branch": "未",
+          "nayin": "路旁土"
+        },
+        "monthPillar": {
+          "stem": "己",
+          "branch": "亥",
+          "nayin": "平地木"
+        },
+        "dayPillar": {
+          "stem": "丁",
+          "branch": "卯",
+          "nayin": "炉中火"
+        },
+        "hourPillar": {
+          "stem": "己",
+          "branch": "酉",
+          "nayin": "大驿土"
+        }
+      },
+      "dayMaster": {
+        "element": "fire",
+        "stem": "丁",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 7,
+        "name": "七赤兑卦",
+        "gua": "dui",
+        "element": "metal",
+        "position": "west",
+        "colorName": "赤",
+        "hsl": {
+          "hue": 0,
+          "saturation": "60%",
+          "lightness": "65%"
+        },
+        "direction": "西"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 15
+        },
+        "fire": {
+          "percentage": 25,
+          "isDayMaster": true
+        },
+        "earth": {
+          "percentage": 30
+        },
+        "metal": {
+          "percentage": 20
+        },
+        "water": {
+          "percentage": 10
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "NOT_STARTED",
+      "analysisResult": "",
+      "matchStatus": "NOT_STARTED",
+      "matchResults": []
+    },
+    {
+      "id": "profile_008",
+      "name": "用户_艮卦",
+      "gender": "female",
+      "birthDate": "1994-04-08T07:30:00",
+      "birthYear": 1994,
+      "birthMonth": 4,
+      "birthDay": 8,
+      "birthHour": 7,
+      "birthMinute": 30,
+      "bazi": {
+        "yearPillar": {
+          "stem": "甲",
+          "branch": "戌",
+          "nayin": "山头火"
+        },
+        "monthPillar": {
+          "stem": "丁",
+          "branch": "卯",
+          "nayin": "炉中火"
+        },
+        "dayPillar": {
+          "stem": "乙",
+          "branch": "未",
+          "nayin": "砂中金"
+        },
+        "hourPillar": {
+          "stem": "己",
+          "branch": "卯",
+          "nayin": "城头土"
+        }
+      },
+      "dayMaster": {
+        "element": "wood",
+        "stem": "乙",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 8,
+        "name": "八白艮卦",
+        "gua": "gen",
+        "element": "earth",
+        "position": "northeast",
+        "colorName": "白",
+        "hsl": {
+          "hue": 45,
+          "saturation": "65%",
+          "lightness": "65%"
+        },
+        "direction": "东北"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 30,
+          "isDayMaster": true
+        },
+        "fire": {
+          "percentage": 18
+        },
+        "earth": {
+          "percentage": 22
+        },
+        "metal": {
+          "percentage": 15
+        },
+        "water": {
+          "percentage": 15
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为甲戌年、丁卯月、乙未日、己卯时。日主乙木生于卯月，木旺之时。",
+      "matchStatus": "CALCULATING",
+      "matchResults": []
+    },
+    {
+      "id": "profile_009",
+      "name": "用户_离卦",
+      "gender": "male",
+      "birthDate": "1989-07-25T15:40:00",
+      "birthYear": 1989,
+      "birthMonth": 7,
+      "birthDay": 25,
+      "birthHour": 15,
+      "birthMinute": 40,
+      "bazi": {
+        "yearPillar": {
+          "stem": "己",
+          "branch": "巳",
+          "nayin": "大林木"
+        },
+        "monthPillar": {
+          "stem": "辛",
+          "branch": "未",
+          "nayin": "路旁土"
+        },
+        "dayPillar": {
+          "stem": "丙",
+          "branch": "子",
+          "nayin": "洞下水"
+        },
+        "hourPillar": {
+          "stem": "丙",
+          "branch": "申",
+          "nayin": "山下火"
+        }
+      },
+      "dayMaster": {
+        "element": "fire",
+        "stem": "丙",
+        "isDayMaster": true
+      },
+      "mingua": {
+        "number": 9,
+        "name": "九紫离卦",
+        "gua": "li",
+        "element": "fire",
+        "position": "south",
+        "colorName": "紫",
+        "hsl": {
+          "hue": 275,
+          "saturation": "60%",
+          "lightness": "65%"
+        },
+        "direction": "南"
+      },
+      "elementProportion": {
+        "wood": {
+          "percentage": 12
+        },
+        "fire": {
+          "percentage": 35,
+          "isDayMaster": true
+        },
+        "earth": {
+          "percentage": 20
+        },
+        "metal": {
+          "percentage": 18
+        },
+        "water": {
+          "percentage": 15
+        }
+      },
+      "isDefault": false,
+      "analysisStatus": "COMPLETED",
+      "analysisResult": "# 八字解析\n\n## 命盘概述\n您的八字为己巳年、辛未月、丙子日、丙申时。日主丙火生于未月，火土两旺。",
+      "matchStatus": "HAS_RESULTS",
+      "matchResults": []
+    }
+  ]
+}

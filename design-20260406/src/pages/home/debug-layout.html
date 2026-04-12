@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>布局诊断</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      padding: 20px;
+    }
+
+    .debug-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      color: #0f0;
+      padding: 15px;
+      z-index: 9999;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .debug-item {
+      margin: 5px 0;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .debug-item.error {
+      background: rgba(239, 68, 68, 0.3);
+      color: #ff6b6b;
+    }
+
+    .debug-item.success {
+      background: rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+    }
+
+    .test-container {
+      margin-top: 220px;
+      padding: 20px;
+    }
+
+    .test-box {
+      border: 2px solid #60a5fa;
+      background: rgba(96, 165, 250, 0.1);
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+
+    .test-box h3 {
+      color: #60a5fa;
+      margin-bottom: 10px;
+    }
+
+    .wuxing-placeholder {
+      width: 100%;
+      max-width: 500px;
+      height: 500px;
+      background: rgba(134, 239, 172, 0.2);
+      border: 2px dashed #86efac;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+
+    .card-placeholder {
+      width: 100%;
+      max-width: 450px;
+      min-height: 300px;
+      background: rgba(248, 113, 113, 0.2);
+      border: 2px dashed #f87171;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      border-radius: 8px;
+    }
+
+    .layout-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .layout-horizontal {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 1024px) {
+      .layout-responsive {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-panel" id="debugPanel">
+    <div class="debug-item">正在检测...</div>
+  </div>
+
+  <div class="test-container">
+    <h2 style="color: white; margin-bottom: 20px;">布局测试页面</h2>
+
+    <div class="test-box">
+      <h3>测试1: 垂直布局（移动端）</h3>
+      <div class="layout-vertical">
+        <div class="wuxing-placeholder">五行图 (500x500)</div>
+        <div class="card-placeholder">摘要卡片 (450x300)</div>
+      </div>
+    </div>
+
+    <div class="test-box">
+      <h3>测试2: 水平布局（PC端）</h3>
+      <div class="layout-horizontal">
+        <div class="wuxing-placeholder">五行图 (500x500)</div>
+        <div class="card-placeholder">摘要卡片 (450x300)</div>
+      </div>
+    </div>
+
+    <div class="test-box">
+      <h3>测试3: 响应式布局</h3>
+      <div class="layout-responsive layout-vertical">
+        <div class="wuxing-placeholder">五行图 (500x500)</div>
+        <div class="card-placeholder">摘要卡片 (450x300)</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const debugPanel = document.getElementById('debugPanel');
+
+    function addDebug(message, isError = false, isSuccess = false) {
+      const div = document.createElement('div');
+      div.className = 'debug-item';
+      if (isError) div.classList.add('error');
+      if (isSuccess) div.classList.add('success');
+      div.textContent = message;
+      debugPanel.appendChild(div);
+      debugPanel.scrollTop = debugPanel.scrollHeight;
+      console.log(message);
+    }
+
+    // 检测屏幕信息
+    addDebug(`屏幕尺寸: ${window.screen.width}x${window.screen.height}`);
+    addDebug(`窗口尺寸: ${window.innerWidth}x${window.innerHeight}`);
+    addDebug(`用户代理: ${navigator.userAgent}`);
+
+    // 检测设备类型
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    addDebug(`设备类型: ${isMobile ? '移动端' : 'PC端'}`);
+
+    // 检测触摸支持
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    addDebug(`触摸支持: ${hasTouch ? '是' : '否'}`);
+
+    // 检测CSS变量支持
+    const supportsCssVars = CSS.supports('--test', '0');
+    addDebug(supportsCssVars ? '✅ CSS变量支持' : '❌ CSS变量不支持', !supportsCssVars, supportsCssVars);
+
+    // 检测Flexbox支持
+    const supportsFlex = CSS.supports('display', 'flex');
+    addDebug(supportsFlex ? '✅ Flexbox支持' : '❌ Flexbox不支持', !supportsFlex, supportsFlex);
+
+    // 检测viewport
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+      addDebug(`✅ Viewport设置: ${viewport.content}`, false, true);
+    } else {
+      addDebug('❌ 缺少viewport设置', true);
+    }
+
+    // 监听窗口大小变化
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        addDebug(`窗口大小改变: ${window.innerWidth}x${window.innerHeight}`);
+      }, 250);
+    });
+
+    // 页面加载完成
+    window.addEventListener('load', () => {
+      addDebug('✅ 页面加载完成', false, true);
+    });
+
+    // 检测所有test-box的尺寸
+    setTimeout(() => {
+      const testBoxes = document.querySelectorAll('.test-box');
+      testBoxes.forEach((box, index) => {
+        const rect = box.getBoundingClientRect();
+        addDebug(`测试区域${index + 1}尺寸: ${Math.round(rect.width)}x${Math.round(rect.height)}`);
+      });
+    }, 100);
+
+    addDebug('✅ 诊断脚本初始化完成', false, true);
+  </script>
+</body>
+</html>

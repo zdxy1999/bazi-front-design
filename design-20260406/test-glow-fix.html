@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试辉光修复</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="components/card/card.css?v=2">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .card-wrapper {
+      width: 320px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .debug-info {
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>辉光修复测试</h1>
+
+  <div class="card-wrapper">
+    <div class="glass-card water-card static-glow"
+         data-card
+         data-star="1"
+         style="--theme-hue: 210; --theme-saturation: 60%; --theme-lightness: 65%;">
+      <div class="card-edge-glow"></div>
+      <div class="card-glow"></div>
+      <div class="glass-card-content">
+        <div class="glass-card-logo glass-card-logo-center">
+          <div class="mingua-icon" style="width: 48px; height: 48px; color: hsla(210, 60%, 65%, 1);">
+            <svg viewBox="0 0 48 48">
+              <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☵</text>
+            </svg>
+          </div>
+        </div>
+        <div class="glass-card-body">
+          <h3 class="profile-name">坎卦（水）- 蓝色</h3>
+          <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+            应该有明显的蓝色边缘辉光和细边框
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="debug-info">
+    <strong>预期效果：</strong><br>
+    1. 卡片周围有柔和的蓝色辉光<br>
+    2. 边框很细（1px），不笨重<br>
+    3. 背景有从左上到右下的渐变光晕<br>
+    <br>
+    <strong>如果没有看到效果：</strong><br>
+    - 检查浏览器控制台是否有CSS加载错误<br>
+    - 确认card.css?v=2已加载
+  </div>
+
+  <script src="components/card/card.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最终测试 - 模拟home.js</title>
+  
+  <!-- 加载真实的样式文件 -->
+  <link rel="stylesheet" href="../../../style/tokens.css">
+  <link rel="stylesheet" href="../../../style/common.css">
+  <link rel="stylesheet" href="../../../components/card/card.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #1a1a2e;
+      font-family: Arial, sans-serif;
+    }
+
+    h2 {
+      color: white;
+      text-align: center;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .debug {
+      color: #0f0;
+      font-family: monospace;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>最终测试 - 使用JSON格式的HSL值</h2>
+
+  <div class="card-container" id="cardContainer"></div>
+
+  <div class="debug" id="debug"></div>
+
+  <script>
+    // 模拟JSON数据
+    const profile = {
+      name: "九紫离卦",
+      gua: "li",
+      hsl: {
+        hue: 275,
+        saturation: "80%",
+        lightness: "60%"
+      }
+    };
+
+    // 模拟home.js的方式
+    const { hue, saturation, lightness } = profile.hsl;
+    
+    const cssVars = `--theme-hue: ${hue}; --theme-saturation: ${saturation}; --theme-lightness: ${lightness};`;
+    
+    console.log('🎨 HSL值:', { hue, saturation, lightness });
+    console.log('🎨 CSS变量字符串:', cssVars);
+    
+    // 创建卡片HTML（模拟home.js的方式）
+    const cardHTML = `
+      <div class="glass-card static-glow"
+           data-card
+           style="${cssVars}">
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <div class="glass-card-logo glass-card-logo-center">
+            <div class="mingua-icon">
+              <svg viewBox="0 0 48 48">
+                <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☲</text>
+              </svg>
+            </div>
+          </div>
+          <div class="glass-card-body">
+            <h3 style="color: white; margin: 0 0 10px 0;">${profile.name}</h3>
+            <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 14px;">
+              hue: ${hue}<br>
+              saturation: ${saturation}<br>
+              lightness: ${lightness}
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('cardContainer').innerHTML = cardHTML;
+    
+    // 检查CSS变量
+    setTimeout(() => {
+      const card = document.querySelector('.glass-card');
+      const style = card.getAttribute('style');
+      const computed = window.getComputedStyle(card);
+      const h = computed.getPropertyValue('--theme-hue');
+      const s = computed.getPropertyValue('--theme-saturation');
+      const l = computed.getPropertyValue('--theme-lightness');
+      
+      document.getElementById('debug').innerHTML = `
+        <strong>检查结果：</strong><br>
+        inline style: ${style}<br>
+        <br>
+        计算后的CSS变量：<br>
+        --theme-hue: "${h}"<br>
+        --theme-saturation: "${s}"<br>
+        --theme-lightness: "${l}"<br>
+        <br>
+        <strong>如果看不到颜色，请截图上面的信息</strong>
+      `;
+      
+      console.log('计算后的CSS变量:', { h, s, l });
+    }, 100);
+  </script>
+</body>
+</html>

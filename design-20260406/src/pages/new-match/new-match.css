@@ -1,0 +1,96 @@
+/**
+ * 新建姻缘匹配页面样式
+ */
+
+/* 主容器 */
+.new-match-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 表单卡片 */
+.form-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* 输入框标签 */
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 文本域 */
+.textarea-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: inherit;
+}
+
+:root[data-theme="light"] .textarea-input {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.textarea-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.textarea-input:focus {
+  outline: none;
+  border-color: var(--fire-primary);
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+}
+
+/* 卡片底部按钮 */
+.form-card .glass-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* 响应式 */
+@media (max-width: 480px) {
+  .new-match-container {
+    padding: 10px;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+
+  .form-card .glass-card-footer {
+    flex-direction: column-reverse;
+  }
+
+  .form-card .glass-card-footer .button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card组件 - 液态玻璃质感</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="card.css">
+</head>
+<body>
+  <!-- 背景组件 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 木 - 绿色 -->
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 火 - 红色 -->
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 土 - 黄色 -->
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 金 - 白色/灰色 -->
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 水 - 蓝色 -->
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 混合渐变 -->
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)">
+        <animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+
+    <!-- 边缘发光效果 -->
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+
+    <!-- 毛玻璃垫层 -->
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="glass rounded-2xl p-6 mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold">Card组件 - 液态玻璃质感</h1>
+        <button id="themeToggle2" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20">
+          切换亮/暗主题
+        </button>
+      </div>
+      <p class="text-secondary mb-2">
+        结构化卡片组件，支持 Logo/标题/主体/页脚 四个部分
+      </p>
+      <p class="text-sm text-tertiary">
+        • Logo - 可选 | • 标题 - 可选 | • 主体 - 必须 | • 页脚 - 可选
+      </p>
+    </div>
+
+    <!-- 组件结构说明 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">组件结构</h2>
+      <div class="glass rounded-xl p-6 mb-4" style="background: rgba(0,0,0,0.2);">
+        <pre class="text-sm" style="color: #a3a3a3; overflow-x: auto;"><code>&lt;div class="glass-card [color-card]" data-card&gt;
+  &lt;div class="card-edge-glow"&gt;&lt;/div&gt;
+  &lt;div class="card-glow"&gt;&lt;/div&gt;
+  &lt;div class="glass-card-content"&gt;
+    &lt;!-- 可选: Logo --&gt;
+    &lt;div class="glass-card-logo [size]"&gt;...&lt;/div&gt;
+
+    &lt;!-- 可选: 标题 --&gt;
+    &lt;div class="glass-card-header"&gt;
+      &lt;h3 class="glass-card-title"&gt;标题&lt;/h3&gt;
+      &lt;p class="glass-card-subtitle"&gt;副标题&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 必须: 主体 --&gt;
+    &lt;div class="glass-card-body"&gt;
+      &lt;p class="glass-card-text"&gt;内容...&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 可选: 页脚 --&gt;
+    &lt;div class="glass-card-footer"&gt;
+      &lt;div class="glass-card-footer-start"&gt;...&lt;/div&gt;
+      &lt;div class="glass-card-footer-end"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- 基础示例：只有主体 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">基础示例：只有主体</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card water-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                只有主体内容的最简卡片。适合纯文本展示。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card wood-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                支持多行文本，自动适应内容高度。
+              </p>
+              <p class="glass-card-text-small mt-3">
+                这是第二段小字。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带 Logo 的示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">带 Logo 的卡片</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 小 Logo -->
+        <div class="glass-card fire-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-logo glass-card-logo-small">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color: #f87171;">
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                小号 Logo (32x32)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 默认 Logo -->
+        <div class="glass-card earth-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-logo">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color: #fde047;">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+              </svg>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                默认 Logo (48x48)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 大 Logo -->
+        <div class="glass-card metal-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-logo glass-card-logo-large">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color: #fafafa;">
+                <polygon points="12,2 22,20 2,20"/>
+              </svg>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                大号 Logo (64x64)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带标题的示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">带标题的卡片</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card wood-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">木</h3>
+              <p class="glass-card-subtitle">五行之木</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                木代表生长、升发、条达、舒畅。在八字中，木主仁，代表仁慈、善良、正直。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card fire-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">火</h3>
+              <p class="glass-card-subtitle">五行之火</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                火代表温热、升腾、明亮。在八字中，火主礼，代表礼貌、热情、向上。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带页脚的示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">带页脚的卡片</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card earth-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">土</h3>
+              <p class="glass-card-subtitle">五行之土</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                土代表承载、生化、受纳。在八字中，土主信，代表诚信、稳重、包容。
+              </p>
+            </div>
+            <div class="glass-card-footer">
+              <div class="glass-card-footer-start">
+                <span class="glass-card-footer-text">页脚信息</span>
+              </div>
+              <div class="glass-card-footer-end">
+                <button class="glass-card-footer-button">操作</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card metal-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">金</h3>
+              <p class="glass-card-subtitle">五行之金</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">
+                金代表清洁、收敛、坚固。在八字中，金主义，代表正义、果断、坚毅。
+              </p>
+            </div>
+            <div class="glass-card-footer">
+              <div class="glass-card-footer-start">
+                <span class="glass-card-footer-text">更新于 2026-04-07</span>
+              </div>
+              <div class="glass-card-footer-end">
+                <button class="glass-card-footer-button">详情</button>
+                <button class="glass-card-footer-button">删除</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 完整示例：包含所有部分 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">完整示例：包含所有部分</h2>
+      <div class="glass-card water-card" data-card>
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <!-- Logo -->
+          <div class="glass-card-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color: #60a5fa;">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- 标题 -->
+          <div class="glass-card-header">
+            <h3 class="glass-card-title">水</h3>
+            <p class="glass-card-subtitle">五行之水</p>
+          </div>
+
+          <!-- 主体 -->
+          <div class="glass-card-body">
+            <p class="glass-card-text">
+              水代表寒凉、滋润、向下。在八字中，水主智，代表智慧、灵活、深沉。
+            </p>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <p class="glass-card-text-muted text-sm mb-1">特点</p>
+                <p class="glass-card-text-small">智慧、灵活</p>
+              </div>
+              <div>
+                <p class="glass-card-text-muted text-sm mb-1">方位</p>
+                <p class="glass-card-text-small">北方</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 页脚 -->
+          <div class="glass-card-footer">
+            <div class="glass-card-footer-start">
+              <span class="glass-card-footer-text">五行占比</span>
+            </div>
+            <div class="glass-card-footer-end">
+              <div class="flex gap-2">
+                <span class="text-xs px-2 py-1 rounded" style="background: rgba(134, 239, 172, 0.2); color: #86efac;">木 30%</span>
+                <span class="text-xs px-2 py-1 rounded" style="background: rgba(248, 113, 113, 0.2); color: #f87171;">火 20%</span>
+                <span class="text-xs px-2 py-1 rounded" style="background: rgba(96, 165, 250, 0.2); color: #60a5fa;">水 15%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 五行颜色变体 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">五行颜色变体</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card wood-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">木</h3>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">绿色主题，生机勃勃</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card fire-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">火</h3>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">红色主题，热情洋溢</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card earth-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">土</h3>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">黄色主题，稳重可靠</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card metal-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">金</h3>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">白色主题，坚毅果敢</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card water-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="glass-card-title">水</h3>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">蓝色主题，智慧深沉</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 页眉页脚对齐示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">页眉页脚对齐方式</h2>
+
+      <!-- 标题居中 -->
+      <div class="mb-4">
+        <h3 class="text-lg font-medium mb-3">标题居中</h3>
+        <div class="glass-card wood-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header glass-card-header-center">
+              <h3 class="glass-card-title">居中标题</h3>
+              <p class="glass-card-subtitle">副标题也居中</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">标题和副标题都居中对齐</p>
+            </div>
+            <div class="glass-card-footer">
+              <div class="glass-card-footer-start">
+                <span class="glass-card-footer-text">左下</span>
+              </div>
+              <div class="glass-card-footer-end">
+                <button class="glass-card-footer-button">右下</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 标题居左 -->
+      <div class="mb-4">
+        <h3 class="text-lg font-medium mb-3">标题居左</h3>
+        <div class="glass-card fire-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header glass-card-header-left">
+              <h3 class="glass-card-title">居左标题</h3>
+              <p class="glass-card-subtitle">副标题也居左</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">标题和副标题都左对齐</p>
+            </div>
+            <div class="glass-card-footer">
+              <div class="glass-card-footer-start">
+                <span class="glass-card-footer-text">左下</span>
+              </div>
+              <div class="glass-card-footer-end">
+                <button class="glass-card-footer-button">右下</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 标题居右 -->
+      <div class="mb-4">
+        <h3 class="text-lg font-medium mb-3">标题居右</h3>
+        <div class="glass-card water-card" data-card>
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header glass-card-header-right">
+              <h3 class="glass-card-title">居右标题</h3>
+              <p class="glass-card-subtitle">副标题也居右</p>
+            </div>
+            <div class="glass-card-body">
+              <p class="glass-card-text">标题和副标题都右对齐</p>
+            </div>
+            <div class="glass-card-footer">
+              <div class="glass-card-footer-start">
+                <span class="glass-card-footer-text">左下</span>
+              </div>
+              <div class="glass-card-footer-end">
+                <button class="glass-card-footer-button">右下</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 完整示例：四个区域 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">完整示例：四个区域</h2>
+      <div class="glass-card earth-card" data-card>
+        <div class="card-edge-glow"></div>
+        <div class="card-glow"></div>
+        <div class="glass-card-content">
+          <!-- Logo -->
+          <div class="glass-card-logo glass-card-logo-center">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="color: #fde047;">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </div>
+
+          <!-- 标题 -->
+          <div class="glass-card-header glass-card-header-center">
+            <h3 class="glass-card-title">完整卡片示例</h3>
+            <p class="glass-card-subtitle">包含所有区域</p>
+          </div>
+
+          <!-- 主体 -->
+          <div class="glass-card-body">
+            <p class="glass-card-text">
+              这个卡片展示了所有四个区域的使用：
+            </p>
+            <ul class="glass-card-list mt-3">
+              <li>左上页眉：日期时间</li>
+              <li>右上页眉：状态标签</li>
+              <li>左下页脚：作者信息</li>
+              <li>右下页脚：操作按钮</li>
+            </ul>
+          </div>
+
+          <!-- 页眉 -->
+          <div class="glass-card-header-top">
+            <div class="glass-card-header-left">
+              <span class="glass-card-footer-text">2026-04-07</span>
+            </div>
+            <div class="glass-card-header-right">
+              <span class="glass-card-tag" style="background: rgba(134, 239, 172, 0.2); color: #86efac;">活跃</span>
+            </div>
+          </div>
+
+          <!-- 页脚 -->
+          <div class="glass-card-footer">
+            <div class="glass-card-footer-start">
+              <span class="glass-card-footer-text">作者：张三</span>
+            </div>
+            <div class="glass-card-footer-end">
+              <button class="glass-card-footer-button">编辑</button>
+              <button class="glass-card-footer-button">删除</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 组件代码结构 -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">组件代码结构</h2>
+      <div class="glass rounded-xl p-6" style="background: rgba(0,0,0,0.2);">
+        <pre class="text-sm" style="color: #a3a3a3; overflow-x: auto;"><code>&lt;div class="glass-card [color-card]" data-card&gt;
+  &lt;div class="card-edge-glow"&gt;&lt;/div&gt;
+  &lt;div class="card-glow"&gt;&lt;/div&gt;
+  &lt;div class="glass-card-content"&gt;
+    &lt;!-- 可选: Logo (支持对齐) --&gt;
+    &lt;div class="glass-card-logo [align]"&gt;...&lt;/div&gt;
+
+    &lt;!-- 可选: 标题 (支持对齐) --&gt;
+    &lt;div class="glass-card-header [align]"&gt;
+      &lt;h3 class="glass-card-title"&gt;标题&lt;/h3&gt;
+      &lt;p class="glass-card-subtitle"&gt;副标题&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 必须: 主体 --&gt;
+    &lt;div class="glass-card-body"&gt;
+      &lt;p class="glass-card-text"&gt;内容...&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 可选: 页眉 (顶部左右区域) --&gt;
+    &lt;div class="glass-card-header-top"&gt;
+      &lt;div class="glass-card-header-left"&gt;左上页眉&lt;/div&gt;
+      &lt;div class="glass-card-header-right"&gt;右上页眉&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 可选: 页脚 (底部左右区域) --&gt;
+    &lt;div class="glass-card-footer"&gt;
+      &lt;div class="glass-card-footer-start"&gt;左下页脚&lt;/div&gt;
+      &lt;div class="glass-card-footer-end"&gt;右下页脚&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 对齐方式 class --&gt;
+&lt;!-- Logo: glass-card-logo-left / glass-card-logo-center / glass-card-logo-right --&gt;
+&lt;!-- 标题: glass-card-header-left / glass-card-header-center / glass-card-header-right --&gt;</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script>
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle2 = document.getElementById('themeToggle2');
+    const html = document.documentElement;
+
+    function toggleTheme() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      console.log('已切换到', newTheme === 'dark' ? '暗色主题' : '亮色主题');
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    if (themeToggle2) {
+      themeToggle2.addEventListener('click', toggleTheme);
+    }
+  </script>
+
+  <script src="card.js"></script>
+</body>
+</html>

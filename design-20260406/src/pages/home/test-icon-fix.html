@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试修复</title>
+  <link rel="stylesheet" href="../../../style/tokens.css">
+  <link rel="stylesheet" href="../../../style/common.css">
+  <link rel="stylesheet" href="../../../components/card/card.css">
+  <style>
+    body {
+      min-height: 100vh;
+      padding: 40px;
+      background: #1a1a2e;
+    }
+
+    .test-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .test-card {
+      margin-bottom: 40px;
+      --theme-hue: 0;
+      --theme-saturation: 70;
+      --theme-lightness: 55;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1 style="color: white; text-align: center; margin-bottom: 40px;">测试命卦图标颜色</h1>
+
+    <!-- 测试卡片 -->
+    <div class="glass-card test-card static-glow" data-card>
+      <div class="card-edge-glow"></div>
+      <div class="card-glow"></div>
+      <div class="glass-card-content">
+        <div class="glass-card-logo glass-card-logo-center">
+          <div class="mingua-icon">
+            <svg viewBox="0 0 48 48">
+              <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☲</text>
+            </svg>
+          </div>
+        </div>
+        <div class="glass-card-body">
+          <h3 class="profile-name">测试用户</h3>
+          <p class="profile-birth">1990年01月01日 12:00</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 测试中宫图标 -->
+    <div class="glass-card test-card static-glow" data-card style="--theme-hue: 45; --theme-saturation: 90; --theme-lightness: 55;">
+      <div class="card-edge-glow"></div>
+      <div class="card-glow"></div>
+      <div class="glass-card-content">
+        <div class="glass-card-logo glass-card-logo-center">
+          <div class="mingua-icon">
+            <svg viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="24" cy="24" r="8" stroke="currentColor" stroke-width="3" fill="none"/>
+            </svg>
+          </div>
+        </div>
+        <div class="glass-card-body">
+          <h3 class="profile-name">中宫用户</h3>
+          <p class="profile-birth">1990年01月01日 12:00</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="color: white; text-align: center; margin-top: 40px;">
+      <p>上面两个卡片应该分别显示：<br>1. 红色的离卦图标 (火)<br>2. 黄色的中宫双圆圈图标 (土)</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题切换测试</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      transition: background-color 0.3s;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 2px solid var(--glass-border);
+      cursor: pointer;
+      z-index: 9999;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .status-dark {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fafafa;
+    }
+
+    .status-light {
+      background: rgba(255, 255, 255, 0.8);
+      color: #171717;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>主题切换测试页面</h1>
+
+    <div class="card">
+      <h2>当前主题状态</h2>
+      <div id="themeStatus" class="status">加载中...</div>
+    </div>
+
+    <div class="card">
+      <h2>五行颜色展示</h2>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <div style="width: 60px; height: 60px; background: var(--wood-primary); border-radius: 8px;"></div>
+        <div style="width: 60px; height: 60px; background: var(--fire-primary); border-radius: 8px;"></div>
+        <div style="width: 60px; height: 60px; background: var(--earth-primary); border-radius: 8px;"></div>
+        <div style="width: 60px; height: 60px; background: var(--metal-primary); border-radius: 8px;"></div>
+        <div style="width: 60px; height: 60px; background: var(--water-primary); border-radius: 8px;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>操作</h2>
+      <button id="toggleBtn" style="padding: 12px 24px; font-size: 16px; cursor: pointer; border-radius: 8px; background: var(--glass-bg); color: var(--text-primary); border: 1px solid var(--glass-border);">
+        切换主题
+      </button>
+      <button id="resetBtn" style="padding: 12px 24px; font-size: 16px; cursor: pointer; border-radius: 8px; background: var(--glass-bg); color: var(--text-primary); border: 1px solid var(--glass-border); margin-left: 10px;">
+        清除localStorage
+      </button>
+    </div>
+  </div>
+
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <script>
+    class ThemeSwitcher {
+      constructor() {
+        this.themeToggle = document.getElementById('themeToggle');
+        this.toggleBtn = document.getElementById('toggleBtn');
+        this.resetBtn = document.getElementById('resetBtn');
+        this.themeStatus = document.getElementById('themeStatus');
+
+        this.init();
+      }
+
+      init() {
+        console.log('ThemeSwitcher初始化');
+
+        // 获取初始主题
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        this.currentTheme = savedTheme || (prefersDark ? 'dark' : 'dark');
+
+        // 设置初始主题
+        this.setTheme(this.currentTheme, !!savedTheme);
+
+        // 绑定事件
+        if (this.themeToggle) {
+          this.themeToggle.addEventListener('click', () => this.toggleTheme());
+          console.log('右上角按钮已绑定');
+        }
+
+        if (this.toggleBtn) {
+          this.toggleBtn.addEventListener('click', () => this.toggleTheme());
+          console.log('页面按钮已绑定');
+        }
+
+        if (this.resetBtn) {
+          this.resetBtn.addEventListener('click', () => {
+            localStorage.removeItem('theme');
+            console.log('localStorage已清除');
+            this.setTheme('dark', false);
+          });
+        }
+
+        this.updateStatus();
+      }
+
+      setTheme(theme, save = true) {
+        console.log('设置主题为:', theme);
+
+        this.currentTheme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+
+        if (save) {
+          localStorage.setItem('theme', theme);
+        }
+
+        this.updateIcon();
+        this.updateStatus();
+      }
+
+      toggleTheme() {
+        const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+        console.log('切换主题:', this.currentTheme, '->', newTheme);
+        this.setTheme(newTheme);
+      }
+
+      updateIcon() {
+        if (!this.themeToggle) return;
+
+        const isDark = this.currentTheme === 'dark';
+
+        const sunIcon = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        `;
+
+        const moonIcon = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        `;
+
+        this.themeToggle.innerHTML = isDark ? sunIcon : moonIcon;
+      }
+
+      updateStatus() {
+        if (!this.themeStatus) return;
+
+        const colors = {
+          dark: {
+            wood: getComputedStyle(document.documentElement).getPropertyValue('--wood-primary').trim(),
+            fire: getComputedStyle(document.documentElement).getPropertyValue('--fire-primary').trim(),
+            earth: getComputedStyle(document.documentElement).getPropertyValue('--earth-primary').trim(),
+            metal: getComputedStyle(document.documentElement).getPropertyValue('--metal-primary').trim(),
+            water: getComputedStyle(document.documentElement).getPropertyValue('--water-primary').trim()
+          }
+        };
+
+        this.themeStatus.className = 'status ' + (this.currentTheme === 'dark' ? 'status-dark' : 'status-light');
+        this.themeStatus.innerHTML = `
+          <strong>当前主题:</strong> ${this.currentTheme}<br>
+          <strong>localStorage:</strong> ${localStorage.getItem('theme') || '无'}<br>
+          <strong>五行颜色:</strong><br>
+          木: ${colors.dark.wood}<br>
+          火: ${colors.dark.fire}<br>
+          土: ${colors.dark.earth}<br>
+          金: ${colors.dark.metal}<br>
+          水: ${colors.dark.water}
+        `;
+      }
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM加载完成，初始化ThemeSwitcher');
+      new ThemeSwitcher();
+    });
+  </script>
+</body>
+</html>

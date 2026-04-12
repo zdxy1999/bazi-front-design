@@ -1,0 +1,286 @@
+/**
+ * Card组件样式 - 参考glow-glass-design的简洁设计
+ */
+
+/* ============================================
+   全局变量
+   ============================================ */
+:root {
+  /* 默认主题色 (可被五行颜色覆盖) */
+  --theme-hue: 210;
+  --theme-saturation: 60%;
+  --theme-lightness: 65%;
+}
+
+/* ============================================
+   Card基础容器 - 简洁的玻璃质感
+   ============================================ */
+.glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  isolation: isolate;
+  overflow: visible;
+}
+
+/* 浅色主题 */
+:root[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 五行颜色变体 - 使用hsla CSS变量 */
+.glass-card.wood-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2),
+    inset 0 1px 0 hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+}
+
+:root[data-theme="light"] .glass-card.wood-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3);
+}
+
+.glass-card.fire-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2),
+    inset 0 1px 0 hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+}
+
+:root[data-theme="light"] .glass-card.fire-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3);
+}
+
+.glass-card.earth-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2),
+    inset 0 1px 0 hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+}
+
+:root[data-theme="light"] .glass-card.earth-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3);
+}
+
+.glass-card.metal-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3);
+  box-shadow:
+    0 8px 32px hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2),
+    inset 0 1px 0 hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15);
+}
+
+:root[data-theme="light"] .glass-card.metal-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.5);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.5);
+}
+
+.glass-card.water-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2),
+    inset 0 1px 0 hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1);
+}
+
+:root[data-theme="light"] .glass-card.water-card {
+  background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15);
+  border-color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3);
+}
+
+/* 静态光晕效果 */
+.glass-card.static-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--pointer-x, 70%) var(--pointer-y, 20%),
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.15),
+    transparent 50%
+  );
+  opacity: 1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 边缘高光反射 */
+.glass-card .card-edge-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3) 25%,
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.4) 50%,
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.3) 75%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  animation: edgeGlowPulse 4s ease-in-out infinite;
+}
+
+@keyframes edgeGlowPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* 内部光晕层 */
+.glass-card > .card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    circle at 70% 20%,
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.2) 0%,
+    hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 0.1) 30%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-card.static-glow > .card-glow {
+  opacity: 0.8;
+}
+
+/* ============================================
+   Card内容层
+   ============================================ */
+.glass-card-content {
+  position: relative;
+  z-index: 10;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border-radius: inherit;
+}
+
+/* ============================================
+   Card Logo 区域
+   ============================================ */
+.glass-card-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-logo-center {
+  justify-content: center;
+}
+
+:root[data-theme="light"] .glass-card-logo {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.glass-card-logo .mingua-icon {
+  width: 48px;
+  height: 48px;
+  color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 1);
+}
+
+.glass-card-logo .mingua-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.glass-card-logo .mingua-icon svg text,
+.glass-card-logo .mingua-icon svg circle,
+.glass-card-logo .mingua-icon svg ellipse {
+  color: inherit;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* ============================================
+   Card 主体内容
+   ============================================ */
+.glass-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.glass-card-body .profile-name {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: white;
+  margin: 0 0 var(--space-2) 0;
+}
+
+:root[data-theme="light"] .glass-card-body .profile-name {
+  color: #1a1a1a;
+}
+
+.glass-card-body .profile-birth {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 var(--space-3) 0;
+}
+
+:root[data-theme="light"] .glass-card-body .profile-birth {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================
+   Card 页脚
+   ============================================ */
+.glass-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  margin-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="light"] .glass-card-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   交互状态
+   ============================================ */
+.glass-card:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   响应式
+   ============================================ */
+@media (max-width: 767px) {
+  .glass-card-content {
+    padding: var(--space-4);
+  }
+}

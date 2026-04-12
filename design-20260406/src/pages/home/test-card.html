@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试Card.js加载</title>
+</head>
+<body>
+  <h1>Card.js 加载测试</h1>
+  <div id="output"></div>
+
+  <script>
+    function log(msg) {
+      const div = document.createElement('div');
+      div.textContent = msg;
+      document.getElementById('output').appendChild(div);
+      console.log(msg);
+    }
+
+    log('开始加载card.js...');
+  </script>
+
+  <script src="../../../components/card/card.js"></script>
+
+  <script>
+    setTimeout(() => {
+      log('card.js加载完成');
+      log('window.cardComponent存在: ' + !!window.cardComponent);
+      log('window.CardComponent存在: ' + !!window.CardComponent);
+      log('typeof window.CardComponent: ' + typeof window.CardComponent);
+
+      if (window.CardComponent) {
+        log('✅ CardComponent类加载成功！');
+      } else {
+        log('❌ CardComponent类未找到！');
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

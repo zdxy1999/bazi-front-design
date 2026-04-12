@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>简单测试</title>
+  <style>
+    body {
+      padding: 40px;
+      background: #1a1a2e;
+    }
+
+    .test {
+      width: 48px;
+      height: 48px;
+      margin: 20px;
+      border: 2px solid white;
+    }
+
+    .test-red {
+      color: red;
+    }
+
+    .test-blue {
+      color: blue;
+    }
+
+    .test-yellow {
+      color: yellow;
+    }
+
+    .test svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .test svg text,
+    .test svg circle {
+      color: inherit !important;
+      fill: currentColor !important;
+      stroke: currentColor !important;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="color: white;">测试icon颜色</h1>
+
+  <div class="test test-red">
+    <svg viewBox="0 0 48 48">
+      <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☲</text>
+    </svg>
+  </div>
+
+  <div class="test test-blue">
+    <svg viewBox="0 0 48 48">
+      <text x="24" y="24" font-size="32" text-anchor="middle" dominant-baseline="central">☵</text>
+    </svg>
+  </div>
+
+  <div class="test test-yellow">
+    <svg viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="16" stroke-width="3" fill="none"/>
+      <circle cx="24" cy="24" r="8" stroke-width="3" fill="none"/>
+    </svg>
+  </div>
+
+  <p style="color: white;">
+    应该看到：红色离卦、蓝色坎卦、黄色双圆圈
+  </p>
+</body>
+</html>

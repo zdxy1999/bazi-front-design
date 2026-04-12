@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>翻页容器组件 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../card/card.css">
+  <link rel="stylesheet" href="swiper.css">
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 木 - 绿色 -->
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 火 - 红色 -->
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 土 - 黄色 -->
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 金 - 白色/灰色 -->
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 水 - 蓝色 -->
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <!-- 混合渐变 -->
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)">
+        <animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)">
+        <animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)">
+        <animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)">
+        <animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)">
+        <animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform>
+      </rect>
+
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)">
+        <animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate>
+        <animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate>
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform>
+      </rect>
+    </svg>
+
+    <!-- 边缘发光效果 -->
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+
+    <!-- 毛玻璃垫层 -->
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="page-header">
+      <h1 class="page-title">翻页容器组件</h1>
+      <p class="page-subtitle">支持PC端水平滚动 + 移动端触摸滑动</p>
+    </div>
+
+    <!-- 基础演示：卡片swiper -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">基础演示：3D翻页效果</h2>
+      <p class="text-secondary mb-6">中间正常大小，两侧缩小并旋转的3D效果。支持鼠标拖拽、触摸滑动、点击切换。</p>
+
+      <!-- Swiper容器 -->
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <!-- 卡片1 - 木 -->
+          <div class="swiper-slide">
+            <div class="glass-card wood-card" data-card style="width: 100%; height: 100%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-header">
+                  <h3 class="glass-card-title">木</h3>
+                  <p class="glass-card-subtitle">五行之木</p>
+                </div>
+                <div class="glass-card-body">
+                  <p class="glass-card-text">
+                    木代表生长、升发、条达、舒畅。在八字中，木主仁，代表仁慈、善良、正直。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片2 - 火 -->
+          <div class="swiper-slide">
+            <div class="glass-card fire-card" data-card style="width: 100%; height: 100%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-header">
+                  <h3 class="glass-card-title">火</h3>
+                  <p class="glass-card-subtitle">五行之火</p>
+                </div>
+                <div class="glass-card-body">
+                  <p class="glass-card-text">
+                    火代表温热、升腾、明亮。在八字中，火主礼，代表礼貌、热情、向上。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片3 - 土 -->
+          <div class="swiper-slide">
+            <div class="glass-card earth-card" data-card style="width: 100%; height: 100%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-header">
+                  <h3 class="glass-card-title">土</h3>
+                  <p class="glass-card-subtitle">五行之土</p>
+                </div>
+                <div class="glass-card-body">
+                  <p class="glass-card-text">
+                    土代表承载、生化、受纳。在八字中，土主信，代表诚信、稳重、包容。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片4 - 金 -->
+          <div class="swiper-slide">
+            <div class="glass-card metal-card" data-card style="width: 100%; height: 100%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-header">
+                  <h3 class="glass-card-title">金</h3>
+                  <p class="glass-card-subtitle">五行之金</p>
+                </div>
+                <div class="glass-card-body">
+                  <p class="glass-card-text">
+                    金代表清洁、收敛、坚固。在八字中，金主义，代表正义、果断、坚毅。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片5 - 水 -->
+          <div class="swiper-slide">
+            <div class="glass-card water-card" data-card style="width: 100%; height: 100%;">
+              <div class="card-edge-glow"></div>
+              <div class="card-glow"></div>
+              <div class="glass-card-content">
+                <div class="glass-card-header">
+                  <h3 class="glass-card-title">水</h3>
+                  <p class="glass-card-subtitle">五行之水</p>
+                </div>
+                <div class="glass-card-body">
+                  <p class="glass-card-text">
+                    水代表寒凉、滋润、向下。在八字中，水主智，代表智慧、灵活、深沉。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PC端导航按钮 -->
+        <button class="swiper-button-prev" aria-label="上一页">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15,18 9,12 15,6"></polyline>
+          </svg>
+        </button>
+        <button class="swiper-button-next" aria-label="下一页">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </button>
+
+        <!-- 分页指示器 -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <!-- 循环模式演示 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">循环模式</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">无限循环滑动，从最后一张可以直接回到第一张</p>
+        <div class="demo-area" style="width: 100%; max-width: 800px;">
+          <!-- 循环Swiper -->
+          <div class="swiper" data-swiper-loop>
+            <div class="swiper-wrapper">
+              <!-- 卡片1 - 春 -->
+              <div class="swiper-slide">
+                <div class="glass-card" data-card style="width: 100%; height: 100%;">
+                  <div class="card-edge-glow"></div>
+                  <div class="card-glow"></div>
+                  <div class="glass-card-content">
+                    <div class="glass-card-header">
+                      <h3 class="glass-card-title">春</h3>
+                      <p class="glass-card-subtitle">四季之首</p>
+                    </div>
+                    <div class="glass-card-body">
+                      <p class="glass-card-text">
+                        春季万物复苏，生机勃勃。对应五行之木，代表生长、升发。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 卡片2 - 夏 -->
+              <div class="swiper-slide">
+                <div class="glass-card fire-card" data-card style="width: 100%; height: 100%;">
+                  <div class="card-edge-glow"></div>
+                  <div class="card-glow"></div>
+                  <div class="glass-card-content">
+                    <div class="glass-card-header">
+                      <h3 class="glass-card-title">夏</h3>
+                      <p class="glass-card-subtitle">盛夏时节</p>
+                    </div>
+                    <div class="glass-card-body">
+                      <p class="glass-card-text">
+                        夏季炎热繁茂，能量充沛。对应五行之火，代表热情、向上。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 卡片3 - 秋 -->
+              <div class="swiper-slide">
+                <div class="glass-card earth-card" data-card style="width: 100%; height: 100%;">
+                  <div class="card-edge-glow"></div>
+                  <div class="card-glow"></div>
+                  <div class="glass-card-content">
+                    <div class="glass-card-header">
+                      <h3 class="glass-card-title">秋</h3>
+                      <p class="glass-card-subtitle">金秋时节</p>
+                    </div>
+                    <div class="glass-card-body">
+                      <p class="glass-card-text">
+                        秋季收获时节，硕果累累。对应五行之金，代表收敛、洁净。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 卡片4 - 冬 -->
+              <div class="swiper-slide">
+                <div class="glass-card water-card" data-card style="width: 100%; height: 100%;">
+                  <div class="card-edge-glow"></div>
+                  <div class="card-glow"></div>
+                  <div class="glass-card-content">
+                    <div class="glass-card-header">
+                      <h3 class="glass-card-title">冬</h3>
+                      <p class="glass-card-subtitle">隆冬时节</p>
+                    </div>
+                    <div class="glass-card-body">
+                      <p class="glass-card-text">
+                        冬季寒冷沉寂，蓄势待发。对应五行之水，代表收藏、智慧。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PC端导航按钮 -->
+            <button class="swiper-button-prev" aria-label="上一页">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+              </svg>
+            </button>
+            <button class="swiper-button-next" aria-label="下一页">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"></polyline>
+              </svg>
+            </button>
+
+            <!-- 分页指示器 -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>HTML结构</h3>
+      <pre><code>&lt;div class="swiper" data-swiper="cards"&gt;
+  &lt;div class="swiper-wrapper"&gt;
+    &lt;div class="swiper-slide"&gt;
+      &lt;!-- 幻灯片内容 --&gt;
+    &lt;/div&gt;
+    &lt;!-- 更多幻灯片 --&gt;
+  &lt;/div&gt;
+
+  &lt;!-- 可选：导航按钮 --&gt;
+  &lt;button class="swiper-button-prev"&gt;&lt;/button&gt;
+  &lt;button class="swiper-button-next"&gt;&lt;/button&gt;
+
+  &lt;!-- 可选：分页指示器 --&gt;
+  &lt;div class="swiper-pagination"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 3D Coverflow效果：中间放大，两侧缩小并旋转</li>
+        <li>✅ PC端：鼠标拖拽 + 点击两侧卡片切换</li>
+        <li>✅ 移动端：触摸滑动切换</li>
+        <li>✅ 键盘导航：左右箭头键切换</li>
+        <li>✅ 点击切换：点击任意卡片直接跳转</li>
+        <li>✅ 导航按钮：PC端左右翻页</li>
+        <li>✅ 分页指示器：显示当前位置，可点击跳转</li>
+        <li>✅ 循环模式：无限循环滑动（添加data-swiper-loop属性）</li>
+        <li>✅ 玻璃质感：与整体设计统一</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+      </ul>
+
+      <h3>关键属性</h3>
+      <ul>
+        <li><code>data-swiper="类型"</code> - swiper类型（cards默认卡片模式）</li>
+        <li><code>data-swiper-loop</code> - 启用循环模式（无限循环滑动）</li>
+        <li><code>data-swiper-autoplay</code> - 启用自动播放（预留功能）</li>
+        <li><code>slides-per-view="数量"</code> - 同时显示的幻灯片数量（可选）</li>
+        <li><code>space-between="间距"</code> - 幻灯片之间的间距（可选）</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="swiper.js"></script>
+  <script>
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    function toggleTheme() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      console.log('已切换到', newTheme === 'dark' ? '暗色主题' : '亮色主题');
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+  </script>
+</body>
+</html>

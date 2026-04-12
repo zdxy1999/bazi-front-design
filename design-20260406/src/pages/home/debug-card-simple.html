@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡片效果调试</title>
+
+  <link rel="stylesheet" href="../../../style/tokens.css">
+  <link rel="stylesheet" href="../../../style/common.css">
+  <link rel="stylesheet" href="../../../components/card/card.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: #1a1a2e;
+    }
+
+    .debug-container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .debug-panel {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #0f0;
+    }
+
+    .debug-panel div {
+      margin: 8px 0;
+      white-space: pre-wrap;
+    }
+
+    .error {
+      color: #f00;
+    }
+
+    .success {
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-container">
+    <!-- 测试卡片：水命 - 蓝色 -->
+    <div class="glass-card"
+         data-card
+         id="test-card"
+         style="--theme-hue: 210; --theme-saturation: 90; --theme-lightness: 60;">
+      <div class="card-edge-glow"></div>
+      <div class="card-glow"></div>
+      <div class="glass-card-content">
+        <div class="glass-card-header">
+          <h3 class="glass-card-title">一白坎卦</h3>
+          <p class="glass-card-subtitle">水命 - 蓝色</p>
+        </div>
+        <div class="glass-card-body">
+          <p class="glass-card-text">北方、黑色、坎卦</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="debug-panel" id="debug-output">
+      <div>等待初始化...</div>
+    </div>
+  </div>
+
+  <script src="../../../components/card/card.js"></script>
+  <script>
+    const debugOutput = document.getElementById('debug-output');
+    const testCard = document.getElementById('test-card');
+
+    function addDebug(message, type = '') {
+      const div = document.createElement('div');
+      div.textContent = message;
+      if (type) div.className = type;
+      debugOutput.appendChild(div);
+    }
+
+    // 等待CardComponent加载
+    setTimeout(() => {
+      addDebug('=== 开始调试 ===');
+
+      // 1. 检查CardComponent类
+      if (typeof window.CardComponent === 'undefined') {
+        addDebug('❌ CardComponent类不存在', 'error');
+        return;
+      }
+      addDebug('✅ CardComponent类存在', 'success');
+
+      // 2. 创建CardComponent实例
+      try {
+        window.cardComponent = new window.CardComponent();
+        addDebug('✅ CardComponent实例创建成功', 'success');
+        addDebug('卡片数量: ' + window.cardComponent.cards.length);
+      } catch (error) {
+        addDebug('❌ 创建CardComponent实例失败: ' + error.message, 'error');
+        return;
+      }
+
+      // 3. 检查卡片类名
+      const classes = testCard.className;
+      addDebug('卡片类名: ' + classes);
+
+      if (classes.includes('static-glow')) {
+        addDebug('✅ static-glow类已添加', 'success');
+      } else if (classes.includes('mobile-glow')) {
+        addDebug('✅ mobile-glow类已添加（移动端）', 'success');
+      } else {
+        addDebug('❌ 没有添加glow类', 'error');
+      }
+
+      // 4. 检查CSS变量
+      const computedStyle = window.getComputedStyle(testCard);
+      const hue = computedStyle.getPropertyValue('--theme-hue').trim();
+      const sat = computedStyle.getPropertyValue('--theme-saturation').trim();
+      const light = computedStyle.getPropertyValue('--theme-lightness').trim();
+
+      addDebug('CSS变量:');
+      addDebug('  hue: ' + hue);
+      addDebug('  sat: ' + sat);
+      addDebug('  light: ' + light);
+
+      // 5. 检查伪元素样式
+      const beforeStyle = window.getComputedStyle(testCard, '::before');
+      const afterStyle = window.getComputedStyle(testCard, '::after');
+
+      addDebug('::before背景色: ' + beforeStyle.backgroundColor);
+      addDebug('::after背景: ' + afterStyle.background.substring(0, 80) + '...');
+
+      // 6. 检查.card-glow元素
+      const cardGlow = testCard.querySelector('.card-glow');
+      if (cardGlow) {
+        addDebug('✅ .card-glow元素存在', 'success');
+        const glowStyle = window.getComputedStyle(cardGlow);
+        addDebug('.card-glow opacity: ' + glowStyle.opacity);
+      } else {
+        addDebug('❌ .card-glow元素不存在', 'error');
+      }
+
+      // 7. 检查.card-edge-glow元素
+      const cardEdgeGlow = testCard.querySelector('.card-edge-glow');
+      if (cardEdgeGlow) {
+        addDebug('✅ .card-edge-glow元素存在', 'success');
+        const edgeStyle = window.getComputedStyle(cardEdgeGlow);
+        addDebug('.card-edge-glow opacity: ' + edgeStyle.opacity);
+      } else {
+        addDebug('❌ .card-edge-glow元素不存在', 'error');
+      }
+
+      addDebug('=== 调试完成 ===');
+    }, 500);
+  </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+/**
+ * 八字解析页面样式
+ */
+
+/* 主容器 */
+.analysis-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 状态内容 */
+.state-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 八字详情卡片 */
+.bazi-detail-card {
+  width: 100%;
+}
+
+/* 四柱八字显示 */
+.pillars-display {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.pillar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+:root[data-theme="light"] .pillar-item {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.pillar-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.pillar-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pillar-nayin {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* 日主信息 */
+.daymaster-section {
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+}
+
+.daymaster-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #ffd700;
+}
+
+.daymaster-section p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* 五行占比 */
+.element-proportion {
+  margin: 20px 0;
+}
+
+.element-proportion h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.proportion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.proportion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.element-name {
+  min-width: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.proportion-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+:root[data-theme="light"] .proportion-bar {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.proportion-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.proportion-value {
+  min-width: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  color: var(--text-primary);
+}
+
+/* Markdown卡片 */
+.markdown-card {
+  width: 100%;
+}
+
+/* 处理中卡片 */
+.processing-card {
+  width: 100%;
+  text-align: center;
+}
+
+.processing-animation {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.processing-text {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 行动卡片 */
+.action-card {
+  width: 100%;
+  text-align: center;
+}
+
+.action-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0 0 24px 0;
+}
+
+/* 按钮组 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .analysis-container {
+    padding: 10px;
+  }
+
+  .state-content {
+    max-width: 100%;
+  }
+
+  .pillars-display {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pillar-value {
+    font-size: 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .action-buttons .button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .proportion-item {
+    flex-wrap: wrap;
+  }
+
+  .proportion-bar {
+    width: 100%;
+    order: 3;
+  }
+}

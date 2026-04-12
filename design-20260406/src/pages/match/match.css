@@ -1,0 +1,176 @@
+/**
+ * 姻缘匹配页面样式
+ */
+
+/* 主容器 */
+.match-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 状态内容 */
+.state-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Swiper容器 */
+.match-container .swiper {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* 推荐卡片 */
+.match-summary-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.match-summary-card .glass-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.match-summary-card .mingua-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.match-summary-card .glass-card-body {
+  width: 100%;
+  text-align: center;
+}
+
+.match-summary-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.match-summary-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.bazi-preview {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.bazi-preview span {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+:root[data-theme="light"] .bazi-preview span {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.mingua-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+:root[data-theme="light"] .mingua-tag {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 理由卡片 */
+.reason-card {
+  width: 100%;
+}
+
+/* 处理中卡片 */
+.processing-card {
+  width: 100%;
+  text-align: center;
+}
+
+.processing-animation {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.processing-text {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 行动卡片 */
+.action-card {
+  width: 100%;
+  text-align: center;
+}
+
+.action-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0 0 24px 0;
+}
+
+/* 按钮组 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .match-container {
+    padding: 10px;
+  }
+
+  .state-content {
+    max-width: 100%;
+  }
+
+  .action-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .action-buttons .button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .match-summary-card {
+    max-width: 100%;
+  }
+
+  .bazi-preview {
+    flex-wrap: wrap;
+  }
+}

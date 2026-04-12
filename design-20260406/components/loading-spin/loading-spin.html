@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加载动画 - 八字五行</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="../card/card.css">
+  <link rel="stylesheet" href="loading-spin.css">
+</head>
+<body>
+  <!-- 背景组件 -->
+  <div class="background-container">
+    <div class="wuxing-flow-layer"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+    <div class="glow-orb glow-orb-4"></div>
+    <div class="glow-orb glow-orb-5"></div>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="glass rounded-2xl p-6 mb-8">
+      <h1 class="text-3xl font-bold mb-4">加载动画Spin组件</h1>
+      <p class="text-secondary mb-2">
+        五行发光点旋转动画，用于短时数据加载场景
+      </p>
+      <p class="text-sm text-tertiary">
+        适用于API请求等待、数据加载等场景
+      </p>
+    </div>
+
+    <!-- 默认尺寸 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">默认尺寸</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content flex items-center justify-center py-8">
+          <div class="loading-spin">
+            <div class="loading-spin-dot"></div>
+            <div class="loading-spin-dot"></div>
+            <div class="loading-spin-dot"></div>
+            <div class="loading-spin-dot"></div>
+            <div class="loading-spin-dot"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 尺寸变体 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">尺寸变体</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 小尺寸 -->
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <h3 class="glass-card-title">小尺寸</h3>
+            <div class="flex items-center justify-center py-6">
+              <div class="loading-spin loading-spin-sm">
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 默认尺寸 -->
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <h3 class="glass-card-title">默认尺寸</h3>
+            <div class="flex items-center justify-center py-6">
+              <div class="loading-spin">
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 大尺寸 -->
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <h3 class="glass-card-title">大尺寸</h3>
+            <div class="flex items-center justify-center py-6">
+              <div class="loading-spin loading-spin-lg">
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 带文字的加载 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">带文字提示</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <div class="loading-spin-container">
+              <div class="loading-spin">
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+              </div>
+              <p class="loading-spin-text">加载中...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" data-card>
+          <div class="glass-card-content">
+            <div class="loading-spin-container">
+              <div class="loading-spin">
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+                <div class="loading-spin-dot"></div>
+              </div>
+              <p class="loading-spin-text">正在请求数据...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 演示按钮 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">交互演示</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content">
+          <h3 class="glass-card-title mb-4">点击按钮触发加载</h3>
+          <div class="flex gap-4 flex-wrap">
+            <button
+              id="demoBtn1"
+              class="glass px-6 py-3 rounded-lg wood-text font-medium clickable transition"
+            >
+              加载2秒
+            </button>
+            <button
+              id="demoBtn2"
+              class="glass px-6 py-3 rounded-lg fire-text font-medium clickable transition"
+            >
+              加载3秒
+            </button>
+            <button
+              id="demoBtn3"
+              class="glass px-6 py-3 rounded-lg water-text font-medium clickable transition"
+            >
+              全屏加载
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用示例 -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">使用示例</h2>
+      <div class="glass-card" data-card>
+        <div class="glass-card-content">
+          <h3 class="glass-card-title">代码示例</h3>
+          <pre class="text-sm text-secondary bg-secondary/10 rounded-lg p-4 mt-4 overflow-x-auto"><code>&lt;!-- 基础用法 --&gt;
+&lt;div class="loading-spin"&gt;
+  &lt;div class="loading-spin-dot"&gt;&lt;/div&gt;
+  &lt;div class="loading-spin-dot"&gt;&lt;/div&gt;
+  &lt;div class="loading-spin-dot"&gt;&lt;/div&gt;
+  &lt;div class="loading-spin-dot"&gt;&lt;/div&gt;
+  &lt;div class="loading-spin-dot"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 带文字 --&gt;
+&lt;div class="loading-spin-container"&gt;
+  &lt;div class="loading-spin"&gt;...&lt;/div&gt;
+  &lt;p class="loading-spin-text"&gt;加载中...&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="../card/card.js"></script>
+  <script src="loading-spin.js"></script>
+</body>
+</html>

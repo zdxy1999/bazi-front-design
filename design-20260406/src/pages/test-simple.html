@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简单测试</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    .test-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+    .success { background: rgba(34, 197, 94, 0.3); border: 1px solid #22c55e; }
+    .error { background: rgba(239, 68, 68, 0.3); border: 1px solid #ef4444; }
+    #log {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>八字小程序 - 简单测试页面</h1>
+
+  <div id="status" class="status">检查中...</div>
+
+  <div class="test-card">
+    <h2>测试项目</h2>
+    <button onclick="testMockData()">测试 Mock 数据加载</button>
+    <button onclick="testWuxingChart()">测试五行图组件</button>
+    <button onclick="testSwiper()">测试 Swiper 组件</button>
+  </div>
+
+  <div class="test-card">
+    <h2>日志输出</h2>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    function log(msg) {
+      const logDiv = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      logDiv.innerHTML += `[${time}] ${msg}<br>`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+      console.log(msg);
+    }
+
+    function setStatus(msg, isSuccess) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.textContent = msg;
+      statusDiv.className = 'status ' + (isSuccess ? 'success' : 'error');
+    }
+
+    async function testMockData() {
+      log('📂 开始测试 Mock 数据加载...');
+      try {
+        const response = await fetch('../../../mock-data/bazi-profiles.json');
+        log(`响应状态: ${response.status}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        log(`✅ 成功加载 ${data.profiles.length} 个档案`);
+
+        // 显示第一个档案信息
+        if (data.profiles.length > 0) {
+          const profile = data.profiles[0];
+          log(`第一个档案: ${profile.name}`);
+          log(`命卦: ${profile.mingua.name}`);
+          log(`日主: ${profile.dayMaster.stem} (${profile.dayMaster.element})`);
+        }
+
+        setStatus('Mock 数据测试成功！', true);
+      } catch (error) {
+        log(`❌ 错误: ${error.message}`);
+        setStatus('Mock 数据测试失败', false);
+      }
+    }
+
+    function testWuxingChart() {
+      log('🎨 测试五行图组件...');
+      try {
+        if (typeof WuxingChart !== 'undefined') {
+          log('✅ WuxingChart 类已定义');
+          setStatus('五行图组件可用', true);
+        } else {
+          log('❌ WuxingChart 类未定义');
+          setStatus('五行图组件不可用', false);
+        }
+      } catch (error) {
+        log(`❌ 错误: ${error.message}`);
+      }
+    }
+
+    function testSwiper() {
+      log('🎠 测试 Swiper 组件...');
+      const swiperElements = document.querySelectorAll('.swiper');
+      log(`找到 ${swiperElements.length} 个 .swiper 元素`);
+      setStatus(`Swiper 测试完成`, true);
+    }
+
+    // 页面加载时自动检查
+    window.addEventListener('DOMContentLoaded', () => {
+      log('🚀 页面加载完成');
+      log('当前 URL: ' + window.location.href);
+
+      // 检查文件路径
+      log('检查文件路径...');
+
+      // 测试Mock数据路径
+      fetch('../../../mock-data/bazi-profiles.json')
+        .then(response => {
+          if (response.ok) {
+            log('✅ Mock数据路径正确');
+            setStatus('准备就绪！点击按钮测试', true);
+          } else {
+            log(`❌ Mock数据返回 ${response.status}`);
+          }
+        })
+        .catch(error => {
+          log(`❌ Mock数据加载失败: ${error.message}`);
+          setStatus('文件加载失败', false);
+        });
+    });
+  </script>
+</body>
+</html>

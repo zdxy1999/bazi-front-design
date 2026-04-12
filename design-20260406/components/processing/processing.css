@@ -1,0 +1,250 @@
+/**
+ * 处理中动画组件样式
+ * 完全照抄 glow-glass-design 的太极实现
+ * 用于长时间异步计算任务
+ */
+
+/* ============================================
+   处理中容器
+   ============================================ */
+.processing {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   太极容器
+   ============================================ */
+.processing-taichi {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+}
+
+/* 阴阳鱼 SVG */
+.processing-yang,
+.processing-yin {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.processing-taichi.processing-rotating .processing-yang,
+.processing-taichi.processing-rotating .processing-yin {
+  transform: translateX(0) !important;
+  opacity: 1;
+}
+
+/* 阳鱼 - 白色 */
+.processing-yang {
+  transform: translateX(0);
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* 阴鱼 - 黑色 */
+.processing-yin {
+  transform: translateX(0);
+  z-index: 2;
+  opacity: 0.9;
+}
+
+/* SVG 样式 */
+.processing-yang svg,
+.processing-yin svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.taichi-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* 旋转动画 */
+.processing-taichi.processing-rotating {
+  animation: taichiRotate 3s linear infinite;
+}
+
+@keyframes taichiRotate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* ============================================
+   太极外圈辉光
+   ============================================ */
+.processing-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  z-index: 0;
+  background: conic-gradient(
+    from 0deg,
+    #ff3333 0deg,
+    #ff3333 50deg,
+    #ffcc00 50deg,
+    #ffcc00 100deg,
+    #00cc66 100deg,
+    #00cc66 140deg,
+    #0099ff 140deg,
+    #0099ff 180deg,
+    #ffffff 180deg,
+    #0099ff 180deg,
+    #0099ff 220deg,
+    #00cc66 220deg,
+    #00cc66 260deg,
+    #ffcc00 260deg,
+    #ffcc00 310deg,
+    #ff3333 310deg,
+    #ff3333 360deg
+  );
+  filter: blur(15px);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 30px 10px rgba(255, 204, 0, 0.3),
+              0 0 30px 10px rgba(255, 51, 51, 0.3),
+              0 0 30px 10px rgba(0, 204, 102, 0.3),
+              0 0 30px 10px rgba(0, 153, 255, 0.3);
+}
+
+.processing-taichi.processing-rotating .processing-glow {
+  animation: glowFadeIn 1s ease-out forwards, glowPulse 3s ease-in-out 1s infinite;
+}
+
+@keyframes glowFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   浅色主题适配
+   ============================================ */
+:root[data-theme="light"] .processing-yang path[fill="#ffffff"],
+:root[data-theme="light"] .processing-yin path[fill="#ffffff"] {
+  fill: #ffffff !important;
+}
+
+:root[data-theme="light"] .processing-yang path[fill="#1a1a1a"],
+:root[data-theme="light"] .processing-yin path[fill="#1a1a1a"] {
+  fill: #2a2a2a !important;
+}
+
+:root[data-theme="light"] .processing-yang circle[fill="#1a1a1a"],
+:root[data-theme="light"] .processing-yin circle[fill="#1a1a1a"] {
+  fill: #2a2a2a !important;
+}
+
+:root[data-theme="light"] .processing-yang circle[fill="#ffffff"],
+:root[data-theme="light"] .processing-yin circle[fill="#ffffff"] {
+  fill: #ffffff !important;
+}
+
+/* ============================================
+   包裹容器（用于居中显示）
+   ============================================ */
+.processing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-12);
+}
+
+/* ============================================
+   处理中文字
+   ============================================ */
+.processing-text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: textFade 2s ease-in-out infinite;
+}
+
+:root[data-theme="light"] .processing-text {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@keyframes textFade {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   全屏处理中覆盖层
+   ============================================ */
+.processing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  z-index: var(--z-modal);
+  animation: fadeIn var(--duration-base) var(--ease-out);
+}
+
+/* ============================================
+   性能优化
+   ============================================ */
+.processing-taichi,
+.processing-yang,
+.processing-yin,
+.processing-glow {
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   减少动画（用户偏好）
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .processing-taichi {
+    animation-duration: 6s;
+  }
+
+  .processing-glow,
+  .processing-text {
+    animation-duration: 4s;
+  }
+}

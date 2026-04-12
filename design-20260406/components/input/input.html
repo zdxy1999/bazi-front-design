@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>输入框组件库 | 八字小程序设计系统</title>
+  <link rel="stylesheet" href="../../style/tokens.css">
+  <link rel="stylesheet" href="../../style/common.css">
+  <link rel="stylesheet" href="../background/background.css">
+  <link rel="stylesheet" href="input.css">
+</head>
+<body>
+  <!-- 背景容器 -->
+  <div class="background-container">
+    <!-- SVG五行流动背景 -->
+    <svg class="svg-background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="Gradient1" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="34s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#86efac" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#86efac" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient2" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="38s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#f87171" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient3" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="42s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fde047" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fde047" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient4" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="46s" values="0%;3%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#fafafa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#fafafa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient5" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="50s" values="0%;5%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+        <radialGradient id="Gradient6" cx="50%" cy="50%" r=".5">
+          <animate attributeName="fx" dur="54s" values="0%;7%;0%" repeatCount="indefinite"></animate>
+          <stop offset="0%" stop-color="#f87171" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+      <rect x="13.744%" y="1.18473%" width="100%" height="100%" fill="url(#Gradient1)"><animate attributeName="x" dur="20s" values="25%;0%;25%" repeatCount="indefinite"></animate><animate attributeName="y" dur="21s" values="0%;25%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="23s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="82.7721%" y="38.6984%" width="100%" height="100%" fill="url(#Gradient2)"><animate attributeName="x" dur="22s" values="-20%;0%;-20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="24s" values="0%;50%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="19s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="54.0827%" y="66.1528%" width="100%" height="100%" fill="url(#Gradient3)"><animate attributeName="x" dur="25s" values="0%;50%;0%" repeatCount="indefinite"></animate><animate attributeName="y" dur="23s" values="0%;20%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="22s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="22.2556%" y="40.5694%" width="100%" height="100%" fill="url(#Gradient4)"><animate attributeName="x" dur="21s" values="30%;0%;30%" repeatCount="indefinite"></animate><animate attributeName="y" dur="22s" values="40%;0%;40%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="25s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="62.7721%" y="18.6984%" width="100%" height="100%" fill="url(#Gradient5)"><animate attributeName="x" dur="23s" values="-10%;0%;-10%" repeatCount="indefinite"></animate><animate attributeName="y" dur="26s" values="0%;30%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="21s" repeatCount="indefinite"></animateTransform></rect>
+      <rect x="35.0827%" y="78.1528%" width="100%" height="100%" fill="url(#Gradient6)"><animate attributeName="x" dur="24s" values="20%;0%;20%" repeatCount="indefinite"></animate><animate attributeName="y" dur="28s" values="0%;60%;0%" repeatCount="indefinite"></animate><animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="24s" repeatCount="indefinite"></animateTransform></rect>
+    </svg>
+    <div class="edge-glow">
+      <div class="edge-glow-left"></div>
+      <div class="edge-glow-right"></div>
+    </div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- 主内容 -->
+  <main class="container" style="position: relative; z-index: 1; padding-top: 80px; padding-bottom: 40px;">
+    <div class="page-header">
+      <h1 class="page-title">输入框组件库</h1>
+      <p class="page-subtitle">液态玻璃质感的输入框组件，支持多种类型和状态</p>
+    </div>
+
+    <!-- 基础输入框 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">基础输入框</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>默认输入框</h3>
+          <p class="demo-desc">标准文本输入</p>
+          <div class="demo-area">
+            <input type="text" class="input" placeholder="请输入内容">
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>带标签</h3>
+          <p class="demo-desc">带label的输入框</p>
+          <div class="demo-area">
+            <div class="input-group">
+              <label class="input-label">姓名</label>
+              <input type="text" class="input" placeholder="请输入姓名">
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>带图标</h3>
+          <p class="demo-desc">左侧图标提示</p>
+          <div class="demo-area">
+            <div class="input-wrapper">
+              <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" class="input" placeholder="请输入用户名">
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>带前后缀</h3>
+          <p class="demo-desc">前后都有内容</p>
+          <div class="demo-area">
+            <div class="input-group">
+              <div class="input-prefix">https://</div>
+              <input type="text" class="input" placeholder="example.com">
+              <div class="input-suffix">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 输入框尺寸 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">输入框尺寸</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">不同大小的输入框</p>
+        <div class="demo-area" style="display: flex; flex-direction: column; gap: 16px; align-items: stretch;">
+          <input type="text" class="input input-sm" placeholder="小输入框">
+          <input type="text" class="input" placeholder="默认输入框">
+          <input type="text" class="input input-lg" placeholder="大输入框">
+        </div>
+      </div>
+    </section>
+
+    <!-- 输入框状态 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">输入框状态</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>焦点状态</h3>
+          <p class="demo-desc">点击输入框查看效果</p>
+          <div class="demo-area">
+            <input type="text" class="input" placeholder="点击我" autofocus>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>禁用状态</h3>
+          <p class="demo-desc">不可编辑</p>
+          <div class="demo-area">
+            <input type="text" class="input" placeholder="禁用状态" disabled>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>错误状态</h3>
+          <p class="demo-desc">验证失败</p>
+          <div class="demo-area">
+            <div class="input-group">
+              <input type="text" class="input input-error" placeholder="输入有误" value="错误内容">
+              <span class="input-error-text">请输入有效内容</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>成功状态</h3>
+          <p class="demo-desc">验证成功</p>
+          <div class="demo-area">
+            <div class="input-group">
+              <input type="text" class="input input-success" placeholder="验证成功" value="正确内容">
+              <span class="input-success-text">格式正确</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 输入框类型 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">输入框类型</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">不同类型的输入框</p>
+        <div class="demo-area" style="display: flex; flex-direction: column; gap: 16px; align-items: stretch;">
+          <input type="text" class="input" placeholder="文本输入">
+
+          <input type="password" class="input" placeholder="密码输入">
+
+          <input type="email" class="input" placeholder="邮箱输入">
+
+          <input type="number" class="input" placeholder="数字输入">
+
+          <input type="tel" class="input" placeholder="电话输入">
+
+          <input type="url" class="input" placeholder="网址输入">
+
+          <textarea class="input textarea" placeholder="多行文本输入...可输入多行内容"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 五行主题色 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">五行主题色</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>木</h3>
+          <div class="demo-area">
+            <input type="text" class="input input-wood" placeholder="木主题">
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>火</h3>
+          <div class="demo-area">
+            <input type="text" class="input input-fire" placeholder="火主题">
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>土</h3>
+          <div class="demo-area">
+            <input type="text" class="input input-earth" placeholder="土主题">
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>金</h3>
+          <div class="demo-area">
+            <input type="text" class="input input-metal" placeholder="金主题">
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>水</h3>
+          <div class="demo-area">
+            <input type="text" class="input input-water" placeholder="水主题">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 表单示例 -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">表单示例</h2>
+
+      <div class="demo-card">
+        <p class="demo-desc">完整的表单示例</p>
+        <div class="demo-area">
+          <form class="form" style="width: 100%; max-width: 400px;">
+            <div class="input-group">
+              <label class="input-label">姓名 <span class="required">*</span></label>
+              <input type="text" class="input" placeholder="请输入您的姓名" required>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">邮箱</label>
+              <input type="email" class="input" placeholder="example@email.com">
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">出生日期 <span class="required">*</span></label>
+              <input type="date" class="input" required>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">性别</label>
+              <select class="input">
+                <option value="">请选择性别</option>
+                <option value="male">男</option>
+                <option value="female">女</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">备注</label>
+              <textarea class="input textarea" placeholder="请输入备注信息"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+              <button type="submit" class="btn btn-primary">提交</button>
+              <button type="reset" class="btn btn-ghost">重置</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="usage-section">
+      <h2>使用说明</h2>
+
+      <h3>基础用法</h3>
+      <pre><code>&lt;!-- 基础输入框 --&gt;
+&lt;input type="text" class="input" placeholder="请输入内容"&gt;
+
+&lt;!-- 带标签 --&gt;
+&lt;div class="input-group"&gt;
+  &lt;label class="input-label"&gt;姓名&lt;/label&gt;
+  &lt;input type="text" class="input" placeholder="请输入姓名"&gt;
+&lt;/div&gt;
+
+&lt;!-- 带图标 --&gt;
+&lt;div class="input-wrapper"&gt;
+  &lt;svg class="input-icon"&gt;...&lt;/svg&gt;
+  &lt;input type="text" class="input" placeholder="请输入用户名"&gt;
+&lt;/div&gt;</code></pre>
+
+      <h3>组件特性</h3>
+      <ul>
+        <li>✅ 液态玻璃质感</li>
+        <li>✅ 胶囊形状（左右圆润）</li>
+        <li>✅ 暗黑/明亮主题适配</li>
+        <li>✅ 多种尺寸：sm、默认、lg</li>
+        <li>✅ 多种状态：焦点、禁用、错误、成功</li>
+        <li>✅ 五行主题色：wood、fire、earth、metal、water</li>
+        <li>✅ 支持图标、前后缀</li>
+        <li>✅ 完整的表单支持</li>
+        <li>✅ 键盘导航支持</li>
+        <li>✅ 可访问性优化</li>
+      </ul>
+
+      <h3>Class列表</h3>
+
+      <p><strong>基础</strong></p>
+      <ul>
+        <li><code>input</code> - 基础输入框</li>
+        <li><code>input-group</code> - 输入框组容器</li>
+        <li><code>input-label</code> - 标签</li>
+        <li><code>input-wrapper</code> - 带图标的包装器</li>
+        <li><code>input-icon</code> - 图标</li>
+        <li><code>input-prefix</code> - 前缀</li>
+        <li><code>input-suffix</code> - 后缀</li>
+      </ul>
+
+      <p><strong>尺寸</strong></p>
+      <ul>
+        <li><code>input-sm</code> - 小输入框</li>
+        <li><code>input-lg</code> - 大输入框</li>
+      </ul>
+
+      <p><strong>状态</strong></p>
+      <ul>
+        <li><code>input-error</code> - 错误状态</li>
+        <li><code>input-success</code> - 成功状态</li>
+        <li><code>input-error-text</code> - 错误提示</li>
+        <li><code>input-success-text</code> - 成功提示</li>
+      </ul>
+
+      <p><strong>类型</strong></p>
+      <ul>
+        <li><code>textarea</code> - 多行文本框</li>
+      </ul>
+
+      <p><strong>主题色</strong></p>
+      <ul>
+        <li><code>input-wood</code> - 木（绿色）</li>
+        <li><code>input-fire</code> - 火（红色）</li>
+        <li><code>input-earth</code> - 土（黄色）</li>
+        <li><code>input-metal</code> - 金（白色）</li>
+        <li><code>input-water</code> - 水（蓝色）</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="../background/background.js"></script>
+  <script src="input.js"></script>
+  <script>
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+    });
+  </script>
+</body>
+</html>

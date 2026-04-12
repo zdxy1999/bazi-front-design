@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五行命卡 - Pokemon风格</title>
+    <link rel="stylesheet" href="pokemon-wuxing.css">
+</head>
+<body>
+    <div class="background-fx">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <main class="container">
+        <!-- 五元素卡片 -->
+        <div class="card" data-rarity="rare holo galaxy" data-element="metal">
+            <div class="card__translater">
+                <div class="card__rotator">
+                    <div class="card__front">
+                        <div class="card__shine"></div>
+                        <div class="card__glare"></div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__rarity">★ Holo</span>
+                                <span class="card__hp">HP 120</span>
+                            </div>
+                            <div class="card__image">
+                                <svg class="element-icon" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="4"/>
+                                    <path d="M50 10v80M10 50h80" stroke="currentColor" stroke-width="4"/>
+                                    <circle cx="50" cy="50" r="15" fill="currentColor"/>
+                                </svg>
+                                <div class="element-name">金</div>
+                            </div>
+                            <div class="card__info">
+                                <h2 class="card__title">金属之命</h2>
+                                <p class="card__type">
+                                    <span class="type-badge metal">金属性</span>
+                                </p>
+                                <div class="card__stats">
+                                    <div class="stat">
+                                        <span class="stat-label">刚毅</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill metal" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">决断</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill metal" style="width: 90%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">收敛</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill metal" style="width: 75%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__flavor">
+                                    <p>金性刚强，处事果断。有组织能力，重义气，但有时过于固执。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 木元素卡片 -->
+        <div class="card" data-rarity="rare holo v" data-element="wood">
+            <div class="card__translater">
+                <div class="card__rotator">
+                    <div class="card__front">
+                        <div class="card__shine"></div>
+                        <div class="card__glare"></div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__rarity">★ V</span>
+                                <span class="card__hp">HP 100</span>
+                            </div>
+                            <div class="card__image">
+                                <svg class="element-icon wood-icon" viewBox="0 0 100 100">
+                                    <path d="M50 10L50 90M30 70L50 90L70 70M30 30L50 10L70 30" stroke="currentColor" stroke-width="4" fill="none"/>
+                                    <path d="M25 50h50" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M35 40h30M35 60h30" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <div class="element-name">木</div>
+                            </div>
+                            <div class="card__info">
+                                <h2 class="card__title">仁德之木</h2>
+                                <p class="card__type">
+                                    <span class="type-badge wood">木属性</span>
+                                </p>
+                                <div class="card__stats">
+                                    <div class="stat">
+                                        <span class="stat-label">仁慈</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill wood" style="width: 95%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">成长</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill wood" style="width: 88%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">创造</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill wood" style="width: 82%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__flavor">
+                                    <p>木性仁厚，生长向上。富有同情心，喜欢创造，但有时过于理想。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 水元素卡片 -->
+        <div class="card" data-rarity="rare ultra" data-element="water">
+            <div class="card__translater">
+                <div class="card__rotator">
+                    <div class="card__front">
+                        <div class="card__shine"></div>
+                        <div class="card__glare"></div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__rarity">★★ Ultra</span>
+                                <span class="card__hp">HP 110</span>
+                            </div>
+                            <div class="card__image">
+                                <svg class="element-icon water-icon" viewBox="0 0 100 100">
+                                    <path d="M50 10C30 40 20 60 20 75a30 30 0 1 0 60 0c0-15-10-35-30-65z" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M35 60c5-10 15-20 15-35" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <circle cx="40" cy="55" r="3" fill="currentColor"/>
+                                    <circle cx="55" cy="65" r="2" fill="currentColor"/>
+                                </svg>
+                                <div class="element-name">水</div>
+                            </div>
+                            <div class="card__info">
+                                <h2 class="card__title">智慧之水</h2>
+                                <p class="card__type">
+                                    <span class="type-badge water">水属性</span>
+                                </p>
+                                <div class="card__stats">
+                                    <div class="stat">
+                                        <span class="stat-label">智慧</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill water" style="width: 92%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">流动</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill water" style="width: 88%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">适应</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill water" style="width: 95%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__flavor">
+                                    <p>水性智慧，灵活流动。适应力强，善于思考，但有时过于多虑。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 火元素卡片 -->
+        <div class="card" data-rarity="rare holo vmax" data-element="fire">
+            <div class="card__translater">
+                <div class="card__rotator">
+                    <div class="card__front">
+                        <div class="card__shine"></div>
+                        <div class="card__glare"></div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__rarity">★★★ VMAX</span>
+                                <span class="card__hp">HP 130</span>
+                            </div>
+                            <div class="card__image">
+                                <svg class="element-icon fire-icon" viewBox="0 0 100 100">
+                                    <path d="M50 10c-5 15-15 25-15 40 0 10 5 15 15 15s15-5 15-15c0-15-10-25-15-40z" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M40 35c3 5 5 10 5 15M60 35c-3 5-5 10-5 15" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.3"/>
+                                    <circle cx="50" cy="50" r="4" fill="currentColor"/>
+                                </svg>
+                                <div class="element-name">火</div>
+                            </div>
+                            <div class="card__info">
+                                <h2 class="card__title">热情之火</h2>
+                                <p class="card__type">
+                                    <span class="type-badge fire">火属性</span>
+                                </p>
+                                <div class="card__stats">
+                                    <div class="stat">
+                                        <span class="stat-label">热情</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill fire" style="width: 96%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">向上</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill fire" style="width: 90%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">礼仪</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill fire" style="width: 78%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__flavor">
+                                    <p>火性热情，积极向上。行动力强，注重礼仪，但有时过于急躁。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 土元素卡片 -->
+        <div class="card" data-rarity="rare rainbow alt" data-element="earth">
+            <div class="card__translater">
+                <div class="card__rotator">
+                    <div class="card__front">
+                        <div class="card__shine"></div>
+                        <div class="card__glare"></div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__rarity">★★★★ Rainbow</span>
+                                <span class="card__hp">HP 140</span>
+                            </div>
+                            <div class="card__image">
+                                <svg class="element-icon earth-icon" viewBox="0 0 100 100">
+                                    <rect x="15" y="15" width="70" height="70" rx="5" fill="none" stroke="currentColor" stroke-width="4"/>
+                                    <line x1="15" y1="35" x2="85" y2="35" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="15" y1="55" x2="85" y2="55" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="15" y1="75" x2="85" y2="75" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="35" y1="15" x2="35" y2="85" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="55" y1="15" x2="55" y2="85" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="75" y1="15" x2="75" y2="85" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <div class="element-name">土</div>
+                            </div>
+                            <div class="card__info">
+                                <h2 class="card__title">厚德之土</h2>
+                                <p class="card__type">
+                                    <span class="type-badge earth">土属性</span>
+                                </p>
+                                <div class="card__stats">
+                                    <div class="stat">
+                                        <span class="stat-label">诚信</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill earth" style="width: 98%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">包容</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill earth" style="width: 94%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">稳定</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-fill earth" style="width: 96%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__flavor">
+                                    <p>土性厚重，信实包容。做事稳重，值得信赖，但有时过于保守。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="pokemon-wuxing.js"></script>
+</body>
+</html>
