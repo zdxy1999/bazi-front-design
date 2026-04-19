@@ -210,5 +210,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// 导出供其他模块使用
-export default ProcessingAnimation;
+// 导出供其他模块使用（改为全局变量方式，兼容浏览器直接引入）
+// export default ProcessingAnimation;

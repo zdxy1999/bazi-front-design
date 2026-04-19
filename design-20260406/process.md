@@ -3,6 +3,158 @@
 
 ---
 
+## 优化记录 (2026-04-19)
+
+### 首页渐入动画优化 (v62)
+**问题**: 组件加载时突然出现，用户体验不佳
+**解决方案**:
+- 添加CSS关键帧动画: `fadeInUp`, `fadeInScale`, `fadeIn`
+- 分层延迟动画，营造流畅的入场效果:
+  - 主容器: 0s (淡入)
+  - Swiper容器: 0.3s (上浮淡入)
+  - 五行图: 0.6s (上浮淡入)
+  - 摘要卡片: 0.7s (上浮淡入)
+  - 环形菜单: 0.8s (缩放淡入)
+  - 主题按钮: 1.0s (淡入)
+  - Swiper按钮/指示点: 1.2s (淡入)
+- 所有动画使用 `ease-out` 缓动函数，视觉效果更自然
+- 使用 `animation-fill-mode: forwards` 保持动画结束状态
+
+**效果**: 组件按顺序优雅浮现，提升视觉品质感
+
+### 按钮组件类名修复
+**问题**: 所有页面使用错误的按钮类名
+- 按钮组件标准类名: `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-lg` 等
+- 页面中错误使用: `.button`, `.button-primary`, `.button-secondary`, `.button-lg` 等
+
+**修复的页面**:
+1. **analysis.html** (八字解析页)
+   - 第141行: `.button button-secondary` → `.btn btn-secondary`
+   - 第184行: `.button button-primary button-lg` → `.btn btn-primary btn-lg`
+
+2. **new-bazi.html** (新建八字页)
+   - 第194行: `.button button-secondary` → `.btn btn-secondary`
+   - 第197行: `.button button-primary` → `.btn btn-primary`
+
+3. **match.html** (姻缘匹配页)
+   - 第138行: `.button button-secondary` → `.btn btn-secondary`
+   - 第141行: `.button button-primary` → `.btn btn-primary`
+   - 第183行: `.button button-primary button-lg` → `.btn btn-primary btn-lg`
+
+4. **new-match.html** (新建姻缘匹配页)
+   - 第127行: `.button button-secondary` → `.btn btn-secondary`
+   - 第130行: `.button button-primary` → `.btn btn-primary`
+
+**效果**: 所有按钮现在都正确使用按钮组件的液态玻璃质感样式
+
+### 按钮样式优化 (2026-04-19)
+**问题**: 按钮样式不符合设计规范
+- 返回按钮使用带颜色的变体（btn-secondary, btn-primary）
+- 主要操作按钮的颜色主题不明确
+
+**解决方案**:
+1. **返回按钮统一使用ghost样式**（无颜色、半透明）
+   - analysis.html: 返回首页按钮
+   - match.html: 返回按钮
+   - new-bazi.html: 返回按钮
+   - new-match.html: 返回按钮
+
+2. **主要操作按钮使用五行色主题**：
+   - 创建档案：btn-wood（木-绿色，代表新生）
+   - 重新计算：btn-wood（木-绿色，代表重新生长）
+   - 开始匹配：btn-fire（火-红色，代表姻缘缘分）
+   - 开始计算解析：btn-wood（木-绿色，代表生长）
+   - 去计算推荐：btn-wood（木-绿色，代表新生）
+
+3. **CSS选择器修复**：
+   - match.css: `.action-buttons .button` → `.action-buttons .btn`
+
+### 推荐页面交互优化 (2026-04-19)
+**问题**: 推荐页面的匹配理由固定显示第一个推荐，不跟随swiper切换
+
+**解决方案**:
+- 修改match.js的renderMatchResults函数
+- 为每个slide添加dataset.matchIndex
+- 监听swiper的slideChange事件
+- 切换slide时自动更新对应的匹配理由
+- 使用activeIndex获取当前激活的slide索引
+
+**效果**: 用户切换推荐卡片时，匹配理由也会同步更新显示
+
+### 页面加载错误修复 (2026-04-19)
+**问题**: 姻缘匹配页面报错，无法正常显示
+1. **processing.js报错**: `Uncaught SyntaxError: Unexpected token 'export'`
+   - 原因：使用了ES6模块导出语法，但浏览器直接引入不支持
+   - 解决：注释掉`export default ProcessingAnimation`
+
+2. **markdown.js报错**: `marked is not defined`
+   - 原因：缺少marked.js和highlight.js的CDN引用
+   - 解决：为match.html和analysis.html添加CDN依赖
+   ```html
+   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+   ```
+
+3. **match.js报错**: `Cannot read properties of undefined (reading 'yearPillar')`
+   - 原因：mock数据中的推荐对象缺少bazi字段
+   - 解决：添加安全检查，确保bazi数据存在才渲染
+   - 补充：完善mock数据，为所有推荐对象添加完整的八字信息
+
+4. **数据兼容性优化**：
+   - 添加hasBazi检查
+   - 数据缺失时显示"八字信息加载中..."
+   - 确保页面不会因数据不完整而崩溃
+
+**效果**: 姻缘匹配页面现在可以正常加载和显示
+
+### 推荐卡片与首页卡片统一设计 (2026-04-19)
+**需求**: 推荐卡片的内容和风格要与home页面的card一模一样
+
+**解决方案**:
+
+1. **HTML结构完全一致**：
+   - 使用与home页面相同的`profile-slide`结构
+   - 包含五行生克图（wuxing-chart）
+   - 包含完整的摘要卡片（summary-card）
+   - 卡片内元素顺序和样式与home页面完全相同
+
+2. **Mock数据完善**：
+   为profile_001的3个推荐对象添加完整数据：
+   - `bazi`: 完整的八字四柱信息（带nayin）
+   - `mingua`: 完整的命卦信息（number, name, gua, element, hsl等）
+   - `dayMaster`: 日主信息（element, stem, isDayMaster）
+   - `elementProportion`: 五行占比数据
+   - `birthDate`, `birthYear`, `birthMonth`, `birthDay`, `birthHour`, `birthMinute`: 完整出生信息
+
+3. **样式统一**：
+   - match.css完全复制home.css的样式
+   - 包括响应式布局（PC端水平排列，移动端垂直排列）
+   - 卡片、按钮、文字大小等全部一致
+
+4. **组件依赖**：
+   - 引入wuxing-chart组件的CSS和JS
+   - 添加renderWuxingChart函数渲染五行图
+   - 使用minguaIcons SVG图标（与home页面一致）
+
+5. **卡片内容**（与home页面完全一致）：
+   - 命卦图标（minguaIcons）
+   - 档案名称
+   - 出生日期
+   - 八字信息（4个bazi-pillar）
+   - 命卦信息
+   - 日主信息
+   - 卡片底部（显示"系统推荐匹配"）
+
+6. **版本号更新**：
+   - 所有JS文件添加`?v=2`版本号
+   - match.js更新为`?v=3`
+   - match.css更新为`?v=2`
+   - 确保浏览器加载最新版本
+
+**效果**: 推荐卡片现在与home页面的档案卡片完全一致，包括五行图、卡片样式、布局结构
+
+---
+
 ## 实现计划 (2026-04-06)
 
 ### 阶段1: 设计基础 ✅
@@ -2352,3 +2504,45 @@ background: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightnes
 - `components/card/card.css` - 移除CSS变量后的%
 - `src/pages/home/test-css-vars.html` - CSS变量测试
 - `src/pages/home/test-hsla-fix.html` - 修复验证测试
+### 匹配页面布局问题修复 (2026-04-19)
+**问题**: 匹配界面的排列全部乱了
+1. 卡片没有左右居中
+2. 卡片的八字显示得不全
+3. 卡片边缘的光效没有跟着鼠标走
+4. 匹配理由没有左右居中
+5. 匹配理由一页放不下时无法滚动
+6. Swiper按钮的标识不见了
+7. 点击按钮没有切换
+
+**解决方案**:
+
+1. **完全重写match.css**：
+   - 主容器使用`margin: 0 auto`实现水平居中
+   - state-content使用`margin: 0 auto` + `max-width: 1400px`
+   - 所有卡片使用`margin: 0 auto`居中
+
+2. **八字信息完整显示**：
+   - `.bazi-info`使用`flex-wrap: wrap`
+   - `.bazi-pillar`添加`white-space: nowrap`
+   - 调整padding为`6px 10px`
+
+3. **卡片光晕效果重新初始化**：
+   - 在`renderMatchResults`完成后重新创建CardComponent实例
+   - 使用独立的`window.matchCardComponent`
+   - 添加150ms延迟
+
+4. **匹配理由卡片居中+可滚动**：
+   - `.reason-card`设置`margin: 0 auto` + `max-width: 800px`
+   - `.reason-card .glass-card-body`设置`max-height: 400px`
+   - 添加`overflow-y: auto`
+   - 自定义滚动条样式
+
+5. **Swiper按钮添加SVG图标**：
+   - 添加左箭头和右箭头SVG图标
+
+6. **版本号更新**：
+   - match.css: `?v=3`
+   - match.js: `?v=4`
+
+**效果**: 所有布局问题已修复
+

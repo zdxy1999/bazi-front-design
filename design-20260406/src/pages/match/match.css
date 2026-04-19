@@ -6,113 +6,365 @@
 .match-container {
   width: 100%;
   min-height: 100vh;
-  padding: 20px;
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  justify-content: flex-start;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
 }
 
 /* 状态内容 */
 .state-content {
   width: 100%;
-  max-width: 800px;
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 0 auto;
+  text-align: center;
 }
+
+/* 状态切换动画 */
+#hasResultsState,
+#calculatingState,
+#noResultsState {
+  transition: opacity 0.5s ease-out;
+}
+
+#hasResultsState.fade-out,
+#calculatingState.fade-out,
+#noResultsState.fade-out {
+  opacity: 0;
+}
+
+#calculatingState.fade-in {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Swiper容器
+   ============================================ */
 
 /* Swiper容器 */
 .match-container .swiper {
   width: 100%;
-  margin-bottom: 20px;
-}
-
-/* 推荐卡片 */
-.match-summary-card {
-  width: 100%;
-  max-width: 400px;
+  height: auto;
+  overflow: visible;
+  position: relative;
   margin: 0 auto;
 }
 
-.match-summary-card .glass-card-content {
+/* Swiper Wrapper */
+.match-container .swiper-wrapper {
+  display: flex;
+  width: 100%;
+  height: auto;
+  align-items: stretch;
+}
+
+/* Swiper Slide */
+.match-container .swiper-slide {
+  position: relative;
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* 简单模式：只显示active的slide */
+.match-container .swiper.swiper-simple .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  position: absolute;
+  z-index: 0;
+}
+
+/* 简单模式：active的slide */
+.match-container .swiper.swiper-simple .swiper-slide.swiper-slide-active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  position: relative;
+  z-index: 10;
+}
+
+/* ============================================
+   卡片容器和卡片
+   ============================================ */
+
+/* 卡片容器 */
+.match-card-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+/* 卡片样式 */
+.match-card-container .glass-card {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
 }
 
-.match-summary-card .mingua-icon {
+/* ============================================
+   卡片内部元素样式
+   ============================================ */
+
+/* 命卦图标 - 使用命卦主题色 */
+.match-card-container .glass-card .glass-card-logo .mingua-icon {
   width: 48px;
   height: 48px;
+  color: hsla(var(--theme-hue), var(--theme-saturation), var(--theme-lightness), 1) !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.match-summary-card .glass-card-body {
+/* 确保SVG正确显示 */
+.match-card-container .glass-card .glass-card-logo .mingua-icon svg {
   width: 100%;
-  text-align: center;
+  height: 100%;
+  display: block;
 }
 
-.match-summary-card h3 {
-  font-size: 18px;
+/* 确保SVG内部元素也使用主题色 */
+.match-card-container .glass-card .glass-card-logo .mingua-icon svg text,
+.match-card-container .glass-card .glass-card-logo .mingua-icon svg circle,
+.match-card-container .glass-card .glass-card-logo .mingua-icon svg ellipse {
+  color: inherit !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* 档案名称 */
+.match-card-container .profile-name {
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 4px 0;
+  margin: 0;
 }
 
-.match-summary-card p {
+/* 出生日期 */
+.match-card-container .profile-birth {
   font-size: 14px;
   color: var(--text-secondary);
-  margin: 0 0 8px 0;
+  margin: 0;
 }
 
-.bazi-preview {
+/* 八字信息 - 确保不换行，完整显示 */
+.match-card-container .bazi-info {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
   justify-content: center;
-  margin: 8px 0;
 }
 
-.bazi-preview span {
-  padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  font-size: 12px;
-  color: var(--text-primary);
-}
-
-:root[data-theme="light"] .bazi-preview span {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-.mingua-tag {
-  display: inline-block;
-  padding: 6px 12px;
+.match-card-container .bazi-pillar {
+  padding: 6px 10px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 14px;
   color: var(--text-primary);
-  margin-top: 4px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-:root[data-theme="light"] .mingua-tag {
+:root[data-theme="light"] .match-card-container .bazi-pillar {
   background: rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* 命卦信息 */
+.match-card-container .mingua-info {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.match-card-container .mingua-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  text-align: center;
+}
+
+.match-card-container .mingua-details {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+/* 日主信息 */
+.match-card-container .daymaster-info {
+  margin-top: 8px;
+}
+
+.match-card-container .daymaster-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+:root[data-theme="light"] .match-card-container .daymaster-tag {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================
+   推荐理由卡片
+   ============================================ */
+
 /* 理由卡片 */
 .reason-card {
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
+.reason-card .glass-card-body {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* 自定义滚动条样式 */
+.reason-card .glass-card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reason-card .glass-card-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.reason-card .glass-card-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.reason-card .glass-card-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+:root[data-theme="light"] .reason-card .glass-card-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="light"] .reason-card .glass-card-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .reason-card .glass-card-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   Swiper按钮和分页器
+   ============================================ */
+
+/* Swiper按钮 */
+.match-container .swiper-button-prev,
+.match-container .swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 1000;
+  pointer-events: auto;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.match-container .swiper-button-prev {
+  left: 10px;
+}
+
+.match-container .swiper-button-next {
+  right: 10px;
+}
+
+.match-container .swiper-button-prev:hover,
+.match-container .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.match-container .swiper-button-prev svg,
+.match-container .swiper-button-next svg {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+/* 分页指示器 */
+.match-container .swiper-pagination {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================
+   其他卡片样式
+   ============================================ */
 
 /* 处理中卡片 */
 .processing-card {
   width: 100%;
+  max-width: 500px;
   text-align: center;
+  margin: 0 auto;
 }
 
 .processing-animation {
@@ -130,7 +382,9 @@
 /* 行动卡片 */
 .action-card {
   width: 100%;
+  max-width: 500px;
   text-align: center;
+  margin: 0 auto;
 }
 
 .action-message {
@@ -144,33 +398,136 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
+/* 计算状态的返回按钮固定在底部 */
+#calculatingState .action-buttons {
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+/* ============================================
+   响应式布局
+   ============================================ */
+
+/* PC端 (>= 768px) - 左右布局 */
+@media (min-width: 768px) {
+  /* 状态内容改为左右布局 */
+  #hasResultsState.state-content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  /* Swiper容器占左侧40% */
+  #hasResultsState .swiper {
+    flex: 0 0 40%;
+    max-width: 40%;
+  }
+
+  /* 推荐理由卡片占右侧60% */
+  #hasResultsState .reason-card {
+    flex: 0 0 60%;
+    max-width: 60%;
+  }
+
+  /* Swiper wrapper - 只显示一张卡片 */
+  #hasResultsState .swiper-wrapper {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  /* 确保只显示active的slide */
+  #hasResultsState .swiper-slide {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #hasResultsState .swiper-slide:not(.swiper-slide-active) {
+    display: none !important;
+  }
+
+  #hasResultsState .swiper-slide.swiper-slide-active {
+    display: flex !important;
+  }
+
+  /* 卡片容器 */
+  .match-card-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 卡片内容区域可滚动 */
+  .match-card-container .glass-card .glass-card-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  /* 理由卡片body */
+  .reason-card .glass-card-body {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+
+  /* 分页指示器固定在底部 */
+  .match-container .swiper-pagination {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+  }
+}
+
+/* 移动端 (< 768px) - 上下布局 */
+@media (max-width: 767px) {
   .match-container {
     padding: 10px;
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-top: 20px;
+    padding-bottom: 140px;
+    height: auto;
+    min-height: 100vh;
   }
 
   .state-content {
-    max-width: 100%;
+    gap: 20px;
   }
 
+  .match-card-container .glass-card {
+    max-width: 90vw;
+  }
+
+  .reason-card {
+    max-width: 90vw;
+  }
+
+  /* 按钮组垂直排列 */
   .action-buttons {
     flex-direction: column-reverse;
+    gap: 10px;
   }
 
-  .action-buttons .button {
+  .action-buttons .btn {
     width: 100%;
   }
-}
 
-@media (max-width: 480px) {
-  .match-summary-card {
-    max-width: 100%;
-  }
-
-  .bazi-preview {
-    flex-wrap: wrap;
+  /* 分页指示器相对定位 */
+  .match-container .swiper-pagination {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 10px;
   }
 }

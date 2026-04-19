@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="../../../components/processing/processing.css">
   <link rel="stylesheet" href="../../../components/markdown/markdown.css">
   <link rel="stylesheet" href="analysis.css">
+
+  <!-- Markdown.js依赖 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
   <!-- 背景容器 -->
@@ -138,7 +142,7 @@
 
       <!-- 返回按钮 -->
       <div class="action-buttons">
-        <button class="button button-secondary" onclick="goBack()">
+        <button class="btn btn-ghost" onclick="goBack()">
           返回首页
         </button>
       </div>
@@ -181,7 +185,7 @@
         <div class="glass-card-content">
           <div class="glass-card-body">
             <p class="action-message">该档案尚未进行八字解析</p>
-            <button class="button button-primary button-lg" onclick="startAnalysis()">
+            <button class="btn btn-primary btn-lg" onclick="startAnalysis()">
               开始计算解析
             </button>
           </div>

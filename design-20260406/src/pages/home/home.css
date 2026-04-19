@@ -3,6 +3,95 @@
  * Home Page Styles
  */
 
+/* ============================================
+   页面加载渐入动画
+   ============================================ */
+
+/* 定义关键帧动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 主容器渐入 */
+.home-container {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Swiper容器渐入（延迟0.3s）*/
+.home-container .swiper {
+  opacity: 0;
+  animation: fadeInUp 1s ease-out 0.3s forwards;
+}
+
+/* 环形菜单渐入（延迟0.8s）*/
+.home-container .circular-menu {
+  opacity: 0;
+  animation: fadeInScale 0.8s ease-out 0.8s forwards;
+}
+
+/* 主题切换按钮渐入（延迟1s）*/
+.theme-toggle {
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out 1s forwards;
+}
+
+/* 五行图渐入（延迟0.6s）*/
+.home-container .wuxing-chart-container {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+/* 摘要卡片渐入（延迟0.7s，每个卡片不同延迟）*/
+.profile-content .summary-card {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.7s forwards;
+}
+
+/* Swiper按钮渐入（延迟1.2s）*/
+.home-container .swiper-button-prev,
+.home-container .swiper-button-next {
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out 1.2s forwards;
+}
+
+/* 分页指示器渐入（延迟1.2s）*/
+.home-container .swiper-pagination {
+  opacity: 0 !important;
+  animation: fadeIn 0.6s ease-out 1.2s forwards !important;
+}
+
+/* ============================================
+   主容器基础样式
+   ============================================ */
+
 /* 主容器 */
 .home-container {
   width: 100%;

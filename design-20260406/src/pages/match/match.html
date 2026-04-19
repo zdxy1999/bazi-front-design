@@ -14,7 +14,12 @@
   <link rel="stylesheet" href="../../../components/processing/processing.css">
   <link rel="stylesheet" href="../../../components/markdown/markdown.css">
   <link rel="stylesheet" href="../../../components/swiper/swiper.css">
-  <link rel="stylesheet" href="match.css">
+  <link rel="stylesheet" href="match.css?v=15">
+
+
+  <!-- Markdown.js依赖 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
   <!-- 背景容器 -->
@@ -114,8 +119,16 @@
         <div class="swiper-wrapper" id="matchSwiperWrapper">
           <!-- 推荐卡片动态生成 -->
         </div>
-        <button class="swiper-button-prev"></button>
-        <button class="swiper-button-next"></button>
+        <button class="swiper-button-prev" aria-label="上一页">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15,18 9,12 15,6"></polyline>
+          </svg>
+        </button>
+        <button class="swiper-button-next" aria-label="下一页">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </button>
         <div class="swiper-pagination"></div>
       </div>
 
@@ -135,10 +148,10 @@
 
       <!-- 操作按钮 -->
       <div class="action-buttons">
-        <button class="button button-secondary" onclick="goBack()">
+        <button class="btn btn-ghost" onclick="goBack()">
           返回
         </button>
-        <button class="button button-primary" onclick="recalculateMatch()">
+        <button class="btn btn-wood" onclick="recalculateMatch()">
           重新计算
         </button>
       </div>
@@ -146,29 +159,30 @@
 
     <!-- 状态2：计算中 -->
     <div id="calculatingState" class="state-content" style="display: none;">
-      <div class="glass-card processing-card" data-card>
-        <div class="card-edge-glow"></div>
-        <div class="card-glow"></div>
-        <div class="glass-card-content">
-          <div class="glass-card-body">
-            <div class="processing-animation">
-              <div class="processing-taichi processing-rotating">
-                <div class="processing-glow"></div>
-                <div class="processing-yang">
-                  <svg viewBox="0 0 100 100" width="200" height="200">
-                    <path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/>
-                  </svg>
-                </div>
-                <div class="processing-yin">
-                  <svg viewBox="0 0 100 100" width="200" height="200">
-                    <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <p class="processing-text">姻缘推荐正在计算中...</p>
+      <div class="processing-animation">
+        <div class="processing-taichi processing-rotating">
+          <div class="processing-glow"></div>
+          <div class="processing-yang">
+            <svg viewBox="0 0 100 100" class="taichi-svg">
+              <path d="M 50 0 A 50 50 0 0 0 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#ffffff"/>
+              <circle cx="50" cy="75" r="12.5" fill="#1a1a1a"/>
+            </svg>
+          </div>
+          <div class="processing-yin">
+            <svg viewBox="0 0 100 100" class="taichi-svg">
+              <path d="M 50 0 A 50 50 0 0 1 50 100 A 25 25 0 0 0 50 50 A 25 25 0 0 1 50 0" fill="#1a1a1a"/>
+              <circle cx="50" cy="25" r="12.5" fill="#ffffff"/>
+            </svg>
           </div>
         </div>
+      </div>
+      <p class="processing-text">姻缘推荐正在计算中...</p>
+
+      <!-- 返回按钮 -->
+      <div class="action-buttons">
+        <button class="btn btn-ghost" onclick="goBack()">
+          返回
+        </button>
       </div>
     </div>
 
@@ -180,7 +194,7 @@
         <div class="glass-card-content">
           <div class="glass-card-body">
             <p class="action-message">还没有进行姻缘匹配</p>
-            <button class="button button-primary button-lg" onclick="calculateMatch()">
+            <button class="btn btn-primary btn-lg" onclick="calculateMatch()">
               去计算推荐
             </button>
           </div>
@@ -190,12 +204,12 @@
   </main>
 
   <!-- 脚本加载 -->
-  <script src="../../../components/background/background.js"></script>
-  <script src="../../../components/card/card.js"></script>
-  <script src="../../../components/button/button.js"></script>
-  <script src="../../../components/processing/processing.js"></script>
-  <script src="../../../components/markdown/markdown.js"></script>
-  <script src="../../../components/swiper/swiper.js"></script>
-  <script src="match.js"></script>
+  <script src="../../../components/background/background.js?v=2"></script>
+  <script src="../../../components/card/card.js?v=2"></script>
+  <script src="../../../components/button/button.js?v=2"></script>
+  <script src="../../../components/processing/processing.js?v=2"></script>
+  <script src="../../../components/markdown/markdown.js?v=2"></script>
+  <script src="../../../components/swiper/swiper.js?v=2"></script>
+  <script src="match.js?v=12"></script>
 </body>
 </html>

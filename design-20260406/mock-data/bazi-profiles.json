@@ -76,8 +76,132 @@
       "matchResults": [
         {
           "id": "match_001",
-          "name": "推荐对象1",
-          "reason": "## 匹配理由\n五行相生，木火相生，性格互补。对方命卦为离卦，与您的坎卦形成水火既济之象。"
+          "name": "推荐对象_离卦",
+          "birthDate": "1992-03-15T10:30:00",
+          "birthYear": 1992,
+          "birthMonth": 3,
+          "birthDay": 15,
+          "birthHour": 10,
+          "birthMinute": 30,
+          "bazi": {
+            "yearPillar": { "stem": "壬", "branch": "申", "nayin": "剑锋金" },
+            "monthPillar": { "stem": "甲", "branch": "寅", "nayin": "大溪水" },
+            "dayPillar": { "stem": "乙", "branch": "卯", "nayin": "大溪水" },
+            "hourPillar": { "stem": "丙", "branch": "辰", "nayin": "沙中土" }
+          },
+          "dayMaster": {
+            "element": "wood",
+            "stem": "乙",
+            "isDayMaster": true
+          },
+          "mingua": {
+            "number": 9,
+            "name": "九紫离卦",
+            "gua": "li",
+            "element": "fire",
+            "position": "south",
+            "colorName": "紫",
+            "hsl": {
+              "hue": 275,
+              "saturation": "80%",
+              "lightness": "60%"
+            },
+            "direction": "南"
+          },
+          "elementProportion": {
+            "wood": { "percentage": 35, "isDayMaster": true },
+            "fire": { "percentage": 25 },
+            "earth": { "percentage": 15 },
+            "metal": { "percentage": 15 },
+            "water": { "percentage": 10 }
+          },
+          "reason": "## 匹配理由\n\n### 五行相生\n五行相生，木火相生，性格互补。对方的木火组合与您的金水形成相生关系。\n\n### 命卦配合\n对方命卦为离卦，与您的坎卦形成水火既济之象，阴阳调和。\n\n### 性格分析\n对方性格开朗热情，与您的沉稳内敛形成完美互补。\n\n### 综合评分\n匹配度：85分"
+        },
+        {
+          "id": "match_002",
+          "name": "推荐对象_震卦",
+          "birthDate": "1990-08-22T14:20:00",
+          "birthYear": 1990,
+          "birthMonth": 8,
+          "birthDay": 22,
+          "birthHour": 14,
+          "birthMinute": 20,
+          "bazi": {
+            "yearPillar": { "stem": "庚", "branch": "午", "nayin": "路旁土" },
+            "monthPillar": { "stem": "甲", "branch": "申", "nayin": "石榴木" },
+            "dayPillar": { "stem": "丙", "branch": "子", "nayin": "涧下水" },
+            "hourPillar": { "stem": "戊", "branch": "戌", "nayin": "大海水" }
+          },
+          "dayMaster": {
+            "element": "fire",
+            "stem": "丙",
+            "isDayMaster": true
+          },
+          "mingua": {
+            "number": 3,
+            "name": "三碧震卦",
+            "gua": "zhen",
+            "element": "wood",
+            "position": "east",
+            "colorName": "碧",
+            "hsl": {
+              "hue": 200,
+              "saturation": "75%",
+              "lightness": "55%"
+            },
+            "direction": "东"
+          },
+          "elementProportion": {
+            "wood": { "percentage": 30 },
+            "fire": { "percentage": 28, "isDayMaster": true },
+            "earth": { "percentage": 20 },
+            "metal": { "percentage": 12 },
+            "water": { "percentage": 10 }
+          },
+          "reason": "## 匹配理由\n\n### 五行互补\n火金相克，但对方土旺可以通关，形成火生土、土生金的流通格局。\n\n### 命卦配合\n对方命卦为震卦，与您的坎卦形成水木相生，事业运强。\n\n### 性格分析\n对方积极进取，能够带动您的积极性。\n\n### 综合评分\n匹配度：78分"
+        },
+        {
+          "id": "match_003",
+          "name": "推荐对象_巽卦",
+          "birthDate": "1994-12-10T09:15:00",
+          "birthYear": 1994,
+          "birthMonth": 12,
+          "birthDay": 10,
+          "birthHour": 9,
+          "birthMinute": 15,
+          "bazi": {
+            "yearPillar": { "stem": "甲", "branch": "戌", "nayin": "山头火" },
+            "monthPillar": { "stem": "丙", "branch": "寅", "nayin": "炉中火" },
+            "dayPillar": { "stem": "丁", "branch": "丑", "nayin": "涧下水" },
+            "hourPillar": { "stem": "甲", "branch": "巳", "nayin": "大溪水" }
+          },
+          "dayMaster": {
+            "element": "fire",
+            "stem": "丁",
+            "isDayMaster": true
+          },
+          "mingua": {
+            "number": 4,
+            "name": "四绿巽卦",
+            "gua": "xun",
+            "element": "wood",
+            "position": "southeast",
+            "colorName": "绿",
+            "hsl": {
+              "hue": 120,
+              "saturation": "70%",
+              "lightness": "50%"
+            },
+            "direction": "东南"
+          },
+          "elementProportion": {
+            "wood": { "percentage": 32 },
+            "fire": { "percentage": 30, "isDayMaster": true },
+            "earth": { "percentage": 18 },
+            "metal": { "percentage": 10 },
+            "water": { "percentage": 10 }
+          },
+          "reason": "## 匹配理由\n\n### 五行调和\n木火通明，对方的木火组合与您的金水形成较为平衡的关系。\n\n### 命卦配合\n对方命卦为巽卦，与您的坎卦形成水木相生，有助于情感发展。\n\n### 性格分析\n对方温柔体贴，善于沟通，与您的性格较为契合。\n\n### 综合评分\n匹配度：82分"
         }
       ]
     },
