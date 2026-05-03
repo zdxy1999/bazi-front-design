@@ -38,6 +38,13 @@
   color: var(--text-primary);
 }
 
+/* Radio组布局 */
+.radio-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
 /* 卡片底部按钮 */
 .form-card .glass-card-footer {
   display: flex;
@@ -61,6 +68,19 @@
   }
 
   .form-card .glass-card-footer .button {
+    width: 100%;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .radio-group .radio-button {
+    width: 100%;
+  }
+
+  .radio-group .radio-button-text {
     width: 100%;
   }
 }

@@ -38,6 +38,99 @@
   color: var(--text-primary);
 }
 
+/* ============================================
+   性别选项单选按钮组
+   ============================================ */
+
+.radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.radio-button {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio-button input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-button-text {
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .radio-button-text {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.radio-button input[type="radio"]:checked + .radio-button-text {
+  border-color: var(--water-primary);
+  color: var(--water-primary);
+  background: rgba(96, 165, 250, 0.15);
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+:root[data-theme="light"] .radio-button input[type="radio"]:checked + .radio-button-text {
+  background: rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+}
+
+.radio-button:hover .radio-button-text {
+  border-color: var(--water-primary);
+  color: var(--water-primary);
+}
+
+/* ============================================
+   出生年份范围
+   ============================================ */
+
+.year-range-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.year-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.year-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.year-separator {
+  display: flex;
+  align-items: center;
+  padding-bottom: 8px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.year-input .input {
+  width: 100%;
+}
+
+/* ============================================ */
+
 /* 文本域 */
 .textarea-input {
   width: 100%;
@@ -64,8 +157,8 @@
 
 .textarea-input:focus {
   outline: none;
-  border-color: var(--fire-primary);
-  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+  border-color: var(--water-primary);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
 /* 卡片底部按钮 */

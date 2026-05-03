@@ -62,19 +62,19 @@ class CircularMenu {
   /**
    * 计算每个菜单项的位置
    * 使用CSS变量存储位置，支持任意数量菜单项
-   * 只在上半圆展开菜单项（180度范围）
+   * 在下半圆展开菜单项（180度范围）
    */
   calculatePositions() {
-    // 只使用上半圆（180度），从左上(-180°/180°)到右上(0°/360°)
+    // 只使用下半圆（180度），从左到右
     const totalAngleSpan = 180;
 
     // 计算角度间隔：如果有1个项，间隔为0；否则平分180度
     const angleStep = this.itemCount > 1 ? totalAngleSpan / (this.itemCount - 1) : 0;
 
-    // 起始角度：180度（左上方）
+    // 起始角度：180度（左侧），向右展开
     const startAngle = 180;
 
-    console.log('[CircularMenu] 计算位置（上半圆模式） - 菜单项数量:', this.itemCount, '角度间隔:', angleStep, '起始角度:', startAngle, '半径:', this.radius);
+    console.log('[CircularMenu] 计算位置（下半圆模式） - 菜单项数量:', this.itemCount, '角度间隔:', angleStep, '起始角度:', startAngle, '半径:', this.radius);
 
     this.items.forEach((item, index) => {
       const angle = startAngle + (index * angleStep);
@@ -82,8 +82,9 @@ class CircularMenu {
       const radians = (angle * Math.PI) / 180;
 
       // 计算位置（使用三角函数）
+      // 注意：Y轴取负值，让菜单向下展开（下半圆）
       const x = Math.cos(radians) * this.radius;
-      const y = Math.sin(radians) * this.radius;
+      const y = -Math.sin(radians) * this.radius; // 取负值
 
       console.log(`[CircularMenu] 菜单项 ${index + 1}: 角度=${angle.toFixed(1)}°, x=${x.toFixed(1)}px, y=${y.toFixed(1)}px`);
 
@@ -267,35 +268,24 @@ function initThemeToggle() {
 
   // 如果没有主题切换按钮，跳过初始化
   if (!themeToggle) {
-    console.log('未找到主题切换按钮，跳过初始化');
+    console.log('[主题切换] 未找到主题切换按钮，跳过初始化');
     return;
   }
-
-  const themeIcon = themeToggle.querySelector('.theme-icon');
 
   // 从localStorage读取主题
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
     document.body.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
   }
 
   themeToggle.addEventListener('click', () => {
-    const currentTheme = document.body.getAttribute('data-theme');
+    const currentTheme = document.body.getAttribute('data-theme') || 'dark';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
     document.body.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
+    console.log(`[主题切换] 切换到 ${newTheme} 主题`);
   });
-
-  function updateThemeIcon(theme) {
-    if (theme === 'dark') {
-      themeIcon.textContent = '🌙';
-    } else {
-      themeIcon.textContent = '☀️';
-    }
-  }
 }
 
 /**

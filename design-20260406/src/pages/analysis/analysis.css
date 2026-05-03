@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 40px;
 }
 
 /* 状态内容 */
@@ -21,12 +21,13 @@
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px !important;
 }
 
 /* 八字详情卡片 */
 .bazi-detail-card {
   width: 100%;
+  margin-bottom: 40px !important;
 }
 
 /* 四柱八字显示 */
@@ -150,6 +151,7 @@
 /* Markdown卡片 */
 .markdown-card {
   width: 100%;
+  margin-bottom: 40px !important;
 }
 
 /* 处理中卡片 */
@@ -158,10 +160,25 @@
   text-align: center;
 }
 
+/* 计算状态容器垂直居中 */
+#calculatingState {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 20px;
+}
+
 .processing-animation {
   display: flex;
   justify-content: center;
-  margin: 40px 0;
+  margin: 0;
 }
 
 .processing-text {
@@ -187,10 +204,16 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+  margin-top: 32px !important;
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
+  /* 计算状态在移动端也居中 */
+  #calculatingState {
+    padding: 20px 10px;
+  }
+
   .analysis-container {
     padding: 10px;
   }

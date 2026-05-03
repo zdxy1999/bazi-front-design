@@ -3,82 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>八字首页</title>
+  <title>登录</title>
 
-  <!-- 样式加载顺序 -->
+  <!-- 样式加载 -->
   <link rel="stylesheet" href="../../../style/tokens.css">
   <link rel="stylesheet" href="../../../style/common.css">
   <link rel="stylesheet" href="../../../components/background/background.css">
-  <link rel="stylesheet" href="../../../components/card/card.css?v=4">
-  <link rel="stylesheet" href="../../../components/swiper/swiper.css?v=2">
-  <link rel="stylesheet" href="../../../components/menu/menu.css?v=2">
+  <link rel="stylesheet" href="../../../components/card/card.css">
   <link rel="stylesheet" href="../../../components/button/button.css">
+  <link rel="stylesheet" href="../../../components/input/input.css">
   <link rel="stylesheet" href="../../../components/selector/selector.css">
-  <link rel="stylesheet" href="../../../components/wuxing-chart/wuxing-chart.css?v=4">
-  <link rel="stylesheet" href="home.css?v=62">
-  <style>
-    /* 移动端强制覆盖样式 - 最高优先级 */
-    @media (max-width: 480px) {
-      body .home-container {
-        padding: 10px !important;
-        overflow-y: auto !important;
-        height: auto !important;
-        min-height: 100vh !important;
-        justify-content: flex-start !important;
-        padding-top: 20px !important;
-        padding-bottom: 160px !important; /* 增加底部padding，确保指示点和菜单不被遮挡 */
-      }
-
-      body .home-container .profile-slide {
-        width: 90vw !important;
-        max-width: 90vw !important;
-        margin: 0 auto !important;
-      }
-
-      body .home-container .profile-content {
-        width: 100% !important;
-      }
-
-      /* 强制覆盖summary-card的min-width和width */
-      body .home-container .summary-card {
-        width: 90% !important;
-        max-width: 90% !important;
-        min-width: 0 !important;
-        margin: 0 auto 10px auto !important;
-      }
-
-      /* 强制覆盖glass-card.summary-card */
-      body .home-container .glass-card.summary-card {
-        width: 90% !important;
-        max-width: 90% !important;
-        min-width: 0 !important;
-        margin: 0 auto 10px auto !important;
-      }
-
-      /* 强制覆盖所有glass-card */
-      body .home-container .glass-card {
-        width: 90% !important;
-        max-width: 90% !important;
-        min-width: 0 !important;
-      }
-
-      /* 五行图响应式 */
-      body .home-container .wuxing-chart-container {
-        width: 90% !important;
-        max-width: 90% !important;
-        margin: 0 auto !important;
-      }
-
-      /* 移动端指示点非常靠近屏幕底部 */
-      body .home-container .swiper-pagination {
-        bottom: 6px !important; /* 非常靠近底部 */
-      }
-
-      .swiper-pagination {
-        bottom: 6px !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="login.css?v=2">
 </head>
 <body>
   <!-- 背景容器 -->
@@ -159,73 +94,8 @@
     <div class="glass-overlay"></div>
   </div>
 
-  <!-- 主内容区 -->
-  <main class="home-container" style="align-items: flex-start !important;">
-    <!-- Swiper翻页容器 -->
-    <div class="swiper" data-swiper="cards" data-swiper-loop data-swiper-simple style="margin-left: 0 !important; margin-right: auto !important;">
-      <div class="swiper-wrapper" id="swiperWrapper" style="justify-content: flex-start !important;">
-        <!-- 档案卡片将通过JS动态生成 -->
-      </div>
-
-      <!-- PC端翻页按钮 -->
-      <button class="swiper-button-prev" aria-label="上一页">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15,18 9,12 15,6"></polyline>
-        </svg>
-      </button>
-      <button class="swiper-button-next" aria-label="下一页">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9,18 15,12 9,6"></polyline>
-        </svg>
-      </button>
-
-      <!-- 分页指示器 -->
-      <div class="swiper-pagination"></div>
-    </div>
-
-    <!-- 环形菜单 -->
-    <div class="circular-menu" data-menu="4">
-      <button class="menu-toggle" aria-label="打开菜单">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
-      <div class="menu-items">
-        <button class="menu-item wood-card" data-action="analysis" aria-label="八字详解">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10 9 9 9 8 9"/>
-          </svg>
-        </button>
-        <button class="menu-item fire-card" data-action="match" aria-label="姻缘匹配">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </button>
-        <button class="menu-item water-card" data-action="login" aria-label="登录">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </button>
-        <button class="menu-item earth-card" data-action="new-bazi" aria-label="新建档案">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="16"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </main>
-
   <!-- 主题切换按钮 -->
-  <button class="theme-toggle" id="themeToggle" aria-label="切换主题" style="z-index: 9999;">
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="5"/>
       <line x1="12" y1="1" x2="12" y2="3"/>
@@ -239,16 +109,134 @@
     </svg>
   </button>
 
+  <!-- 主内容 -->
+  <main class="login-container">
+    <div class="glass-card login-card water-card" data-card>
+      <div class="card-edge-glow"></div>
+      <div class="card-glow"></div>
+      <div class="glass-card-content">
+        <div class="glass-card-header">
+          <h1 class="glass-card-title">登录</h1>
+          <p class="glass-card-subtitle">欢迎回到八字命理</p>
+        </div>
+
+        <div class="glass-card-body">
+          <!-- 登录方式切换 -->
+          <div class="login-method-tabs">
+            <label class="method-tab">
+              <input type="radio" name="loginMethod" value="email" checked>
+              <span class="tab-text">邮箱登录</span>
+            </label>
+            <label class="method-tab">
+              <input type="radio" name="loginMethod" value="phone">
+              <span class="tab-text">手机号登录</span>
+            </label>
+            <label class="method-tab">
+              <input type="radio" name="loginMethod" value="wechat">
+              <span class="tab-text">微信扫码</span>
+            </label>
+          </div>
+
+          <!-- 邮箱登录表单 -->
+          <form id="emailLoginForm" class="login-form active">
+            <div class="form-group">
+              <label for="email" class="form-label">邮箱</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="input"
+                placeholder="请输入邮箱"
+                required
+                autocomplete="email">
+            </div>
+
+            <div class="form-group verification-group">
+              <label for="emailCode" class="form-label">验证码</label>
+              <input
+                type="text"
+                id="emailCode"
+                name="emailCode"
+                class="input"
+                placeholder="请输入验证码"
+                required
+                maxlength="6">
+              <button type="button" class="btn btn-secondary btn-sm send-code-btn" data-type="email">
+                获取验证码
+              </button>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-water btn-block">
+              登录
+            </button>
+          </form>
+
+          <!-- 手机号登录表单 -->
+          <form id="phoneLoginForm" class="login-form">
+            <div class="form-group">
+              <label for="phone" class="form-label">手机号</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="input"
+                placeholder="请输入手机号"
+                required
+                maxlength="11"
+                autocomplete="tel">
+            </div>
+
+            <div class="form-group verification-group">
+              <label for="phoneCode" class="form-label">验证码</label>
+              <input
+                type="text"
+                id="phoneCode"
+                name="phoneCode"
+                class="input"
+                placeholder="请输入验证码"
+                required
+                maxlength="6">
+              <button type="button" class="btn btn-secondary btn-sm send-code-btn" data-type="phone">
+                获取验证码
+              </button>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-water btn-block">
+              登录
+            </button>
+          </form>
+
+          <!-- 微信扫码登录 -->
+          <div id="wechatLoginForm" class="login-form wechat-form">
+            <div class="qrcode-container">
+              <div class="qrcode-placeholder">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="5" y="5" width="3" height="3" fill="currentColor"/>
+                  <rect x="5" y="16" width="3" height="3" fill="currentColor"/>
+                  <rect x="16" y="5" width="3" height="3" fill="currentColor"/>
+                  <rect x="16" y="16" width="3" height="3" fill="currentColor"/>
+                </svg>
+              </div>
+              <p class="qrcode-tip">请使用微信扫描二维码登录</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <!-- 脚本加载 -->
   <script src="../../../components/background/background.js"></script>
   <script src="../../../components/card/card.js"></script>
-  <script src="../../../components/swiper/swiper.js"></script>
-  <script src="../../../components/menu/menu.js"></script>
   <script src="../../../components/button/button.js"></script>
+  <script src="../../../components/input/input.js"></script>
   <script src="../../../components/selector/selector.js"></script>
-  <script src="../../../components/wuxing-chart/wuxing-chart.js"></script>
   <script src="../../common/utils.js"></script>
   <script src="../../common/api.js"></script>
-  <script src="home.js?v=19"></script>
+  <script src="login.js?v=3"></script>
 </body>
 </html>

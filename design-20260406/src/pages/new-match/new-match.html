@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="../../../components/card/card.css">
   <link rel="stylesheet" href="../../../components/button/button.css">
   <link rel="stylesheet" href="../../../components/input/input.css">
-  <link rel="stylesheet" href="new-match.css">
+  <link rel="stylesheet" href="../../../components/selector/selector.css">
+  <link rel="stylesheet" href="new-match.css?v=2">
 </head>
 <body>
   <!-- 背景容器 -->
@@ -114,6 +115,58 @@
         </div>
         <div class="glass-card-body">
           <form id="newMatchForm">
+            <!-- 性别选项 -->
+            <div class="form-group">
+              <label class="input-label">性别选项</label>
+              <div class="radio-group">
+                <label class="radio-button">
+                  <input type="radio" name="genderPreference" value="opposite" checked>
+                  <span class="radio-button-text">异性</span>
+                </label>
+                <label class="radio-button">
+                  <input type="radio" name="genderPreference" value="same">
+                  <span class="radio-button-text">同性</span>
+                </label>
+                <label class="radio-button">
+                  <input type="radio" name="genderPreference" value="both">
+                  <span class="radio-button-text">双性</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 出生年份范围 -->
+            <div class="form-group">
+              <label class="input-label">出生年份范围</label>
+              <div class="year-range-group">
+                <div class="year-input">
+                  <label for="birthYearStart" class="year-label">起始年份</label>
+                  <input
+                    type="number"
+                    id="birthYearStart"
+                    name="birthYearStart"
+                    class="input"
+                    placeholder="例如：1990"
+                    min="1950"
+                    max="2010"
+                    step="1">
+                </div>
+                <span class="year-separator">至</span>
+                <div class="year-input">
+                  <label for="birthYearEnd" class="year-label">结束年份</label>
+                  <input
+                    type="number"
+                    id="birthYearEnd"
+                    name="birthYearEnd"
+                    class="input"
+                    placeholder="例如：2005"
+                    min="1950"
+                    max="2010"
+                    step="1">
+                </div>
+              </div>
+            </div>
+
+            <!-- 个性化要求 -->
             <div class="form-group">
               <label class="input-label">个性化要求（可选）</label>
               <textarea name="requirements"
@@ -127,7 +180,7 @@
           <button class="btn btn-ghost" onclick="goBack()">
             返回
           </button>
-          <button class="btn btn-fire" onclick="calculateMatch()">
+          <button class="btn btn-water" onclick="calculateMatch()">
             开始匹配
           </button>
         </div>
@@ -140,6 +193,8 @@
   <script src="../../../components/card/card.js"></script>
   <script src="../../../components/button/button.js"></script>
   <script src="../../../components/input/input.js"></script>
-  <script src="new-match.js"></script>
+  <script src="../../common/utils.js"></script>
+  <script src="../../common/api.js"></script>
+  <script src="new-match.js?v=5"></script>
 </body>
 </html>

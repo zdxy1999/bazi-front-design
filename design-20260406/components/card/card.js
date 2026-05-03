@@ -4,7 +4,7 @@
  * 参考: https://codepen.io/simeydotme/pen/RNWoPRj
  */
 
-console.log('✅✅✅ [card.js] 文件开始加载 ✅✅✅');
+// Card组件 - 处理光晕跟随鼠标、边缘高光和移动端平滑飘动效果
 
 /**
  * 辅助函数: 四舍五入到指定精度
@@ -92,22 +92,9 @@ class CardComponent {
   }
 
   init() {
-    console.log('CardComponent初始化, isMobile:', this.isMobile, '卡片数量:', this.cards.length);
-
     this.cards.forEach((card, index) => {
-      console.log(`处理卡片 ${index + 1}/${this.cards.length}`);
-      console.log(`卡片inline style:`, card.getAttribute('style'));
-
-      // 检查CSS变量
-      const computedStyle = window.getComputedStyle(card);
-      const themeHue = computedStyle.getPropertyValue('--theme-hue');
-      const themeSat = computedStyle.getPropertyValue('--theme-saturation');
-      const themeLight = computedStyle.getPropertyValue('--theme-lightness');
-      console.log(`🎨 卡片${index} CSS变量:`, { themeHue, themeSat, themeLight });
-
       if (!this.isMobile) {
         // PC端：光晕跟随鼠标 + 边缘高光
-        console.log('→ PC端模式，初始化hover交互');
         this.initMouseGlow(card);
 
         // PC端：添加静态边缘发光效果（即使没有hover也能看到颜色）
@@ -117,7 +104,6 @@ class CardComponent {
         card.classList.add('static-glow');
       } else {
         // 移动端：添加mobile-glow class，启用自动边缘发光
-        console.log('→ 移动端模式，添加mobile-glow class');
         card.classList.add('mobile-glow');
         // 移动端：光晕平滑飘动（JavaScript驱动）
         this.initMobileGlow(card);
@@ -149,7 +135,6 @@ class CardComponent {
 
     // 重新获取卡片（旧卡片会被DOM移除，事件监听器会自动清理）
     this.cards = document.querySelectorAll('[data-card]');
-    console.log('CardComponent刷新, isMobile:', this.isMobile, '新卡片数量:', this.cards.length);
 
     // 重新初始化
     this.init();
@@ -200,23 +185,6 @@ class CardComponent {
     // 当--glow-sens=30时，如果--pointer-d=60，opacity=clamp(30/70, 0, 1)=0.43
     const pointerD = Math.max(distance * 100, 60); // 至少60，确保可见
     card.style.setProperty('--pointer-d', `${round(pointerD)}`);
-
-    console.log(`  设置的--pointer-d: ${pointerD}（确保opacity>0）`);
-
-    // 验证设置的值
-    setTimeout(() => {
-      const computedStyle = window.getComputedStyle(card);
-      const finalD = computedStyle.getPropertyValue('--pointer-d');
-      const cardGlow = card.querySelector('.card-glow');
-      if (cardGlow) {
-        const glowStyle = window.getComputedStyle(cardGlow);
-        const glowSens = glowStyle.getPropertyValue('--glow-sens');
-        console.log(`  --glow-sens: ${glowSens}`);
-        console.log(`  opacity计算: (${pointerD} - ${glowSens}) / (100 - ${glowSens}) = ${((pointerD - 30) / 70).toFixed(2)}`);
-      }
-    }, 100);
-
-    console.log(`→ 静态光晕已设置`);
   }
 
   /**
@@ -256,15 +224,7 @@ class CardComponent {
    * 移动端：模拟鼠标沿着边缘缓慢移动，让边缘发光持续显示
    */
   initMobileGlow(card) {
-    console.log('启动移动端动画, card:', card);
-
     let frameCount = 0;
-    const rect = card.getBoundingClientRect();
-    console.log('卡片尺寸:', {
-      width: rect.width,
-      height: rect.height,
-      aspectRatio: (rect.width / rect.height).toFixed(2)
-    });
 
     // 创建动画函数
     const animate = () => {
@@ -300,17 +260,6 @@ class CardComponent {
       card.style.setProperty('--pointer-°', `${round(pointerAngle)}deg`);
       card.style.setProperty('--pointer-d', `${round(distance * 100)}`);
 
-      // 每60帧输出一次调试信息（约每秒一次）
-      if (frameCount % 60 === 0) {
-        const opacity = Math.max(0, Math.min(1, (distance * 100 - 30) / 70));
-        console.log(`动画帧 ${frameCount}:`, {
-          x: round(clampedX),
-          y: round(clampedY),
-          distance: round(distance * 100),
-          pointerAngle: round(pointerAngle),
-          calculatedOpacity: opacity.toFixed(2)
-        });
-      }
       frameCount++;
 
       // 继续动画
@@ -320,15 +269,12 @@ class CardComponent {
     // 启动动画
     const animationId = requestAnimationFrame(animate);
     this.mobileAnimations.set(card, animationId);
-    console.log('移动端动画已启动, animationId:', animationId);
   }
 
   /**
    * 清理动画
    */
   cleanup() {
-    console.log('CardComponent cleanup 开始...');
-
     // 停止所有移动端动画
     this.mobileAnimations.forEach((animationId) => {
       cancelAnimationFrame(animationId);
@@ -357,10 +303,7 @@ class CardComponent {
       }
 
       card.parentNode.replaceChild(newCard, card);
-      console.log('已替换卡片节点，保留data-card属性:', attributes['data-card']);
     });
-
-    console.log('CardComponent cleanup 完成');
   }
 
   /**
@@ -491,7 +434,3 @@ class CardComponent {
 
 // 导出CardComponent类供外部使用
 window.CardComponent = CardComponent;
-console.log('🎴 [card.js] CardComponent类已导出到window.CardComponent');
-
-// 不再自动初始化，由home.js手动控制初始化时机
-console.log('🎴 [card.js] 等待手动初始化...');

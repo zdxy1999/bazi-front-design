@@ -135,12 +135,10 @@
             <!-- 档案名称（可选） -->
             <div class="form-group">
               <label class="input-label">档案名称（可选）</label>
-              <div class="input-wrapper">
-                <input type="text"
-                       name="profileName"
-                       placeholder="留空自动生成"
-                       class="text-input">
-              </div>
+              <input type="text"
+                     name="profileName"
+                     placeholder="留空自动生成"
+                     class="input">
             </div>
 
             <!-- 性别选择 -->
@@ -149,11 +147,11 @@
               <div class="radio-group" data-name="gender">
                 <label class="radio-button">
                   <input type="radio" name="gender" value="male" checked>
-                  <span class="radio-label">男</span>
+                  <span class="radio-button-text">男</span>
                 </label>
                 <label class="radio-button">
                   <input type="radio" name="gender" value="female">
-                  <span class="radio-label">女</span>
+                  <span class="radio-button-text">女</span>
                 </label>
               </div>
             </div>
@@ -164,29 +162,27 @@
               <input type="date"
                      name="birthDate"
                      value="2002-06-01"
-                     class="date-input"
+                     class="input"
                      required>
             </div>
 
             <!-- 出生时辰 -->
             <div class="form-group">
               <label class="input-label">出生时辰</label>
-              <div class="select-wrapper">
-                <select name="birthHour" class="select-input" required>
-                  <option value="0">子时 (23:00-01:00)</option>
-                  <option value="1">丑时 (01:00-03:00)</option>
-                  <option value="2">寅时 (03:00-05:00)</option>
-                  <option value="3">卯时 (05:00-07:00)</option>
-                  <option value="4">辰时 (07:00-09:00)</option>
-                  <option value="5">巳时 (09:00-11:00)</option>
-                  <option value="6">午时 (11:00-13:00)</option>
-                  <option value="7">未时 (13:00-15:00)</option>
-                  <option value="8">申时 (15:00-17:00)</option>
-                  <option value="9">酉时 (17:00-19:00)</option>
-                  <option value="10">戌时 (19:00-21:00)</option>
-                  <option value="11">亥时 (21:00-23:00)</option>
-                </select>
-              </div>
+              <select name="birthHour" class="input" required>
+                <option value="0">子时 (23:00-01:00)</option>
+                <option value="1">丑时 (01:00-03:00)</option>
+                <option value="2">寅时 (03:00-05:00)</option>
+                <option value="3">卯时 (05:00-07:00)</option>
+                <option value="4">辰时 (07:00-09:00)</option>
+                <option value="5">巳时 (09:00-11:00)</option>
+                <option value="6">午时 (11:00-13:00)</option>
+                <option value="7">未时 (13:00-15:00)</option>
+                <option value="8">申时 (15:00-17:00)</option>
+                <option value="9">酉时 (17:00-19:00)</option>
+                <option value="10">戌时 (19:00-21:00)</option>
+                <option value="11">亥时 (21:00-23:00)</option>
+              </select>
             </div>
           </form>
         </div>
@@ -208,6 +204,8 @@
   <script src="../../../components/button/button.js"></script>
   <script src="../../../components/input/input.js"></script>
   <script src="../../../components/selector/selector.js"></script>
-  <script src="new-bazi.js"></script>
+  <script src="../../common/utils.js"></script>
+  <script src="../../common/api.js"></script>
+  <script src="new-bazi.js?v=3"></script>
 </body>
 </html>

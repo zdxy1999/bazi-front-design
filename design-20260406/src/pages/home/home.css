@@ -472,29 +472,31 @@
   color: var(--text-secondary);
 }
 
-/* 环形菜单位置 - 页面正下方居中 */
+/* 环形菜单位置 - 页面正上方居中 */
 .home-container .circular-menu {
   position: fixed !important;
-  bottom: 20px !important;
+  top: 20px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 1000 !important;
 }
 
 /* 分页指示器位置 - 固定到页面底部 */
-.home-container .swiper-pagination,
-.swiper-pagination {
+.home-container .swiper-pagination {
   position: fixed !important;
   bottom: 15% !important; /* 从10%改到15%，不要太靠下 */
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 99999 !important;
   display: flex !important;
+  flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
+  gap: 8px !important;
   pointer-events: auto !important;
   opacity: 1 !important;
   visibility: visible !important;
+  width: auto !important;
 }
 
 /* 确保指示点的子元素也可见 */
@@ -581,8 +583,13 @@
     transform: translateX(-50%) !important;
     z-index: 9999 !important;
     display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
     opacity: 1 !important;
     visibility: visible !important;
+    width: auto !important;
   }
 }
 
@@ -615,7 +622,7 @@
 }
 
   .home-container .circular-menu {
-    bottom: 20px !important;
+    top: 20px !important;
     right: 20px !important;
   }
 
@@ -636,7 +643,7 @@
     overflow-y: auto !important;
     justify-content: flex-start !important;
     padding-top: 20px !important;
-    padding-bottom: 100px !important;
+    padding-bottom: 180px !important; /* 增加到180px，确保指示器和菜单不被卡片遮挡 */
     height: auto !important;
     min-height: 100vh !important;
   }
@@ -675,8 +682,8 @@
   .home-container .wuxing-chart-container,
   .home-container .profile-slide .wuxing-chart-container,
   .home-container .profile-slide .profile-content .wuxing-chart-container {
-    width: 90% !important;
-    max-width: 90% !important;
+    width: 95% !important;
+    max-width: 95% !important;
     margin: 0 auto !important;
   }
 
@@ -699,9 +706,10 @@
     justify-content: center;
   }
 
-  /* 移动端指示点 */
+  /* 移动端指示点 - 非常靠近屏幕底部 */
   .home-container .swiper-pagination {
-    bottom: 15% !important;
+    bottom: 6px !important; /* 非常靠近屏幕底部边缘 */
+    gap: 6px !important; /* 移动端间距稍小 */
   }
 
   .profile-name {

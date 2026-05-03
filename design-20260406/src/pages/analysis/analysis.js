@@ -1,320 +1,303 @@
 /**
  * 八字解析页面逻辑
+ * Analysis Page Logic
  */
 
-let currentProfile = null;
-let pollingInterval = null;
+(function() {
+  'use strict';
 
-/**
- * 初始化页面
- */
-async function init() {
-  try {
-    // 获取URL参数
-    const urlParams = new URLSearchParams(window.location.search);
-    const profileId = urlParams.get('profileId');
+  let currentProfile = null;
+  let pollingInterval = null;
 
-    if (!profileId) {
-      showError('缺少档案ID');
-      setTimeout(() => goBack(), 2000);
-      return;
-    }
-
-    // 加载档案数据
-    await loadProfile(profileId);
-
-    // 检查解析状态
-    await checkAnalysisStatus();
-
-    // 初始化主题切换
-    initThemeToggle();
-
-  } catch (error) {
-    console.error('初始化失败:', error);
-    showError('加载失败，请返回重试');
-  }
-}
-
-/**
- * 加载档案数据
- */
-async function loadProfile(profileId) {
-  const response = await fetch('../../../mock-data/bazi-profiles.json');
-  const data = await response.json();
-  const profiles = data.profiles;
-  currentProfile = profiles.find(p => p.id === profileId);
-
-  if (!currentProfile) {
-    throw new Error('Profile not found');
-  }
-}
-
-/**
- * 检查解析状态
- */
-async function checkAnalysisStatus() {
-  const status = currentProfile.analysisStatus;
-
-  switch(status) {
-    case 'COMPLETED':
-      showCompletedState();
-      break;
-    case 'CALCULATING':
-      showCalculatingState();
-      startPolling();
-      break;
-    case 'NOT_STARTED':
-      showNotStartedState();
-      break;
-  }
-}
-
-/**
- * 显示已完成状态
- */
-function showCompletedState() {
-  document.getElementById('completedState').style.display = 'block';
-
-  // 渲染八字详情
-  renderBaziDetail();
-
-  // 渲染Markdown
-  if (currentProfile.analysisResult) {
-    renderMarkdown(currentProfile.analysisResult);
-  }
-}
-
-/**
- * 渲染八字详情
- */
-function renderBaziDetail() {
-  const container = document.getElementById('baziDetailContent');
-
-  const { bazi, dayMaster, mingua, elementProportion } = currentProfile;
-
-  const dayMasterElementNames = {
-    'wood': '木',
-    'fire': '火',
-    'earth': '土',
-    'metal': '金',
-    'water': '水'
-  };
-
-  container.innerHTML = `
-    <!-- 四柱八字 -->
-    <div class="pillars-display">
-      <div class="pillar-item">
-        <span class="pillar-label">年柱</span>
-        <span class="pillar-value">${bazi.yearPillar.stem}${bazi.yearPillar.branch}</span>
-        <span class="pillar-nayin">${bazi.yearPillar.nayin}</span>
-      </div>
-      <div class="pillar-item">
-        <span class="pillar-label">月柱</span>
-        <span class="pillar-value">${bazi.monthPillar.stem}${bazi.monthPillar.branch}</span>
-        <span class="pillar-nayin">${bazi.monthPillar.nayin}</span>
-      </div>
-      <div class="pillar-item">
-        <span class="pillar-label">日柱</span>
-        <span class="pillar-value">${bazi.dayPillar.stem}${bazi.dayPillar.branch}</span>
-        <span class="pillar-nayin">${bazi.dayPillar.nayin}</span>
-      </div>
-      <div class="pillar-item">
-        <span class="pillar-label">时柱</span>
-        <span class="pillar-value">${bazi.hourPillar.stem}${bazi.hourPillar.branch}</span>
-        <span class="pillar-nayin">${bazi.hourPillar.nayin}</span>
-      </div>
-    </div>
-
-    <!-- 日主信息 -->
-    <div class="daymaster-section">
-      <h3>日主：${dayMaster.stem} (${dayMasterElementNames[dayMaster.element]})</h3>
-      <p>命卦：${mingua.name} - ${mingua.position}</p>
-    </div>
-
-    <!-- 五行占比 -->
-    <div class="element-proportion">
-      <h4>五行占比</h4>
-      <div class="proportion-list">
-        <div class="proportion-item">
-          <span class="element-name">木</span>
-          <div class="proportion-bar">
-            <div class="proportion-fill" style="width: ${elementProportion.wood.percentage}%; background: var(--wood-primary);"></div>
-          </div>
-          <span class="proportion-value">${elementProportion.wood.percentage}%</span>
-        </div>
-        <div class="proportion-item">
-          <span class="element-name">火</span>
-          <div class="proportion-bar">
-            <div class="proportion-fill" style="width: ${elementProportion.fire.percentage}%; background: var(--fire-primary);"></div>
-          </div>
-          <span class="proportion-value">${elementProportion.fire.percentage}%</span>
-        </div>
-        <div class="proportion-item">
-          <span class="element-name">土</span>
-          <div class="proportion-bar">
-            <div class="proportion-fill" style="width: ${elementProportion.earth.percentage}%; background: var(--earth-primary);"></div>
-          </div>
-          <span class="proportion-value">${elementProportion.earth.percentage}%</span>
-        </div>
-        <div class="proportion-item">
-          <span class="element-name">金</span>
-          <div class="proportion-bar">
-            <div class="proportion-fill" style="width: ${elementProportion.metal.percentage}%; background: var(--metal-primary);"></div>
-          </div>
-          <span class="proportion-value">${elementProportion.metal.percentage}%</span>
-        </div>
-        <div class="proportion-item">
-          <span class="element-name">水</span>
-          <div class="proportion-bar">
-            <div class="proportion-fill" style="width: ${elementProportion.water.percentage}%; background: var(--water-primary);"></div>
-          </div>
-          <span class="proportion-value">${elementProportion.water.percentage}%</span>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/**
- * 渲染Markdown
- */
-async function renderMarkdown(markdownContent) {
-  const container = document.getElementById('markdown-content');
-
-  // 使用MarkdownRenderer组件
-  if (window.MarkdownRenderer) {
-    const renderer = new MarkdownRenderer({
-      breaks: true,
-      gfm: true,
-      highlight: true
-    });
-
-    await renderer.render(markdownContent, '#markdown-content');
-  } else {
-    // 简单的fallback
-    container.innerHTML = `<pre>${markdownContent}</pre>`;
-  }
-}
-
-/**
- * 显示计算中状态
- */
-function showCalculatingState() {
-  document.getElementById('calculatingState').style.display = 'block';
-}
-
-/**
- * 显示未开始状态
- */
-function showNotStartedState() {
-  document.getElementById('notStartedState').style.display = 'block';
-}
-
-/**
- * 开始解析
- */
-async function startAnalysis() {
-  try {
-    // TODO: 调用后端API开始计算
-    // await fetch(`/api/profiles/${currentProfile.id}/analysis`, { method: 'POST' });
-
-    // 模拟状态更新
-    currentProfile.analysisStatus = 'CALCULATING';
-    showCalculatingState();
-    startPolling();
-
-  } catch (error) {
-    console.error('启动解析失败:', error);
-    showError('启动解析失败，请重试');
-  }
-}
-
-/**
- * 开始轮询
- */
-function startPolling() {
-  pollingInterval = setInterval(async () => {
+  /**
+   * 初始化页面
+   */
+  async function init() {
     try {
-      // TODO: 从后端API获取状态
-      // const response = await fetch(`/api/profiles/${currentProfile.id}/analysis-status`);
-      // const data = await response.json();
+      const profileId = getUrlParam('profileId');
 
-      // 模拟轮询结果（3次后完成）
-      const random = Math.random();
-      if (random > 0.7) {
-        currentProfile.analysisStatus = 'COMPLETED';
-        currentProfile.analysisResult = '# 八字解析\n\n## 命盘概述\n解析已完成...\n\n## 五行分析\n您的五行配置如下...\n\n## 性格特点\n根据您的八字分析...';
-
-        clearInterval(pollingInterval);
-        location.reload();
+      if (!profileId) {
+        showError('缺少档案ID');
+        setTimeout(() => goBack(), 2000);
+        return;
       }
 
+      await loadProfile(profileId);
+      await checkAnalysisStatus();
+
     } catch (error) {
-      console.error('轮询失败:', error);
+      console.error('初始化失败:', error);
+      showError('加载失败，请返回重试');
     }
-  }, 3000);
-}
-
-/**
- * 返回首页
- */
-function goBack() {
-  window.location.href = '../home/home.html';
-}
-
-/**
- * 显示错误消息
- */
-function showError(message) {
-  const toast = document.createElement('div');
-  toast.textContent = message;
-  toast.style.cssText = `
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 24px;
-    background: var(--fire-primary);
-    color: white;
-    border-radius: 8px;
-    z-index: 1000;
-  `;
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    document.body.removeChild(toast);
-  }, 3000);
-}
-
-/**
- * 初始化主题切换
- */
-function initThemeToggle() {
-  const themeToggle = document.getElementById('themeToggle');
-  const html = document.documentElement;
-
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  html.setAttribute('data-theme', savedTheme);
-
-  themeToggle.addEventListener('click', function() {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  });
-}
-
-// 清理轮询
-window.addEventListener('beforeunload', () => {
-  if (pollingInterval) {
-    clearInterval(pollingInterval);
   }
-});
 
-// 页面加载完成后初始化
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+  /**
+   * 加载档案数据
+   */
+  async function loadProfile(profileId) {
+    const response = await fetch('../../../mock-data/bazi-profiles.json');
+    const data = await response.json();
+    currentProfile = data.profiles.find(p => p.id === profileId);
+
+    if (!currentProfile) {
+      throw new Error('Profile not found');
+    }
+  }
+
+  /**
+   * 检查解析状态
+   */
+  async function checkAnalysisStatus() {
+    const status = currentProfile.analysisStatus;
+
+    switch(status) {
+      case 'COMPLETED':
+        showCompletedState();
+        break;
+      case 'CALCULATING':
+        showCalculatingState();
+        startPolling();
+        break;
+      case 'NOT_STARTED':
+        showNotStartedState();
+        break;
+    }
+  }
+
+  /**
+   * 显示已完成状态
+   */
+  function showCompletedState() {
+    const completedState = document.getElementById('completedState');
+    if (completedState) {
+      completedState.style.display = 'block';
+      renderBaziDetail();
+
+      if (currentProfile.analysisResult && window.MarkdownRenderer) {
+        const renderer = new window.MarkdownRenderer();
+        renderer.render(currentProfile.analysisResult, '#markdown-content');
+      }
+    }
+  }
+
+  /**
+   * 渲染八字详情
+   */
+  function renderBaziDetail() {
+    const container = document.getElementById('baziDetailContent');
+    if (!container) return;
+
+    const { bazi, dayMaster, mingua, elementProportion } = currentProfile;
+
+    const dayMasterElementNames = {
+      'wood': '木',
+      'fire': '火',
+      'earth': '土',
+      'metal': '金',
+      'water': '水'
+    };
+
+    container.innerHTML = `
+      <div class="pillars-display">
+        <div class="pillar-item">
+          <div class="pillar-label">年柱</div>
+          <div class="pillar-value">${bazi.yearPillar.stem}${bazi.yearPillar.branch}</div>
+          <div class="pillar-nayin">${bazi.yearPillar.nayin}</div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-label">月柱</div>
+          <div class="pillar-value">${bazi.monthPillar.stem}${bazi.monthPillar.branch}</div>
+          <div class="pillar-nayin">${bazi.monthPillar.nayin}</div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-label">日柱</div>
+          <div class="pillar-value">${bazi.dayPillar.stem}${bazi.dayPillar.branch}</div>
+          <div class="pillar-nayin">${bazi.dayPillar.nayin}</div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-label">时柱</div>
+          <div class="pillar-value">${bazi.hourPillar.stem}${bazi.hourPillar.branch}</div>
+          <div class="pillar-nayin">${bazi.hourPillar.nayin}</div>
+        </div>
+      </div>
+
+      <div class="daymaster-section">
+        <h3>日主：${dayMaster.stem}（${dayMasterElementNames[dayMaster.element]}）</h3>
+        <p>${dayMaster.isDayMaster ? '身强' : '身弱'}</p>
+      </div>
+
+      <div class="mingua-section">
+        <h4>命卦：${mingua.name}（${mingua.element}）</h4>
+        <p>位置：${mingua.position} | 方向：${mingua.direction}</p>
+      </div>
+
+      <div class="element-proportion">
+        <h4>五行占比</h4>
+        <div class="proportion-list">
+          ${Object.entries(elementProportion).map(([element, data]) => `
+            <div class="proportion-item">
+              <span class="element-name">${dayMasterElementNames[element]}</span>
+              <div class="proportion-bar">
+                <div class="proportion-fill" style="width: ${data.percentage}%; background: var(--${element}-primary);"></div>
+              </div>
+              <span class="proportion-value">${data.percentage}%</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * 显示计算中状态
+   */
+  function showCalculatingState() {
+    const calculatingState = document.getElementById('calculatingState');
+    if (calculatingState) {
+      calculatingState.style.display = 'flex';
+    }
+  }
+
+  /**
+   * 显示未开始状态
+   */
+  function showNotStartedState() {
+    const notStartedState = document.getElementById('notStartedState');
+    if (notStartedState) {
+      notStartedState.style.display = 'block';
+    }
+  }
+
+  /**
+   * 隐藏所有状态
+   */
+  function hideAllStates() {
+    const completedState = document.getElementById('completedState');
+    const calculatingState = document.getElementById('calculatingState');
+    const notStartedState = document.getElementById('notStartedState');
+
+    if (completedState) completedState.style.display = 'none';
+    if (calculatingState) calculatingState.style.display = 'none';
+    if (notStartedState) notStartedState.style.display = 'none';
+  }
+
+  /**
+   * 开始轮询
+   */
+  function startPolling() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+    }
+
+    pollingInterval = setInterval(async () => {
+      try {
+        await loadProfile(currentProfile.id);
+
+        if (currentProfile.analysisStatus === 'COMPLETED') {
+          stopPolling();
+          hideAllStates();
+          showCompletedState();
+        }
+      } catch (error) {
+        console.error('轮询失败:', error);
+      }
+    }, 3000);
+  }
+
+  /**
+   * 停止轮询
+   */
+  function stopPolling() {
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+      pollingInterval = null;
+    }
+  }
+
+  /**
+   * 开始计算
+   */
+  async function startCalculation() {
+    if (!currentProfile) return;
+
+    try {
+      const startButton = document.querySelector('#notStartedState button');
+      if (startButton && window.ButtonComponent) {
+        window.ButtonComponent.setButtonLoading(startButton, true, '开始计算...');
+      }
+
+      // 调用API开始计算
+      // await window.API?.analysis.start(currentProfile.id);
+
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // 更新状态
+      currentProfile.analysisStatus = 'CALCULATING';
+
+      hideAllStates();
+      showCalculatingState();
+      startPolling();
+
+    } catch (error) {
+      console.error('开始计算失败:', error);
+      showError('开始计算失败，请重试');
+
+      if (startButton && window.ButtonComponent) {
+        window.ButtonComponent.setButtonLoading(startButton, false);
+      }
+    }
+  }
+
+  /**
+   * 返回
+   */
+  function goBack() {
+    stopPolling();
+    window.location.href = '../home/home.html';
+  }
+
+  // 辅助函数
+  function getUrlParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  function showError(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-error';
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      background: var(--fire-primary);
+      color: white;
+      border-radius: 8px;
+      z-index: 10000;
+      animation: toastFadeInOut 3s ease forwards;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      if (document.body.contains(toast)) {
+        document.body.removeChild(toast);
+      }
+    }, 3000);
+  }
+
+  // 导出到全局
+  window.startCalculation = startCalculation;
+  window.goBack = goBack;
+
+  // 页面加载完成后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // 页面卸载时停止轮询
+  window.addEventListener('beforeunload', stopPolling);
+})();

@@ -1,5 +1,5 @@
 /**
- * 姻缘匹配页面逻辑
+ * 姻缘匹配页面逻辑 - 完全复制home.js的成功模式
  * Match Page Logic
  */
 
@@ -7,10 +7,10 @@
   'use strict';
 
   let currentProfile = null;
+  let currentMatches = [];
   let pollingInterval = null;
+  let swiperInstance = null;
   let cardComponent = null;
-  let currentMatches = []; // 保存当前匹配结果，用于切换时更新推荐理由
-  let resizeTimeout = null; // 防抖处理窗口大小变化
 
   /**
    * 初始化页面
@@ -79,29 +79,35 @@
    * 显示有结果状态
    */
   function showHasResultsState() {
+    // console.log('[match-new.js] showHasResultsState() 被调用');
     const hasResultsState = document.getElementById('hasResultsState');
     if (hasResultsState) {
-      hasResultsState.style.display = 'block';
-      renderMatchResults();
+      // console.log('[match-new.js] 显示hasResultsState');
+      hasResultsState.style.display = 'flex';
+      // console.log('[match-new.js] 开始renderMatches()');
+      renderMatches();
+      // console.log('[match-new.js] renderMatches()完成，开始initSwiper()');
+      initSwiper();
+      // console.log('[match-new.js] initSwiper()完成');
     }
   }
 
   /**
-   * 渲染匹配结果
+   * 渲染匹配结果 - 完全模仿home.js的renderProfiles
    */
-  function renderMatchResults() {
+  function renderMatches() {
     const wrapper = document.getElementById('matchSwiperWrapper');
     if (!wrapper) return;
 
     const matches = currentProfile.matchResults || [];
-    currentMatches = matches; // 保存到全局变量
+    currentMatches = matches;
 
     // 清空现有内容
     wrapper.innerHTML = '';
 
     // 如果没有匹配结果，隐藏swiper容器
     if (matches.length === 0) {
-      const swiperContainer = document.querySelector('#hasResultsState .swiper');
+      const swiperContainer = document.querySelector('.swiper');
       if (swiperContainer) {
         swiperContainer.style.display = 'none';
       }
@@ -109,98 +115,129 @@
     }
 
     // 确保swiper容器可见
-    const swiperContainer = document.querySelector('#hasResultsState .swiper');
+    const swiperContainer = document.querySelector('.swiper');
     if (swiperContainer) {
       swiperContainer.style.display = 'block';
     }
 
+    // **关键修复**：先清空slides数组和重新获取，确保顺序
     // 生成匹配卡片
     matches.forEach((match, index) => {
-      const slide = document.createElement('div');
-      slide.className = 'swiper-slide';
-      slide.dataset.index = index; // 添加索引用于调试
+      const slide = createMatchSlide(match, index);
+      wrapper.appendChild(slide);
+    });
 
-      const { hue, saturation, lightness } = match.mingua.hsl;
+    // **验证slides顺序**
+    // console.log('Slides创建后DOM顺序:');
+    const allSlides = wrapper.querySelectorAll('.swiper-slide');
+    allSlides.forEach((slide, i) => {
+      // console.log(`  slide[${i}]:`, {
+      //   matchIndex: slide.dataset.matchIndex,
+      //   textContent: slide.querySelector('.profile-name')?.textContent
+      // });
+    });
 
-      slide.innerHTML = `
-        <div class="match-card-container">
-          <div class="glass-card ${match.mingua.element}-card" data-card
-               style="--theme-hue: ${hue}; --theme-saturation: ${saturation}; --theme-lightness: ${lightness};">
-            <div class="card-edge-glow"></div>
-            <div class="card-glow"></div>
-            <div class="glass-card-content">
-              <div class="glass-card-header">
-                <h3 class="profile-name">${match.name}</h3>
-                <p class="profile-birth">${formatDateTime(match.birthDate)}</p>
+    // 刷新卡片组件
+    setTimeout(() => {
+      if (window.CardComponent) {
+        if (window.cardComponent) {
+          window.cardComponent.cleanup();
+        }
+        window.cardComponent = new window.CardComponent();
+      }
+    }, 100);
+
+    // 渲染第一个匹配理由
+    if (matches.length > 0 && matches[0].reason && window.MarkdownRenderer) {
+      const renderer = new window.MarkdownRenderer();
+      renderer.render(matches[0].reason, '#match-reason');
+    }
+  }
+
+<arg_value>/**
+ * 创建匹配卡片Slide - 完全模仿home.js的createProfileSlide
+ */
+function createMatchSlide(match, index) {
+  const slide = document.createElement('div');
+  slide.className = 'swiper-slide';
+  slide.dataset.matchId = match.id;
+  slide.dataset.matchIndex = index;
+  slide.dataset.index = index; // 关键：添加这个属性
+
+  const { hue, saturation, lightness } = match.mingua.hsl;
+
+    slide.innerHTML = `
+      <div class="match-card-container">
+        <div class="glass-card ${match.mingua.element}-card" data-card
+             style="--theme-hue: ${hue}; --theme-saturation: ${saturation}; --theme-lightness: ${lightness};">
+          <div class="card-edge-glow"></div>
+          <div class="card-glow"></div>
+          <div class="glass-card-content">
+            <div class="glass-card-header">
+              <h3 class="profile-name">${match.name}</h3>
+              <p class="profile-birth">${formatDateTime(match.birthDate)}</p>
+            </div>
+
+            <div class="glass-card-body">
+              <div class="bazi-info">
+                <span class="bazi-pillar">${match.bazi.yearPillar.stem}${match.bazi.yearPillar.branch}</span>
+                <span class="bazi-pillar">${match.bazi.monthPillar.stem}${match.bazi.monthPillar.branch}</span>
+                <span class="bazi-pillar">${match.bazi.dayPillar.stem}${match.bazi.dayPillar.branch}</span>
+                <span class="bazi-pillar">${match.bazi.hourPillar.stem}${match.bazi.hourPillar.branch}</span>
               </div>
 
-              <div class="glass-card-body">
-                <div class="bazi-info">
-                  <span class="bazi-pillar">${match.bazi.yearPillar.stem}${match.bazi.yearPillar.branch}</span>
-                  <span class="bazi-pillar">${match.bazi.monthPillar.stem}${match.bazi.monthPillar.branch}</span>
-                  <span class="bazi-pillar">${match.bazi.dayPillar.stem}${match.bazi.dayPillar.branch}</span>
-                  <span class="bazi-pillar">${match.bazi.hourPillar.stem}${match.bazi.hourPillar.branch}</span>
-                </div>
-
-                <div class="mingua-info">
-                  <h4 class="mingua-name">${match.mingua.name}</h4>
-                  <p class="mingua-details">${match.mingua.position} / ${match.mingua.element}</p>
-                </div>
+              <div class="mingua-info">
+                <h4 class="mingua-name">${match.mingua.name}</h4>
+                <p class="mingua-details">${match.mingua.position} / ${match.mingua.element}</p>
               </div>
             </div>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      wrapper.appendChild(slide);
-    });
+    return slide;
+  }
 
-    // 初始化Swiper
-    if (window.Swiper && matches.length > 0) {
-      const swiperElement = document.querySelector('#hasResultsState .swiper');
-
-      if (swiperElement) {
-        try {
-          // 如果已有实例，先销毁（因为slides数量可能已改变）
-          if (swiperElement.swiperInstance) {
-            swiperElement.swiperInstance.destroy();
-            swiperElement.swiperInstance = null;
-          }
-
-          // 创建新实例
-          swiperElement.swiperInstance = new window.Swiper(swiperElement, {
-            loop: matches.length > 1,
-            simple: true // 使用简单模式，适合卡片切换
-          });
-
-          // 监听swiper切换事件，更新推荐理由
-          swiperElement.addEventListener('swiperChange', (e) => {
-            updateMatchReason(e.detail.activeIndex);
-          });
-        } catch (error) {
-          console.error('Failed to initialize Swiper:', error);
-        }
-      }
+  /**
+   * 初始化Swiper - 完全复制home.js的initSwiper
+   */
+  function initSwiper() {
+    // console.log('[match-new.js] initSwiper() 被调用');
+    const swiperElement = document.querySelector('.swiper');
+    if (!swiperElement) {
+      // console.log('[match-new.js] 没有找到.swiper元素');
+      return;
     }
 
-    // 初始化卡片边缘高光效果
-    if (window.CardComponent) {
-      try {
-        // 创建或获取CardComponent单例
-        if (!cardComponent) {
-          cardComponent = new window.CardComponent();
-        } else {
-          cardComponent.refresh();
-        }
-      } catch (error) {
-        console.error('Failed to initialize Card effects:', error);
-      }
+    // console.log('[match-new.js] swiperElement已有实例:', swiperElement.swiperInstance ? 'YES' : 'NO');
+
+    // 如果已有实例，不要重新创建，直接返回
+    if (swiperElement.swiperInstance) {
+      // console.log('[match-new.js] Swiper实例已存在，跳过创建');
+      return;
     }
 
-    // 渲染匹配理由
-    if (matches.length > 0 && matches[0].reason && window.MarkdownRenderer) {
-      const renderer = new window.MarkdownRenderer();
-      renderer.render(matches[0].reason, '#match-reason');
+    const loop = swiperElement.hasAttribute('data-swiper-loop');
+    const simple = swiperElement.hasAttribute('data-swiper-simple');
+    // console.log('[match-new.js] loop:', loop, 'simple:', simple);
+
+    if (window.Swiper) {
+      // console.log('[match-new.js] 创建新的Swiper实例');
+      swiperInstance = new window.Swiper(swiperElement, {
+        loop: loop,
+        simple: simple
+      });
+
+      swiperElement.swiperInstance = swiperInstance;
+      // console.log('[match-new.js] Swiper实例已创建并保存');
+
+      // 监听切换事件，更新推荐理由
+      swiperElement.addEventListener('swiperChange', (e) => {
+        const index = e.detail.activeIndex;
+        updateMatchReason(index);
+      });
+      // console.log('[match-new.js] swiperChange事件监听器已添加');
     }
   }
 
@@ -240,15 +277,6 @@
   }
 
   /**
-   * 隐藏所有状态
-   */
-  function hideAllStates() {
-    document.getElementById('hasResultsState').style.display = 'none';
-    document.getElementById('calculatingState').style.display = 'none';
-    document.getElementById('noResultsState').style.display = 'none';
-  }
-
-  /**
    * 开始轮询
    */
   function startPolling() {
@@ -282,6 +310,15 @@
   }
 
   /**
+   * 隐藏所有状态
+   */
+  function hideAllStates() {
+    document.getElementById('hasResultsState').style.display = 'none';
+    document.getElementById('calculatingState').style.display = 'none';
+    document.getElementById('noResultsState').style.display = 'none';
+  }
+
+  /**
    * 计算匹配
    */
   function calculateMatch() {
@@ -292,7 +329,6 @@
    * 重新计算匹配
    */
   function recalculateMatch() {
-    // 跳转到新建匹配页面
     window.location.href = `../new-match/new-match.html?profileId=${currentProfile.id}`;
   }
 
@@ -361,16 +397,4 @@
 
   // 页面卸载时停止轮询
   window.addEventListener('beforeunload', stopPolling);
-
-  // 监听窗口大小变化，确保pagination正确更新
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      const swiperElement = document.querySelector('#hasResultsState .swiper');
-      if (swiperElement && swiperElement.swiperInstance) {
-        // 强制更新pagination
-        swiperElement.swiperInstance.updatePagination();
-      }
-    }, 300);
-  });
 })();

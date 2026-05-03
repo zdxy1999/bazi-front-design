@@ -70,7 +70,7 @@
 
 /* 旋转动画 */
 .processing-taichi.processing-rotating {
-  animation: taichiRotate 3s linear infinite;
+  animation: taichiRotate 0.5s linear infinite !important;
 }
 
 @keyframes taichiRotate {
